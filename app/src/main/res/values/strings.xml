@@ -6,4 +6,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="genres">Genres</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="details_to_connect">Please enter your contact details to connect.</string>
+    <string name="email">Email</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log in</string>
 </resources>
