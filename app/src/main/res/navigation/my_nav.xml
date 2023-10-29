@@ -9,8 +9,7 @@
         android:id="@+id/homeFragment"
         android:name="com.example.geetsunam.features.presentation.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home">
-    </fragment>
+        tools:layout="@layout/fragment_home"/>
     <fragment
         android:id="@+id/trendingFragment"
         android:name="com.example.geetsunam.features.presentation.trending.TrendingFragment"

@@ -79,6 +79,9 @@ dependencies {
     kapt("androidx.hilt:hilt-compiler:1.1.0-alpha01")
     implementation("androidx.navigation:navigation-compose:2.6.0")
 
+    //datastore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")

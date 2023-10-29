@@ -18,7 +18,7 @@
         android:theme="@style/Theme.GeetSunam"
         tools:targetApi="31">
         <activity
-            android:name=".features.presentation.login.LoginActivity"
+            android:name=".features.presentation.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,8 +26,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".features.presentation.login.LoginActivity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>
