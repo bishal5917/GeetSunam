@@ -1,4 +1,5 @@
 package com.example.geetsunam.features.presentation.login.viewmodel
 
-class LoginEvent {
+sealed class LoginEvent {
+    data class LoginUser(val email: String, val password: String) : LoginEvent()
 }

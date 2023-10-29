@@ -7,12 +7,14 @@ import com.example.geetsunam.MainActivity
 import com.example.geetsunam.R
 import com.example.geetsunam.features.presentation.login.LoginActivity
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
 
     @Inject
