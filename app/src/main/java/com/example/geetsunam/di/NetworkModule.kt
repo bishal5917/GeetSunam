@@ -1,6 +1,5 @@
 package com.example.geetsunam.di
 
-import android.content.Context
 import com.example.geetsunam.core.configs.ApiConfig
 import com.example.geetsunam.services.network.ApiService
 import com.google.gson.Gson
