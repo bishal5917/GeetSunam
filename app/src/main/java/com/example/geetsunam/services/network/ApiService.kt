@@ -1,14 +1,22 @@
 package com.example.geetsunam.services.network
 
+import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
 import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
     //login
-    @POST("api/users/login")
+    @POST("users/login")
     @JvmSuppressWildcards
     suspend fun login(
         @Body body: Any
     ): Response<LoginResponseModel>
+
+    //get genres
+    @GET("genre")
+    @JvmSuppressWildcards
+    suspend fun getGenres(
+        @Header("Authorization") authToken: String,
+    ): Response<GenreResponseModel>
 }

@@ -1,14 +1,17 @@
 package com.example.geetsunam.features.data.datasource
 
+import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
 import com.example.geetsunam.features.data.models.login.toJson
 import com.example.geetsunam.services.network.ApiService
+import com.example.geetsunam.utils.models.CommonRequestModel
 import retrofit2.Response
 import javax.inject.Inject
 
 interface UserRemoteDatasource {
     suspend fun login(loginRequestModel: LoginRequestModel): Response<LoginResponseModel>
+    suspend fun getGenres(commonRequestModel: CommonRequestModel): Response<GenreResponseModel>
 }
 
 class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiService) :
@@ -20,5 +23,9 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
                 "password" to loginRequestModel.password,
             )
         )
+    }
+
+    override suspend fun getGenres(commonRequestModel: CommonRequestModel): Response<GenreResponseModel> {
+        return apiService.getGenres(authToken = "Bearer ${commonRequestModel.token}")
     }
 }
