@@ -1,13 +1,12 @@
 package com.example.geetsunam.features.presentation.login.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
-import com.example.geetsunam.utils.LogTag
+import com.example.geetsunam.services.local.LocalDatastore
 import com.example.geetsunam.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUsecase: LoginUsecase
+    private val loginUsecase: LoginUsecase, private val localDatastore: LocalDatastore
 ) : ViewModel() {
     private val _loginState = MutableLiveData(LoginState.idle)
     val loginState: LiveData<LoginState> = _loginState
@@ -35,8 +34,7 @@ class LoginViewModel @Inject constructor(
                 is Resource.Loading -> {
                     _loginState.postValue(
                         _loginState.value?.copy(
-                            status = LoginState.LoginStatus.LOADING,
-                            message = "Logging in ..."
+                            status = LoginState.LoginStatus.LOADING, message = "Logging in ..."
                         )
                     )
                 }
@@ -49,13 +47,13 @@ class LoginViewModel @Inject constructor(
                             user = result.data?.data?.user,
                         )
                     )
+                    localDatastore.saveToken(result.data?.token ?: "")
                 }
 
                 is Resource.Error -> {
                     _loginState.postValue(
                         _loginState.value?.copy(
-                            status = LoginState.LoginStatus.FAILED,
-                            message = result.message.toString()
+                            status = LoginState.LoginStatus.FAILED, message = result.message
                         )
                     )
                 }

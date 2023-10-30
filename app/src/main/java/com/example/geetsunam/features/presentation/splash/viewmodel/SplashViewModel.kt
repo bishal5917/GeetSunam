@@ -1,9 +1,13 @@
 package com.example.geetsunam.features.presentation.splash.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.geetsunam.features.presentation.login.viewmodel.LoginState
 import com.example.geetsunam.services.local.LocalDatastore
+import com.example.geetsunam.utils.LogTag
 import com.example.heartconnect.features.presentation.screens.splash.viewmodel.SplashEvent
 import com.example.heartconnect.features.presentation.screens.splash.viewmodel.SplashState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,12 +20,11 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(private val localDatastore: LocalDatastore) :
     ViewModel() {
 
-    private val _splashState = MutableStateFlow(SplashState.IDLE)
-    val splashState: StateFlow<SplashState> = _splashState
+    private val _splashState = MutableLiveData(SplashState.IDLE)
+    val splashState: LiveData<SplashState> = _splashState
 
-    private val userIdFlow = localDatastore.getToken().stateIn(
-        scope = viewModelScope, started = SharingStarted.WhileSubscribed(),
-        initialValue = ""
+    val userIdFlow = localDatastore.getToken().stateIn(
+        scope = viewModelScope, started = SharingStarted.WhileSubscribed(), initialValue = ""
     );
 
     init {
@@ -38,25 +41,33 @@ class SplashViewModel @Inject constructor(private val localDatastore: LocalDatas
         }
     }
 
-
     private fun checkStatus() = viewModelScope.launch {
         try {
             if (userIdFlow.value.isEmpty()) {
-                _splashState.value = _splashState.value.copy(
-                    status = SplashState.SplashStatus.LOGGEDOUT, message = "User logged out"
+                _splashState.postValue(
+                    _splashState.value?.copy(
+                        status = SplashState.SplashStatus.LOGGEDOUT,
+                        message = "Logged Out",
+                    )
                 )
-                Log.d("Splash", "ID: ${userIdFlow.value}")
+                Log.d(LogTag.SPLASH, "ID: ${userIdFlow.value}")
             } else {
-                _splashState.value = _splashState.value.copy(
-                    status = SplashState.SplashStatus.LOGGEDIN, message = "User Logged In"
+                _splashState.postValue(
+                    _splashState.value?.copy(
+                        status = SplashState.SplashStatus.LOGGEDIN,
+                        message = "Logged In",
+                    )
                 )
-                Log.d("Splash", "ID: ${userIdFlow.value}")
+                Log.d(LogTag.SPLASH, "ID: ${userIdFlow.value}")
             }
         } catch (ex: Exception) {
-            _splashState.value = _splashState.value.copy(
-                status = SplashState.SplashStatus.FAILED, message = "${ex.message}"
+            _splashState.postValue(
+                _splashState.value?.copy(
+                    status = SplashState.SplashStatus.FAILED,
+                    message = "Some error occured",
+                )
             )
-            Log.d("logs", "Exception : ${ex.message}")
+            Log.d(LogTag.SPLASH, "Exception : ${ex.message}")
         }
     }
 }

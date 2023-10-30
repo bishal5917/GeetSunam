@@ -15,7 +15,10 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
     UserRemoteDatasource {
     override suspend fun login(loginRequestModel: LoginRequestModel): Response<LoginResponseModel> {
         return apiService.login(
-            body = loginRequestModel.toJson()
+            body = mapOf<String, String>(
+                "email" to loginRequestModel.email,
+                "password" to loginRequestModel.password,
+            )
         )
     }
 }

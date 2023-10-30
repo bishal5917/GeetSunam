@@ -3,8 +3,8 @@ package com.example.geetsunam.features.data.models.login
 import com.google.gson.Gson
 
 data class LoginRequestModel (
-    val message: String,
-    val status: String
+    val email: String,
+    val password: String
 )
 
 fun LoginRequestModel.toJson(): String {

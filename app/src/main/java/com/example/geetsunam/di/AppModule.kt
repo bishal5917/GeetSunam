@@ -64,7 +64,7 @@ object AppModule {
     }
 
     @Provides
-    fun provideLoginViewModel(loginUsecase: LoginUsecase): LoginViewModel {
-        return LoginViewModel(loginUsecase)
+    fun provideLoginViewModel(loginUsecase: LoginUsecase,localDatastore: LocalDatastore): LoginViewModel {
+        return LoginViewModel(loginUsecase,localDatastore)
     }
 }

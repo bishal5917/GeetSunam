@@ -9,6 +9,6 @@ interface ApiService {
     @POST("api/users/login")
     @JvmSuppressWildcards
     suspend fun login(
-        @Body body: String
+        @Body body: Any
     ): Response<LoginResponseModel>
 }

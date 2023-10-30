@@ -7,6 +7,8 @@ data class LoginResponseModel(
     val `data`: Data?,
     @SerializedName("status")
     val status: String?,
+    @SerializedName("message")
+    val message: String?,
     @SerializedName("token")
     val token: String?
 ) {
