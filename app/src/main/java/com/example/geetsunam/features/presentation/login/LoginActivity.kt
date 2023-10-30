@@ -1,17 +1,20 @@
 package com.example.geetsunam.features.presentation.login
 
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.geetsunam.MainActivity
 import com.example.geetsunam.R
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginEvent
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginState
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewModel
+import com.example.geetsunam.utils.CustomDialog
 import com.example.geetsunam.utils.CustomToast
 import com.example.geetsunam.utils.LocalController
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,12 +50,15 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun observeLiveData() {
+        val dialog = Dialog(this)
         loginViewModel.loginState.observe(this) { response ->
             if (response != null) {
                 if (response.status == LoginState.LoginStatus.LOADING) {
                     //show loading dialog
+                    CustomDialog().showLoadingDialog(dialog)
                 }
                 if (response.status == LoginState.LoginStatus.SUCCESS) {
+                    CustomDialog().hideLoadingDialog(dialog)
                     CustomToast.showToast(
                         context = this, "${
                             response.message
@@ -63,6 +69,7 @@ class LoginActivity : AppCompatActivity() {
                     finish()
                 }
                 if (response.status == LoginState.LoginStatus.FAILED) {
+                    CustomDialog().hideLoadingDialog(dialog)
                     CustomToast.showToast(
                         context = this, "${
                             response.message

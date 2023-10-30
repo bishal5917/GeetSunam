@@ -12,4 +12,5 @@
     <string name="enter_your_email">Enter your email</string>
     <string name="password">Password</string>
     <string name="log_in">Log in</string>
+    <string name="requesting_please_wait">Requesting , Please wait ...</string>
 </resources>
