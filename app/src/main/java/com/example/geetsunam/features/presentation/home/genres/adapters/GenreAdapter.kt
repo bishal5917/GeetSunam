@@ -41,8 +41,8 @@ class GenreAdapter : RecyclerView.Adapter<GenreAdapter.MyViewHolder>() {
     }
 
     fun setData(newData: List<GenreResponseModel.Data.Genre>) {
-        val recipesDiffUtil = GenreDiffUtil(genre, newData)
-        val diffUtilResult = DiffUtil.calculateDiff(recipesDiffUtil)
+        val genreDiffUtil = GenreDiffUtil(genre, newData)
+        val diffUtilResult = DiffUtil.calculateDiff(genreDiffUtil)
         genre = newData
         diffUtilResult.dispatchUpdatesTo(this)
     }
