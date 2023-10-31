@@ -11,10 +11,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.geetsunam.R
 import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
 import com.example.geetsunam.features.data.models.genres.GenreResponseModel
+import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.features.presentation.home.featured_artists.adapters.FeaturedArtistsAdapter
 import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsEvent
 import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsState
 import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsViewModel
+import com.example.geetsunam.features.presentation.home.featured_songs.adapters.FeaturedSongsAdapter
+import com.example.geetsunam.features.presentation.home.featured_songs.viewmodel.FeaturedSongsEvent
+import com.example.geetsunam.features.presentation.home.featured_songs.viewmodel.FeaturedSongsState
+import com.example.geetsunam.features.presentation.home.featured_songs.viewmodel.FeaturedSongsViewModel
 import com.example.geetsunam.features.presentation.home.genres.adapters.GenreAdapter
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreEvent
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreState
@@ -30,6 +35,7 @@ class HomeFragment : Fragment() {
 
     private val genreAdapter by lazy { GenreAdapter() }
     private val featuredArtistsAdapter by lazy { FeaturedArtistsAdapter() }
+    private val featuredSongsAdapter by lazy { FeaturedSongsAdapter() }
 
     private lateinit var gview: View
 
@@ -38,6 +44,9 @@ class HomeFragment : Fragment() {
 
     @Inject
     lateinit var featuredArtistsViewModel: FeaturedArtistsViewModel
+
+    @Inject
+    lateinit var featuredSongsViewModel: FeaturedSongsViewModel
 
     @Inject
     lateinit var splashViewModel: SplashViewModel
@@ -51,6 +60,7 @@ class HomeFragment : Fragment() {
         pullToRefresh()
         requestGenres()
         requestFeaturedArtists()
+        requestFeaturedSongs()
         setupRecyclerView()
         return gview
     }
@@ -61,6 +71,9 @@ class HomeFragment : Fragment() {
             genreViewModel.onEvent(GenreEvent.GetGenre(splashViewModel.userIdFlow.value))
             featuredArtistsViewModel.onEvent(
                 FeaturedArtistsEvent.GetFeaturedArtists(splashViewModel.userIdFlow.value)
+            )
+            featuredSongsViewModel.onEvent(
+                FeaturedSongsEvent.GetFeaturedSongs(splashViewModel.userIdFlow.value)
             )
             swipeToRefresh.isRefreshing = false
         }
@@ -79,6 +92,11 @@ class HomeFragment : Fragment() {
         val artistRecViewLayoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         artistRecView.layoutManager = artistRecViewLayoutManager
+        //for featured songs
+        val songsRecView = gview.findViewById<RecyclerView>(R.id.rvFeaturedSongs)
+        songsRecView.adapter = featuredSongsAdapter
+        val songsRecViewLayoutManager = LinearLayoutManager(requireContext())
+        songsRecView.layoutManager = songsRecViewLayoutManager
     }
 
     private fun requestGenres() {
@@ -131,6 +149,37 @@ class HomeFragment : Fragment() {
                 shimmerView.visibility = View.GONE
             }
             if (response.status == FeaturedArtistsState.FeaturedArtistsStatus.FAILED) {
+                recyclerView.visibility = View.GONE
+                CustomToast.showToast(context = requireContext(), "${response.message}")
+            }
+        }
+    }
+
+    private fun requestFeaturedSongs() {
+        //find recyclerview and shimmerview
+        val recyclerView = gview.findViewById<RecyclerView>(R.id.rvFeaturedSongs)
+        val shimmerView = gview.findViewById<ShimmerFrameLayout>(R.id.shlFeaturedSongs)
+
+        featuredSongsViewModel.featuredSongState.observe(viewLifecycleOwner) { response ->
+            if (response.status == FeaturedSongsState.SongStatus.IDLE) {
+                featuredSongsViewModel.onEvent(
+                    FeaturedSongsEvent.GetFeaturedSongs(splashViewModel.userIdFlow.value)
+                )
+            }
+            if (response.status == FeaturedSongsState.SongStatus.LOADING) {
+                recyclerView.visibility = View.GONE
+                shimmerView.visibility = View.VISIBLE
+            }
+            if (response.status == FeaturedSongsState.SongStatus.SUCCESS) {
+                response.songs?.let {
+                    featuredSongsAdapter.setData(
+                        response.songs.songs as List<SongResponseModel.Data.Song>
+                    )
+                }
+                recyclerView.visibility = View.VISIBLE
+                shimmerView.visibility = View.GONE
+            }
+            if (response.status == FeaturedSongsState.SongStatus.FAILED) {
                 recyclerView.visibility = View.GONE
                 CustomToast.showToast(context = requireContext(), "${response.message}")
             }
