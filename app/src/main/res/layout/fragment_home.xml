@@ -117,7 +117,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="424dp"
+            android:layout_marginTop="410dp"
             android:layout_marginEnd="8dp"
             android:text="@string/featured_songs"
             android:textColor="@color/neutral_800"

@@ -5,6 +5,7 @@ import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
 import com.example.geetsunam.features.data.models.login.toJson
+import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.services.network.ApiService
 import com.example.geetsunam.utils.models.CommonRequestModel
 import retrofit2.Response
@@ -14,6 +15,8 @@ interface UserRemoteDatasource {
     suspend fun login(loginRequestModel: LoginRequestModel): Response<LoginResponseModel>
     suspend fun getGenres(commonRequestModel: CommonRequestModel): Response<GenreResponseModel>
     suspend fun getFeaturedArtists(commonRequestModel: CommonRequestModel): Response<ArtistResponseModel>
+    suspend fun getFeaturedSongs(commonRequestModel: CommonRequestModel):
+            Response<SongResponseModel>
 }
 
 class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiService) :
@@ -33,5 +36,9 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
 
     override suspend fun getFeaturedArtists(commonRequestModel: CommonRequestModel): Response<ArtistResponseModel> {
         return apiService.getFeaturedArtists(authToken = "Bearer ${commonRequestModel.token}")
+    }
+
+    override suspend fun getFeaturedSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel> {
+        return apiService.getFeaturedSongs(authToken = "Bearer ${commonRequestModel.token}")
     }
 }

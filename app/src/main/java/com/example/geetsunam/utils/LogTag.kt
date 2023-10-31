@@ -6,5 +6,5 @@ object LogTag {
     const val SPLASH = "splash"
     const val GENRE = "genre"
     const val FARTISTS = "artist"
-
+    const val FSONGS = "song"
 }

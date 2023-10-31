@@ -4,6 +4,7 @@ import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
 import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
+import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.utils.Resource
 import com.example.geetsunam.utils.models.CommonRequestModel
 import com.example.geetsunam.utils.models.CommonResponseModel
@@ -14,4 +15,6 @@ interface UserRepository {
     suspend fun getFeaturedArtists(commonRequestModel: CommonRequestModel):
             Resource<ArtistResponseModel>
 
+    suspend fun getFeaturedSongs(commonRequestModel: CommonRequestModel):
+            Resource<SongResponseModel>
 }
