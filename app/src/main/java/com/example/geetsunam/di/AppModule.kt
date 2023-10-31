@@ -11,8 +11,10 @@ import com.example.geetsunam.features.data.datasource.UserRemoteDatasource
 import com.example.geetsunam.features.data.datasource.UserRemoteDatasourceImpl
 import com.example.geetsunam.features.data.repositories.UserRepositoryImpl
 import com.example.geetsunam.features.domain.repositories.UserRepository
+import com.example.geetsunam.features.domain.usecases.GetFeaturedArtistsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenresUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
+import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsViewModel
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreViewModel
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
@@ -64,6 +66,11 @@ object AppModule {
         return GetGenresUsecase(repo)
     }
 
+    @Provides
+    fun provideFeaturedArtistsUsecase(repo: UserRepository): GetFeaturedArtistsUsecase {
+        return GetFeaturedArtistsUsecase(repo)
+    }
+
     //registering viewmodels
     @Provides
     fun provideSplashViewModel(datastore: LocalDatastore): SplashViewModel {
@@ -82,5 +89,12 @@ object AppModule {
         getGenresUsecase: GetGenresUsecase
     ): GenreViewModel {
         return GenreViewModel(getGenresUsecase)
+    }
+
+    @Provides
+    fun provideFeaturedArtistsViewModel(
+        getFeaturedArtistsUsecase: GetFeaturedArtistsUsecase
+    ): FeaturedArtistsViewModel {
+        return FeaturedArtistsViewModel(getFeaturedArtistsUsecase)
     }
 }

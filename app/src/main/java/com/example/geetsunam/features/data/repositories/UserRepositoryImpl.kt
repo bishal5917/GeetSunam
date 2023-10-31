@@ -1,6 +1,7 @@
 package com.example.geetsunam.features.data.repositories
 
 import com.example.geetsunam.features.data.datasource.UserRemoteDatasource
+import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
 import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
@@ -23,6 +24,16 @@ class UserRepositoryImpl(
 
     override suspend fun getGenres(commonRequestModel: CommonRequestModel): Resource<GenreResponseModel> {
         val response = userRemoteDatasource.getGenres(commonRequestModel)
+        if (response.isSuccessful) {
+            response.body()?.let { result ->
+                return Resource.Success(result)
+            }
+        }
+        return Resource.Error(message = "${response.errorBody()?.string()}")
+    }
+
+    override suspend fun getFeaturedArtists(commonRequestModel: CommonRequestModel): Resource<ArtistResponseModel> {
+        val response = userRemoteDatasource.getFeaturedArtists(commonRequestModel)
         if (response.isSuccessful) {
             response.body()?.let { result ->
                 return Resource.Success(result)

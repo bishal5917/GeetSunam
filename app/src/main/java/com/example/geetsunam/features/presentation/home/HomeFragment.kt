@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geetsunam.R
 import com.example.geetsunam.features.data.models.genres.GenreResponseModel
+import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsEvent
+import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsState
+import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsViewModel
 import com.example.geetsunam.features.presentation.home.genres.adapters.GenreAdapter
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreEvent
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreState
@@ -30,6 +33,9 @@ class HomeFragment : Fragment() {
     lateinit var genreViewModel: GenreViewModel
 
     @Inject
+    lateinit var featuredArtistsViewModel: FeaturedArtistsViewModel
+
+    @Inject
     lateinit var splashViewModel: SplashViewModel
 
     override fun onCreateView(
@@ -38,7 +44,8 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         gview = inflater.inflate(R.layout.fragment_home, container, false)
 
-        requestApi()
+        requestGenres()
+        requestFeaturedArtists()
         setupRecyclerView()
 //        pullToRefresh()
         return gview
@@ -52,7 +59,7 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = layoutManager
     }
 
-    private fun requestApi() {
+    private fun requestGenres() {
         //find recyclerview and shimmerview
         val recyclerView = gview.findViewById<RecyclerView>(R.id.rvGenre)
         val shimmerView = gview.findViewById<ShimmerFrameLayout>(R.id.shlGenre)
@@ -72,6 +79,33 @@ class HomeFragment : Fragment() {
             }
             if (response.status == GenreState.GenreStatus.FAILED) {
                 recyclerView.visibility = View.GONE
+                CustomToast.showToast(context = requireContext(), "${response.message}")
+            }
+        }
+    }
+
+    private fun requestFeaturedArtists() {
+        //find recyclerview and shimmerview
+        val recyclerView = gview.findViewById<RecyclerView>(R.id.rvGenre)
+        val shimmerView = gview.findViewById<ShimmerFrameLayout>(R.id.shlGenre)
+
+        featuredArtistsViewModel.featuredArtistsState.observe(viewLifecycleOwner) { response ->
+            if (response.status == FeaturedArtistsState.FeaturedArtistsStatus.IDLE) {
+                featuredArtistsViewModel.onEvent(
+                    FeaturedArtistsEvent.GetFeaturedArtists(splashViewModel.userIdFlow.value)
+                )
+            }
+            if (response.status == FeaturedArtistsState.FeaturedArtistsStatus.LOADING) {
+//                recyclerView.visibility = View.GONE
+//                shimmerView.visibility = View.VISIBLE
+            }
+            if (response.status == FeaturedArtistsState.FeaturedArtistsStatus.SUCCESS) {
+//                response.genres?.let { genreAdapter.setData(response.genres.genres as List<GenreResponseModel.Data.Genre>) }
+//                recyclerView.visibility = View.VISIBLE
+//                shimmerView.visibility = View.GONE
+            }
+            if (response.status == FeaturedArtistsState.FeaturedArtistsStatus.FAILED) {
+//                recyclerView.visibility = View.GONE
                 CustomToast.showToast(context = requireContext(), "${response.message}")
             }
         }
