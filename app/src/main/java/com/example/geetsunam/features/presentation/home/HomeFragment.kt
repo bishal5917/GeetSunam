@@ -15,6 +15,7 @@ import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreSt
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.utils.CustomToast
+import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -52,15 +53,25 @@ class HomeFragment : Fragment() {
     }
 
     private fun requestApi() {
-        genreViewModel.onEvent(GenreEvent.GetGenre(splashViewModel.userIdFlow.value))
+        //find recyclerview and shimmerview
+        val recyclerView = gview.findViewById<RecyclerView>(R.id.rvGenre)
+        val shimmerView = gview.findViewById<ShimmerFrameLayout>(R.id.shlGenre)
+
         genreViewModel.genreState.observe(viewLifecycleOwner) { response ->
+            if (response.status == GenreState.GenreStatus.IDLE) {
+                genreViewModel.onEvent(GenreEvent.GetGenre(splashViewModel.userIdFlow.value))
+            }
             if (response.status == GenreState.GenreStatus.LOADING) {
-                //show shimmer
+                recyclerView.visibility = View.GONE
+                shimmerView.visibility = View.VISIBLE
             }
             if (response.status == GenreState.GenreStatus.SUCCESS) {
                 response.genres?.let { genreAdapter.setData(response.genres.genres as List<GenreResponseModel.Data.Genre>) }
+                recyclerView.visibility = View.VISIBLE
+                shimmerView.visibility = View.GONE
             }
             if (response.status == GenreState.GenreStatus.FAILED) {
+                recyclerView.visibility = View.GONE
                 CustomToast.showToast(context = requireContext(), "${response.message}")
             }
         }
