@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.geetsunam.MainActivity
@@ -30,9 +31,13 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         val loginBtn = findViewById<Button>(R.id.btnLogin)
+        val forgotPassword = findViewById<TextView>(R.id.tvForgotPassword)
         loginBtn.setOnClickListener {
             LocalController().unfocusKeyboard(this)
             loginUser()
+        }
+        forgotPassword.setOnClickListener {
+            //navigate to forgot password fragment/activity
         }
         observeLiveData()
     }

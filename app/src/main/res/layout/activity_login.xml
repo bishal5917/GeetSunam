@@ -14,7 +14,6 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:text="@string/welcome_back"
-        android:textAlignment="center"
         android:textColor="@color/neutral_800"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,7 +28,6 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:text="@string/details_to_connect"
-        android:textAlignment="center"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,15 +54,15 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints="emailAddress"
         android:ems="10"
         android:hint="@string/enter_your_email"
+        android:inputType="textEmailAddress"
         android:textColor="@color/neutral_400"
         android:textSize="14sp"
-        android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvEmail"
-        android:autofillHints="emailAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
 
     <TextView
         android:id="@+id/tvPassword"
@@ -89,8 +87,8 @@
         android:layout_marginEnd="16dp"
         android:autofillHints="emailAddress"
         android:ems="10"
-        android:inputType="textPassword"
         android:hint="@string/password"
+        android:inputType="textPassword"
         android:textColor="@color/neutral_400"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -100,12 +98,26 @@
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="@string/log_in"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvForgotPassword" />
+
+    <TextView
+        android:id="@+id/tvForgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/forgot_password"
+        android:textColor="@color/primaryColor"
+        android:textSize="14sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etLoginPassword" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,4 +15,9 @@
     <string name="requesting_please_wait">Requesting , Please wait ...</string>
     <string name="featured_artists">Featured Artists</string>
     <string name="featured_songs">Featured Songs</string>
+    <string name="for_you">For You</string>
+    <string name="liked">Liked</string>
+    <string name="new_music">New</string>
+    <string name="forgot_password">Forgot Password?</string>
+
 </resources>

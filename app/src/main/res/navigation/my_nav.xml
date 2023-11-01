@@ -16,8 +16,18 @@
         android:label="fragment_trending"
         tools:layout="@layout/fragment_trending" />
     <fragment
-        android:id="@+id/exploreFragment"
-        android:name="com.example.geetsunam.features.presentation.explore.ExploreFragment"
-        android:label="fragment_explore"
-        tools:layout="@layout/fragment_explore" />
+        android:id="@+id/forYouFragment"
+        android:name="com.example.geetsunam.features.presentation.for_you.ForYouFragment"
+        android:label="fragment_for_you"
+        tools:layout="@layout/fragment_for_you" />
+    <fragment
+        android:id="@+id/newSongFragment"
+        android:name="com.example.geetsunam.features.presentation.new_song.NewSongFragment"
+        android:label="fragment_new_song"
+        tools:layout="@layout/fragment_new_song" />
+    <fragment
+        android:id="@+id/likedSongFragment"
+        android:name="com.example.geetsunam.features.presentation.liked_song.LikedSongFragment"
+        android:label="fragment_liked_song"
+        tools:layout="@layout/fragment_liked_song" />
 </navigation>
