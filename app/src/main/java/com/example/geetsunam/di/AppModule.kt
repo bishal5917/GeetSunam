@@ -20,6 +20,7 @@ import com.example.geetsunam.features.presentation.home.featured_artists.viewmod
 import com.example.geetsunam.features.presentation.home.featured_songs.viewmodel.FeaturedSongsViewModel
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreViewModel
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewModel
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingViewModel
 import com.example.geetsunam.services.local.LocalDatastore
@@ -89,6 +90,11 @@ object AppModule {
     @Provides
     fun provideSplashViewModel(datastore: LocalDatastore): SplashViewModel {
         return SplashViewModel(datastore)
+    }
+
+    @Provides
+    fun provideMusicViewModel(): MusicViewModel {
+        return MusicViewModel()
     }
 
     @Provides

@@ -8,9 +8,15 @@
         <variable
             name="result"
             type="com.example.geetsunam.features.data.models.songs.SongResponseModel.Data.Song" />
+
+        <variable
+            name="from"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        clickedFrom="@{from}"
+        getSongId="@{result.id}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -37,9 +43,9 @@
                     loadImageFromUrl="@{result.coverArt}"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -62,11 +68,11 @@
 
                 <TextView
                     android:id="@+id/tvFeaturedSongSinger"
+                    setText="@{result.artists.fullname}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
-                    setText="@{result.artists.fullname}"
                     app:layout_constraintStart_toEndOf="@+id/ivFeaturedSongImage"
                     app:layout_constraintTop_toBottomOf="@+id/tvFeaturedSongName" />
 
@@ -95,18 +101,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:tint="@color/primaryColor"
                     app:layout_constraintStart_toEndOf="@+id/ivFeaturedSongImage"
-                    app:srcCompat="@drawable/playcircle_outlined" />
+                    app:srcCompat="@drawable/playcircle_outlined"
+                    app:tint="@color/primaryColor" />
 
                 <TextView
                     android:id="@+id/tvSongDuration"
+                    setText="@{result.duration}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    setText="@{result.duration}"
                     android:textColor="@color/neutral_700"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@+id/ivPlayIcon"

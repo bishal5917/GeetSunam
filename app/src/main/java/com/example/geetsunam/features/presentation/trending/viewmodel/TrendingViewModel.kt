@@ -36,7 +36,7 @@ class TrendingViewModel @Inject constructor(
                     _trendingSongState.postValue(
                         _trendingSongState.value?.copy(
                             status = TrendingState.TrendingStatus.LOADING,
-                            message = "Getting genres"
+                            message = "Getting trending songs"
                         )
                     )
                 }

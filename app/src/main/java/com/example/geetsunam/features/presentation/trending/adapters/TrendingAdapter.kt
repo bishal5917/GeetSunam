@@ -1,12 +1,14 @@
 package com.example.geetsunam.features.presentation.trending.adapters
 
-import com.example.geetsunam.features.presentation.home.featured_songs.adapters.FeaturedSongsDiffUtil
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geetsunam.databinding.FeaturedSongCardBinding
 import com.example.geetsunam.features.data.models.songs.SongResponseModel
+import com.example.geetsunam.features.presentation.home.featured_songs.adapters.FeaturedSongsDiffUtil
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
+import javax.inject.Inject
 
 class TrendingAdapter : RecyclerView.Adapter<TrendingAdapter.MyViewHolder>() {
 
@@ -14,8 +16,14 @@ class TrendingAdapter : RecyclerView.Adapter<TrendingAdapter.MyViewHolder>() {
 
     class MyViewHolder(private val binding: FeaturedSongCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        @Inject
+        lateinit var musicViewModel: MusicViewModel
+
         fun bind(result: SongResponseModel.Data.Song) {
             binding.result = result
+            binding.from = "trending"
+//            binding.musicViewModel = musicViewModel
             binding.executePendingBindings()
         }
 

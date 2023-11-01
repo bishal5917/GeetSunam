@@ -1,15 +1,13 @@
 package com.example.geetsunam.features.presentation.home.featured_songs.adapters
 
-import com.example.geetsunam.features.presentation.home.featured_artists.adapters.FeaturedArtistsDiffUtil
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.geetsunam.databinding.FavArtistsCardBinding
 import com.example.geetsunam.databinding.FeaturedSongCardBinding
-import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
 import com.example.geetsunam.features.data.models.songs.SongResponseModel
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
+import javax.inject.Inject
 
 class FeaturedSongsAdapter : RecyclerView.Adapter<FeaturedSongsAdapter.MyViewHolder>() {
 
@@ -17,8 +15,12 @@ class FeaturedSongsAdapter : RecyclerView.Adapter<FeaturedSongsAdapter.MyViewHol
 
     class MyViewHolder(private val binding: FeaturedSongCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @Inject
+        lateinit var musicViewModel: MusicViewModel
         fun bind(result: SongResponseModel.Data.Song) {
             binding.result = result
+            binding.from = "featured"
+//            binding.musicViewModel = musicViewModel
             binding.executePendingBindings()
         }
 

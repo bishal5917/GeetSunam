@@ -34,6 +34,7 @@
             <include layout="@layout/placeholder_rectangle" />
 
             <include layout="@layout/placeholder_rectangle" />
+
         </LinearLayout>
 
     </com.facebook.shimmer.ShimmerFrameLayout>

@@ -27,10 +27,10 @@ class TrendingFragment : Fragment() {
     private lateinit var gview: View
 
     @Inject
-    lateinit var trendingViewModel: TrendingViewModel
+    lateinit var splashViewModel: SplashViewModel
 
     @Inject
-    lateinit var splashViewModel: SplashViewModel
+    lateinit var trendingViewModel: TrendingViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
