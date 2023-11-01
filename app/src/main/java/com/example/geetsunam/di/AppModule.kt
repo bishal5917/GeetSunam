@@ -14,12 +14,14 @@ import com.example.geetsunam.features.domain.repositories.UserRepository
 import com.example.geetsunam.features.domain.usecases.GetFeaturedArtistsUsecase
 import com.example.geetsunam.features.domain.usecases.GetFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenresUsecase
+import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
 import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsViewModel
 import com.example.geetsunam.features.presentation.home.featured_songs.viewmodel.FeaturedSongsViewModel
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreViewModel
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
+import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingViewModel
 import com.example.geetsunam.services.local.LocalDatastore
 import com.example.geetsunam.services.local.LocalDatastoreImpl
 import com.example.geetsunam.services.network.ApiService
@@ -74,8 +76,13 @@ object AppModule {
     }
 
     @Provides
-    fun provideFeaturedSOngsUsecase(repo: UserRepository): GetFeaturedSongsUsecase {
+    fun provideFeaturedSongsUsecase(repo: UserRepository): GetFeaturedSongsUsecase {
         return GetFeaturedSongsUsecase(repo)
+    }
+
+    @Provides
+    fun provideTrendingSongsUsecase(repo: UserRepository): GetTrendingSongsUsecase {
+        return GetTrendingSongsUsecase(repo)
     }
 
     //registering viewmodels
@@ -106,9 +113,16 @@ object AppModule {
     }
 
     @Provides
-    fun provideFeaturedSomgsViewModel(
+    fun provideFeaturedSongsViewModel(
         getFeaturedSongsUsecase: GetFeaturedSongsUsecase
     ): FeaturedSongsViewModel {
         return FeaturedSongsViewModel(getFeaturedSongsUsecase)
+    }
+
+    @Provides
+    fun provideTrendingSongsViewModel(
+        getTrendingSongsUsecase: GetTrendingSongsUsecase
+    ): TrendingViewModel {
+        return TrendingViewModel(getTrendingSongsUsecase)
     }
 }
