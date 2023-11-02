@@ -4,7 +4,10 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.widget.SeekBar
 import androidx.navigation.navArgs
+import com.example.geetsunam.R
 import com.example.geetsunam.core.configs.ApiConfig
 import com.example.geetsunam.databinding.ActivityMusicBinding
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
@@ -32,6 +35,10 @@ class MusicActivity : AppCompatActivity() {
 
     @Inject
     lateinit var musicViewModel: MusicViewModel
+
+    //handler for seekBar
+    lateinit var runnable: Runnable
+    private var handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +77,37 @@ class MusicActivity : AppCompatActivity() {
                 mediaPlayer?.setOnPreparedListener { player ->
                     // Start playing when the media is prepared
                     player.start()
+                    binding.seekBar.progress = 0
+                    binding.seekBar.max = mediaPlayer!!.duration
+                    binding.seekBar.setOnSeekBarChangeListener(object :
+                        SeekBar.OnSeekBarChangeListener {
+                        override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                            if (p2) {
+                                mediaPlayer!!.seekTo(p1)
+                            }
+                        }
+
+                        override fun onStartTrackingTouch(p0: SeekBar?) {
+                        }
+
+                        override fun onStopTrackingTouch(p0: SeekBar?) {
+                        }
+                    })
+                    runnable = Runnable {
+                        binding.seekBar.progress = mediaPlayer!!.currentPosition + 1000
+                        handler.postDelayed(runnable, 1000)
+                    }
                     binding.result = response.music
+                    binding.ibPlay.setImageResource(R.drawable.ic_pause)
+                    binding.ibPlay.setOnClickListener {
+                        if (mediaPlayer!!.isPlaying) {
+                            mediaPlayer!!.pause()
+                            binding.ibPlay.setImageResource(R.drawable.ic_play)
+                        } else if (!mediaPlayer!!.isPlaying) {
+                            mediaPlayer!!.start()
+                            binding.ibPlay.setImageResource(R.drawable.ic_pause)
+                        }
+                    }
                 }
             }
             if (response.status == MusicState.MusicStatus.FAILED) {
@@ -80,7 +117,7 @@ class MusicActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        mediaPlayer?.release() // Release the MediaPlayer when done
+        mediaPlayer?.release()
         super.onDestroy()
     }
 }

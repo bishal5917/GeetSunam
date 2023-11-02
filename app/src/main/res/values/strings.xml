@@ -20,5 +20,8 @@
     <string name="new_music">New</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="now_playing">Now Playing</string>
+    <string name="play">Play</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
 
 </resources>
