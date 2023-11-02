@@ -31,8 +31,8 @@ class SplashActivity : AppCompatActivity() {
     @OptIn(DelicateCoroutinesApi::class)
     private fun delayAndNavigate() {
         GlobalScope.launch {
-            // Delay for 2 seconds
-            delay(2000)
+            // Delay for 1 second
+            delay(1000)
             checkTokenAndNavigate()
         }
     }

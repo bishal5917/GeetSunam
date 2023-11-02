@@ -3,6 +3,7 @@ package com.example.geetsunam.services.network
 import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
 import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
+import com.example.geetsunam.features.data.models.songs.SingleSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import retrofit2.Response
 import retrofit2.http.*
@@ -42,4 +43,12 @@ interface ApiService {
     suspend fun getTrendingSongs(
         @Header("Authorization") authToken: String,
     ): Response<SongResponseModel>
+
+    // Get single song
+    @GET("songs/{id}")
+    @JvmSuppressWildcards
+    suspend fun getSingleSong(
+        @Header("Authorization") authToken: String,
+        @Path("id") songId: String
+    ): Response<SingleSongResponseModel>
 }

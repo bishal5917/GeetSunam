@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.geetsunam.R
 import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
@@ -15,6 +16,7 @@ import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingEv
 import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingState
 import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingViewModel
 import com.example.geetsunam.utils.CustomToast
+import com.example.geetsunam.utils.models.Song
 import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -66,7 +68,7 @@ class TrendingFragment : Fragment() {
             if (response.status == TrendingState.TrendingStatus.SUCCESS) {
                 response.songs?.let {
                     trendingAdapter.setData(
-                        response.songs.songs as List<SongResponseModel.Data.Song>
+                        response.songs.songs as List<Song>
                     )
                 }
                 recyclerView.visibility = View.VISIBLE
@@ -80,5 +82,10 @@ class TrendingFragment : Fragment() {
     }
 
     private fun pullToRefresh() {
+        val swipeToRefresh = gview.findViewById<SwipeRefreshLayout>(R.id.srlTrending)
+        swipeToRefresh.setOnRefreshListener {
+            trendingViewModel.onEvent(TrendingEvent.GetTrendingSongs(splashViewModel.userIdFlow.value))
+            swipeToRefresh.isRefreshing = false
+        }
     }
 }

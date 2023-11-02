@@ -26,6 +26,7 @@ import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreSt
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.utils.CustomToast
+import com.example.geetsunam.utils.models.Song
 import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -173,7 +174,7 @@ class HomeFragment : Fragment() {
             if (response.status == FeaturedSongsState.SongStatus.SUCCESS) {
                 response.songs?.let {
                     featuredSongsAdapter.setData(
-                        response.songs.songs as List<SongResponseModel.Data.Song>
+                        response.songs.songs as List<Song>
                     )
                 }
                 recyclerView.visibility = View.VISIBLE

@@ -7,7 +7,7 @@
 
         <variable
             name="result"
-            type="com.example.geetsunam.features.data.models.songs.SongResponseModel.Data.Song" />
+            type="com.example.geetsunam.utils.models.Song" />
 
         <variable
             name="from"

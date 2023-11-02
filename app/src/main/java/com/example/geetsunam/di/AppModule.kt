@@ -14,6 +14,7 @@ import com.example.geetsunam.features.domain.repositories.UserRepository
 import com.example.geetsunam.features.domain.usecases.GetFeaturedArtistsUsecase
 import com.example.geetsunam.features.domain.usecases.GetFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenresUsecase
+import com.example.geetsunam.features.domain.usecases.GetSingleSongUsecase
 import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
 import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsViewModel
@@ -86,15 +87,15 @@ object AppModule {
         return GetTrendingSongsUsecase(repo)
     }
 
+    @Provides
+    fun provideSingleSongUsecase(repo: UserRepository): GetSingleSongUsecase {
+        return GetSingleSongUsecase(repo)
+    }
+
     //registering viewmodels
     @Provides
     fun provideSplashViewModel(datastore: LocalDatastore): SplashViewModel {
         return SplashViewModel(datastore)
-    }
-
-    @Provides
-    fun provideMusicViewModel(): MusicViewModel {
-        return MusicViewModel()
     }
 
     @Provides
@@ -130,5 +131,12 @@ object AppModule {
         getTrendingSongsUsecase: GetTrendingSongsUsecase
     ): TrendingViewModel {
         return TrendingViewModel(getTrendingSongsUsecase)
+    }
+
+    @Provides
+    fun provideSingleSongViewModel(
+        getSingleSongUsecase: GetSingleSongUsecase
+    ): MusicViewModel {
+        return MusicViewModel(getSingleSongUsecase)
     }
 }

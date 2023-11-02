@@ -1,52 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/srlTrending"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".features.presentation.trending.TrendingFragment">
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shlTrending"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".features.presentation.trending.TrendingFragment">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shlTrending"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <include layout="@layout/placeholder_rectangle" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <include layout="@layout/placeholder_rectangle" />
+                <include layout="@layout/placeholder_rectangle" />
 
-            <include layout="@layout/placeholder_rectangle" />
+                <include layout="@layout/placeholder_rectangle" />
 
-            <include layout="@layout/placeholder_rectangle" />
+                <include layout="@layout/placeholder_rectangle" />
 
-            <include layout="@layout/placeholder_rectangle" />
+                <include layout="@layout/placeholder_rectangle" />
 
-            <include layout="@layout/placeholder_rectangle" />
+                <include layout="@layout/placeholder_rectangle" />
 
-            <include layout="@layout/placeholder_rectangle" />
+                <include layout="@layout/placeholder_rectangle" />
 
-            <include layout="@layout/placeholder_rectangle" />
+                <include layout="@layout/placeholder_rectangle" />
 
-        </LinearLayout>
+                <include layout="@layout/placeholder_rectangle" />
 
-    </com.facebook.shimmer.ShimmerFrameLayout>
+            </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvTrendingSongs"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTrendingSongs"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

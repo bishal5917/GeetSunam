@@ -8,4 +8,5 @@ object LogTag {
     const val FARTISTS = "artist"
     const val FSONGS = "featured"
     const val TSONGS = "trending"
+    const val SINGLESONG = "song"
 }
