@@ -14,6 +14,7 @@ import com.example.geetsunam.features.domain.repositories.UserRepository
 import com.example.geetsunam.features.domain.usecases.GetFeaturedArtistsUsecase
 import com.example.geetsunam.features.domain.usecases.GetFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenresUsecase
+import com.example.geetsunam.features.domain.usecases.GetNewSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetSingleSongUsecase
 import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
@@ -22,6 +23,7 @@ import com.example.geetsunam.features.presentation.home.featured_songs.viewmodel
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreViewModel
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewModel
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
+import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingViewModel
 import com.example.geetsunam.services.local.LocalDatastore
@@ -92,6 +94,11 @@ object AppModule {
         return GetSingleSongUsecase(repo)
     }
 
+    @Provides
+    fun provideNewSongsUsecase(repo: UserRepository): GetNewSongsUsecase {
+        return GetNewSongsUsecase(repo)
+    }
+
     //registering viewmodels
     @Provides
     fun provideSplashViewModel(datastore: LocalDatastore): SplashViewModel {
@@ -138,5 +145,12 @@ object AppModule {
         getSingleSongUsecase: GetSingleSongUsecase
     ): MusicViewModel {
         return MusicViewModel(getSingleSongUsecase)
+    }
+
+    @Provides
+    fun provideNewSongsViewModel(
+        getNewSongsUsecase: GetNewSongsUsecase
+    ): NewSongViewModel {
+        return NewSongViewModel(getNewSongsUsecase)
     }
 }

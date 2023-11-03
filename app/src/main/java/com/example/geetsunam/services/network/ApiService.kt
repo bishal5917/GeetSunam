@@ -48,7 +48,13 @@ interface ApiService {
     @GET("songs/{id}")
     @JvmSuppressWildcards
     suspend fun getSingleSong(
-        @Header("Authorization") authToken: String,
-        @Path("id") songId: String
+        @Header("Authorization") authToken: String, @Path("id") songId: String
     ): Response<SingleSongResponseModel>
+
+    //get trending songs
+    @GET("songs/new-releases")
+    @JvmSuppressWildcards
+    suspend fun getNewSongs(
+        @Header("Authorization") authToken: String,
+    ): Response<SongResponseModel>
 }

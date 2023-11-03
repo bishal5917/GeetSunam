@@ -1,4 +1,4 @@
-package com.example.geetsunam.features.presentation.trending.adapters
+package com.example.geetsunam.features.presentation.new_song.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import com.example.geetsunam.databinding.FeaturedSongCardBinding
 import com.example.geetsunam.features.presentation.home.featured_songs.adapters.FeaturedSongsDiffUtil
 import com.example.geetsunam.utils.models.Song
 
-class TrendingAdapter : RecyclerView.Adapter<TrendingAdapter.MyViewHolder>() {
+class NewsongsAdapter : RecyclerView.Adapter<NewsongsAdapter.MyViewHolder>() {
 
     private var songs = emptyList<Song>()
 
@@ -17,7 +17,7 @@ class TrendingAdapter : RecyclerView.Adapter<TrendingAdapter.MyViewHolder>() {
 
         fun bind(result: Song) {
             binding.result = result
-            binding.from = "trending"
+            binding.from = "new_song"
             binding.executePendingBindings()
         }
 
@@ -44,8 +44,8 @@ class TrendingAdapter : RecyclerView.Adapter<TrendingAdapter.MyViewHolder>() {
     }
 
     fun setData(newData: List<Song>) {
-        val trendingDiffUtil = FeaturedSongsDiffUtil(songs, newData)
-        val diffUtilResult = DiffUtil.calculateDiff(trendingDiffUtil)
+        val newSongDiffUtil = FeaturedSongsDiffUtil(songs, newData)
+        val diffUtilResult = DiffUtil.calculateDiff(newSongDiffUtil)
         songs = newData
         diffUtilResult.dispatchUpdatesTo(this)
     }

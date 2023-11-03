@@ -41,8 +41,8 @@
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/ivFeaturedSongImage"
                     loadImageFromUrl="@{result.coverArt}"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
@@ -59,7 +59,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:textColor="@color/neutral_800"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -72,38 +72,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
                     app:layout_constraintStart_toEndOf="@+id/ivFeaturedSongImage"
                     app:layout_constraintTop_toBottomOf="@+id/tvFeaturedSongName" />
-
-                <ImageView
-                    android:id="@+id/ivAddPlaylistIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_playlistadd" />
-
-                <ImageView
-                    android:id="@+id/ivAddFavouriteIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toStartOf="@+id/ivAddPlaylistIcon"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_favorite" />
 
                 <ImageView
                     android:id="@+id/ivPlayIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivFeaturedSongImage"
                     app:layout_constraintStart_toEndOf="@+id/ivFeaturedSongImage"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFeaturedSongSinger"
                     app:srcCompat="@drawable/playcircle_outlined"
                     app:tint="@color/primaryColor" />
 

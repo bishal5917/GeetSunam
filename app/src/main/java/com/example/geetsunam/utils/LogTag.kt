@@ -9,4 +9,6 @@ object LogTag {
     const val FSONGS = "featured"
     const val TSONGS = "trending"
     const val SINGLESONG = "song"
+    const val NSONGS = "new"
+
 }

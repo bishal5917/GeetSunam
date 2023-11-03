@@ -24,4 +24,7 @@ interface UserRepository {
 
     suspend fun getSingleSong(commonRequestModel: CommonRequestModel):
             Resource<SingleSongResponseModel>
+
+    suspend fun getNewSongs(commonRequestModel: CommonRequestModel):
+            Resource<SongResponseModel>
 }

@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.widget.SeekBar
 import androidx.navigation.navArgs
 import com.example.geetsunam.R
@@ -38,7 +39,6 @@ class MusicActivity : AppCompatActivity() {
 
     //handler for seekBar
     lateinit var runnable: Runnable
-    private var handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,10 +93,12 @@ class MusicActivity : AppCompatActivity() {
                         override fun onStopTrackingTouch(p0: SeekBar?) {
                         }
                     })
-                    runnable = Runnable {
-                        binding.seekBar.progress = mediaPlayer!!.currentPosition + 1000
-                        handler.postDelayed(runnable, 1000)
-                    }
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        runnable = Runnable {
+                            binding.seekBar.progress = mediaPlayer!!.currentPosition
+                        }
+                    }, 3000)
+
                     binding.result = response.music
                     binding.ibPlay.setImageResource(R.drawable.ic_pause)
                     binding.ibPlay.setOnClickListener {

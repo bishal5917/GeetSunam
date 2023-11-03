@@ -12,6 +12,7 @@ import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.features.presentation.home.HomeFragmentDirections
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
+import com.example.geetsunam.features.presentation.new_song.NewSongFragmentDirections
 import com.example.geetsunam.features.presentation.trending.TrendingFragmentDirections
 import javax.inject.Inject
 
@@ -30,7 +31,12 @@ class BindingAdapter {
                             TrendingFragmentDirections.actionTrendingFragmentToMusicActivity(songId)
                         songCard.findNavController().navigate(action)
                     } else if (from == "featured") {
-                        val action = HomeFragmentDirections.actionHomeFragmentToMusicActivity(songId)
+                        val action =
+                            HomeFragmentDirections.actionHomeFragmentToMusicActivity(songId)
+                        songCard.findNavController().navigate(action)
+                    } else if (from == "new_song") {
+                        val action =
+                            NewSongFragmentDirections.actionNewSongFragmentToMusicActivity(songId)
                         songCard.findNavController().navigate(action)
                     }
                 } catch (ex: Exception) {

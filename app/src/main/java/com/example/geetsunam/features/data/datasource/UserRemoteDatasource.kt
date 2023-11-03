@@ -4,7 +4,6 @@ import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
 import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
-import com.example.geetsunam.features.data.models.login.toJson
 import com.example.geetsunam.features.data.models.songs.SingleSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.services.network.ApiService
@@ -21,6 +20,10 @@ interface UserRemoteDatasource {
     suspend fun getTrendingSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel>
 
     suspend fun getSingleSong(commonRequestModel: CommonRequestModel): Response<SingleSongResponseModel>
+
+    suspend fun getNewSongs(commonRequestModel: CommonRequestModel):
+            Response<SongResponseModel>
+
 }
 
 class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiService) :
@@ -55,5 +58,9 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
             authToken = "Bearer ${commonRequestModel.token}",
             songId = commonRequestModel.songId ?: "abc"
         )
+    }
+
+    override suspend fun getNewSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel> {
+        return apiService.getNewSongs(authToken = "Bearer ${commonRequestModel.token}")
     }
 }

@@ -73,4 +73,14 @@ class UserRepositoryImpl(
         }
         return Resource.Error(message = "${response.errorBody()?.string()}")
     }
+
+    override suspend fun getNewSongs(commonRequestModel: CommonRequestModel): Resource<SongResponseModel> {
+        val response = userRemoteDatasource.getNewSongs(commonRequestModel)
+        if (response.isSuccessful) {
+            response.body()?.let { result ->
+                return Resource.Success(result)
+            }
+        }
+        return Resource.Error(message = "${response.errorBody()?.string()}")
+    }
 }
