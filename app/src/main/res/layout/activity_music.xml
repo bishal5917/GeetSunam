@@ -30,12 +30,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageButton
+            android:id="@+id/ibAddToPlaylist"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:background="@color/white"
+            android:contentDescription="@string/add_to_favourites"
+            android:src="@drawable/ic_playlistadd"
+            app:layout_constraintBottom_toTopOf="@+id/ivMusic"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageButton
+            android:id="@+id/ibLike"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/white"
+            android:contentDescription="@string/add_to_favourites"
+            android:src="@drawable/ic_favorite"
+            app:layout_constraintBottom_toTopOf="@+id/ivMusic"
+            app:layout_constraintEnd_toEndOf="parent" />
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivMusic"
             loadImageFromUrl="@{result.coverArt}"
             android:layout_width="300dp"
             android:layout_height="300dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="64dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

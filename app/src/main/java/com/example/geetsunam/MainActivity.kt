@@ -5,8 +5,12 @@ import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
+import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingEvent
+import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
