@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">GeetSunam</string>
     <string name="home">Home</string>
+    <string name="web_client_id">366970231566-5ke77odbusspkiqpde0pgnuu24g28o2d.apps.googleusercontent.com</string>
     <string name="trending">Trending</string>
     <string name="explore">Explore</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>

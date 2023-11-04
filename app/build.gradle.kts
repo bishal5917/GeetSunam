@@ -101,4 +101,7 @@ dependencies {
 
     // Shimmer
     implementation("com.facebook.shimmer:shimmer:0.5.0")
+
+    //google onetap login
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 }
