@@ -41,9 +41,6 @@
         <action
             android:id="@+id/action_newSongFragment_to_musicActivity"
             app:destination="@id/musicActivity" />
-        <argument
-            android:name="id"
-            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/likedSongFragment"
@@ -55,9 +52,8 @@
         android:name="com.example.geetsunam.features.presentation.music.MusicActivity"
         android:label="activity_music"
         tools:layout="@layout/activity_music">
-
         <argument
-            android:name="id"
-            app:argType="string" />
+            android:name="song"
+            app:argType="com.example.geetsunam.features.domain.entities.SongEntity" />
     </activity>
 </navigation>

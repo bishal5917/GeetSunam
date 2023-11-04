@@ -8,35 +8,46 @@ import androidx.databinding.BindingAdapter
 import androidx.navigation.findNavController
 import coil.load
 import com.example.geetsunam.R
-import com.example.geetsunam.features.data.models.songs.SongResponseModel
+import com.example.geetsunam.features.domain.entities.SongEntity
 import com.example.geetsunam.features.presentation.home.HomeFragmentDirections
-import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
-import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.new_song.NewSongFragmentDirections
 import com.example.geetsunam.features.presentation.trending.TrendingFragmentDirections
-import javax.inject.Inject
+import com.example.geetsunam.utils.models.Song
 
 class BindingAdapter {
 
     companion object {
-        @BindingAdapter("clickedFrom", "getSongId", requireAll = true)
+        @BindingAdapter("clickedFrom", "getSong", requireAll = true)
         @JvmStatic
         fun onMusicCardClickedListener(
-            songCard: ConstraintLayout, from: String, songId: String
+            songCard: ConstraintLayout, from: String, song: Song
         ) {
             songCard.setOnClickListener {
+                val songEntity = SongEntity(
+                    id = song.id,
+                    coverArt = song.coverArt,
+                    artistName = song.artists?.fullname,
+                    songName = song.title,
+                    duration = song.duration,
+                    source = song.source,
+                    stream = song.stream,
+                )
                 try {
                     if (from == "trending") {
                         val action =
-                            TrendingFragmentDirections.actionTrendingFragmentToMusicActivity(songId)
+                            TrendingFragmentDirections.actionTrendingFragmentToMusicActivity(
+                                songEntity
+                            )
                         songCard.findNavController().navigate(action)
                     } else if (from == "featured") {
                         val action =
-                            HomeFragmentDirections.actionHomeFragmentToMusicActivity(songId)
+                            HomeFragmentDirections.actionHomeFragmentToMusicActivity(songEntity)
                         songCard.findNavController().navigate(action)
                     } else if (from == "new_song") {
                         val action =
-                            NewSongFragmentDirections.actionNewSongFragmentToMusicActivity(songId)
+                            NewSongFragmentDirections.actionNewSongFragmentToMusicActivity(
+                                songEntity
+                            )
                         songCard.findNavController().navigate(action)
                     }
                 } catch (ex: Exception) {

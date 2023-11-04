@@ -35,7 +35,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun providesFlyBuyApiService(retrofit: Retrofit): ApiService {
+    fun providesApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
     }
 

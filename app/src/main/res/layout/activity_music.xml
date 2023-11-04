@@ -7,7 +7,7 @@
 
         <variable
             name="result"
-            type="com.example.geetsunam.utils.models.Song" />
+            type="com.example.geetsunam.features.domain.entities.SongEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -67,7 +67,7 @@
 
         <TextView
             android:id="@+id/tvMusic"
-            setText="@{result.title}"
+            setText="@{result.songName}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -83,7 +83,7 @@
 
         <TextView
             android:id="@+id/tvMusicArtist"
-            setText="@{result.artists.fullname}"
+            setText="@{result.artistName}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
