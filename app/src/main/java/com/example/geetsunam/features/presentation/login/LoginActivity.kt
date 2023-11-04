@@ -15,6 +15,7 @@ import com.example.geetsunam.R
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginEvent
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginState
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewModel
+import com.example.geetsunam.features.presentation.signup.SignupActivity
 import com.example.geetsunam.utils.CustomDialog
 import com.example.geetsunam.utils.CustomToast
 import com.example.geetsunam.utils.LocalController
@@ -32,12 +33,18 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         val loginBtn = findViewById<Button>(R.id.btnLogin)
         val forgotPassword = findViewById<TextView>(R.id.tvForgotPassword)
+        val gotoSignUpBtn = findViewById<TextView>(R.id.btnSignup)
         loginBtn.setOnClickListener {
             LocalController().unfocusKeyboard(this)
             loginUser()
         }
         forgotPassword.setOnClickListener {
             //navigate to forgot password fragment/activity
+        }
+        gotoSignUpBtn.setOnClickListener {
+            //navigate to sign up activity
+            val signupIntent = Intent(this, SignupActivity::class.java)
+            startActivity(signupIntent)
         }
         observeLiveData()
     }
