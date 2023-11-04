@@ -27,4 +27,7 @@ interface UserRepository {
 
     suspend fun getNewSongs(commonRequestModel: CommonRequestModel):
             Resource<SongResponseModel>
+
+    suspend fun toggleFavourite(commonRequestModel: CommonRequestModel):
+            Resource<SingleSongResponseModel>
 }

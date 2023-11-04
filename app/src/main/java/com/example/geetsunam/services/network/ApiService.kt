@@ -57,4 +57,11 @@ interface ApiService {
     suspend fun getNewSongs(
         @Header("Authorization") authToken: String,
     ): Response<SongResponseModel>
+
+    // Get single song
+    @PATCH("favourite/songs/toggle")
+    @JvmSuppressWildcards
+    suspend fun toggleFavourites(
+        @Header("Authorization") authToken: String, @Body body: Any
+    ): Response<SingleSongResponseModel>
 }

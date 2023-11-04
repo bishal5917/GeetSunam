@@ -12,4 +12,5 @@ data class SongEntity(
     val duration: String?,
     val source: String?,
     val stream: String?,
+    val isFavourite: Boolean?,
 ) : Parcelable

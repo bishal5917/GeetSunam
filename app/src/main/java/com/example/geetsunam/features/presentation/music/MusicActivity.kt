@@ -1,12 +1,23 @@
 package com.example.geetsunam.features.presentation.music
 
+import android.app.Dialog
+import android.content.Intent
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.SeekBar
 import androidx.navigation.navArgs
+import com.example.geetsunam.MainActivity
 import com.example.geetsunam.R
 import com.example.geetsunam.databinding.ActivityMusicBinding
+import com.example.geetsunam.features.presentation.login.viewmodel.LoginState
+import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavEvent
+import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavState
+import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavViewModel
+import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
+import com.example.geetsunam.utils.CustomDialog
+import com.example.geetsunam.utils.CustomToast
+import com.example.geetsunam.utils.models.CommonRequestModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -15,6 +26,12 @@ class MusicActivity : AppCompatActivity() {
 
     @Inject
     lateinit var mediaPlayer: MediaPlayer
+
+    @Inject
+    lateinit var splashViewModel: SplashViewModel
+
+    @Inject
+    lateinit var toggleFavViewModel: ToggleFavViewModel
 
     //getting argument (song)
     private val args by navArgs<MusicActivityArgs>()
@@ -35,6 +52,50 @@ class MusicActivity : AppCompatActivity() {
 //                .setUsage(AudioAttributes.USAGE_MEDIA).build()
 //        )
         playMusic()
+        setFavDrawable()
+        addToFavourite()
+    }
+
+    private fun setFavDrawable() {
+        if (args.song.isFavourite == true) {
+            binding.ibLike.setImageResource(R.drawable.ic_favorite_fill)
+        }
+    }
+
+    private fun addToFavourite() {
+        val favBtn = binding.ibLike
+        favBtn.setOnClickListener {
+            toggleFavViewModel.onEvent(
+                ToggleFavEvent.AddFavourite(
+                    CommonRequestModel(splashViewModel.userIdFlow.value, args.song.id)
+                )
+            )
+        }
+        //observing
+        val dialog = Dialog(this)
+        toggleFavViewModel.toggleFavState.observe(this) { response ->
+            if (response.status == ToggleFavState.ToggleFavStatus.LOADING) {
+                //show loading dialog
+                CustomDialog().showLoadingDialog(dialog)
+            }
+            if (response.status == ToggleFavState.ToggleFavStatus.SUCCESS) {
+                CustomDialog().hideLoadingDialog(dialog)
+                binding.ibLike.setImageResource(response.drawableId!!)
+                CustomToast.showToast(
+                    context = this, "${
+                        response.message
+                    }"
+                )
+            }
+            if (response.status == ToggleFavState.ToggleFavStatus.FAILED) {
+                CustomDialog().hideLoadingDialog(dialog)
+                CustomToast.showToast(
+                    context = this, "${
+                        response.message
+                    }"
+                )
+            }
+        }
     }
 
     private fun playMusic() {

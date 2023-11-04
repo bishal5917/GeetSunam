@@ -31,6 +31,7 @@ class BindingAdapter {
                     duration = song.duration,
                     source = song.source,
                     stream = song.stream,
+                    isFavourite = song.isFavourite,
                 )
                 try {
                     if (from == "trending") {

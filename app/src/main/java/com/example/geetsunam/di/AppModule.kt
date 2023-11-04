@@ -18,10 +18,12 @@ import com.example.geetsunam.features.domain.usecases.GetNewSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetSingleSongUsecase
 import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
+import com.example.geetsunam.features.domain.usecases.ToggleFavouriteUsecase
 import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsViewModel
 import com.example.geetsunam.features.presentation.home.featured_songs.viewmodel.FeaturedSongsViewModel
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreViewModel
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewModel
+import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavViewModel
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
@@ -99,6 +101,11 @@ object AppModule {
         return GetNewSongsUsecase(repo)
     }
 
+    @Provides
+    fun provideToggleFavUsecase(repo: UserRepository): ToggleFavouriteUsecase {
+        return ToggleFavouriteUsecase(repo)
+    }
+
     //registering viewmodels
     @Provides
     fun provideSplashViewModel(datastore: LocalDatastore): SplashViewModel {
@@ -152,5 +159,12 @@ object AppModule {
         getNewSongsUsecase: GetNewSongsUsecase
     ): NewSongViewModel {
         return NewSongViewModel(getNewSongsUsecase)
+    }
+
+    @Provides
+    fun provideToggleFavViewModel(
+        toggleFavouriteUsecase: ToggleFavouriteUsecase
+    ): ToggleFavViewModel {
+        return ToggleFavViewModel(toggleFavouriteUsecase)
     }
 }

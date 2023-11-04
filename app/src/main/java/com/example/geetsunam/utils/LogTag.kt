@@ -10,5 +10,5 @@ object LogTag {
     const val TSONGS = "trending"
     const val SINGLESONG = "song"
     const val NSONGS = "new"
-
+    const val TOGGLEFAV = "toggle"
 }
