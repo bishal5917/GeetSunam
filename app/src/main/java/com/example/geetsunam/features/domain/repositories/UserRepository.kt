@@ -12,6 +12,8 @@ import com.example.geetsunam.utils.models.CommonResponseModel
 
 interface UserRepository {
     suspend fun login(loginRequestModel: LoginRequestModel): Resource<LoginResponseModel>
+    suspend fun loginWithGoogle(commonRequestModel: CommonRequestModel): Resource<LoginResponseModel>
+
     suspend fun getGenres(commonRequestModel: CommonRequestModel): Resource<GenreResponseModel>
     suspend fun getFeaturedArtists(commonRequestModel: CommonRequestModel):
             Resource<ArtistResponseModel>

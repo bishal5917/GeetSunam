@@ -16,6 +16,13 @@ interface ApiService {
         @Body body: Any
     ): Response<LoginResponseModel>
 
+    //login
+    @POST("users/google")
+    @JvmSuppressWildcards
+    suspend fun loginWithGoogle(
+        @Body body: Any
+    ): Response<LoginResponseModel>
+
     //get genres
     @GET("genre")
     @JvmSuppressWildcards

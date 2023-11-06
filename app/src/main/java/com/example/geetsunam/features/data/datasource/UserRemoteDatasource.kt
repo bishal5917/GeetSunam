@@ -13,6 +13,9 @@ import javax.inject.Inject
 
 interface UserRemoteDatasource {
     suspend fun login(loginRequestModel: LoginRequestModel): Response<LoginResponseModel>
+    suspend fun loginWithGoogle(commonRequestModel: CommonRequestModel):
+            Response<LoginResponseModel>
+
     suspend fun getGenres(commonRequestModel: CommonRequestModel): Response<GenreResponseModel>
     suspend fun getFeaturedArtists(commonRequestModel: CommonRequestModel): Response<ArtistResponseModel>
     suspend fun getFeaturedSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel>
@@ -33,6 +36,15 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
             body = mapOf<String, String>(
                 "email" to loginRequestModel.email,
                 "password" to loginRequestModel.password,
+            )
+        )
+    }
+
+    override suspend fun loginWithGoogle(commonRequestModel: CommonRequestModel): Response<LoginResponseModel> {
+        return apiService.loginWithGoogle(
+            body = mapOf<String, String>(
+                "googleAccessToken" to commonRequestModel.googleAccessToken!!,
+                "type" to "manual",
             )
         )
     }

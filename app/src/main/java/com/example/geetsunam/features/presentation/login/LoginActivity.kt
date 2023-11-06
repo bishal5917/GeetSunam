@@ -14,6 +14,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.geetsunam.MainActivity
 import com.example.geetsunam.R
+import com.example.geetsunam.features.presentation.login.google_login_viewmodel.GoogleLoginEvent
+import com.example.geetsunam.features.presentation.login.google_login_viewmodel.GoogleLoginState
+import com.example.geetsunam.features.presentation.login.google_login_viewmodel.GoogleLoginViewModel
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginEvent
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginState
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewModel
@@ -22,6 +25,7 @@ import com.example.geetsunam.utils.CustomDialog
 import com.example.geetsunam.utils.CustomToast
 import com.example.geetsunam.utils.LocalController
 import com.example.geetsunam.utils.LogTag
+import com.example.geetsunam.utils.models.CommonRequestModel
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -43,6 +47,9 @@ class LoginActivity : AppCompatActivity() {
 
     @Inject
     lateinit var loginViewModel: LoginViewModel
+
+    @Inject
+    lateinit var googleLoginViewModel: GoogleLoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +85,7 @@ class LoginActivity : AppCompatActivity() {
             displaySignUp()
         }
         observeLiveData()
+        observeGoogleLogin()
     }
 
     private fun loginUser() {
@@ -123,6 +131,37 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun observeGoogleLogin() {
+        val dialog = Dialog(this)
+        googleLoginViewModel.googleLoginState.observe(this) { response ->
+            if (response != null) {
+                if (response.status == GoogleLoginState.GoogleLoginStatus.LOADING) {
+                    //show loading dialog
+                    CustomDialog().showLoadingDialog(dialog)
+                }
+                if (response.status == GoogleLoginState.GoogleLoginStatus.SUCCESS) {
+                    CustomDialog().hideLoadingDialog(dialog)
+                    CustomToast.showToast(
+                        context = this, "${
+                            response.message
+                        }"
+                    )
+                    val mainIntent = Intent(this, MainActivity::class.java)
+                    startActivity(mainIntent)
+                    finish()
+                }
+                if (response.status == GoogleLoginState.GoogleLoginStatus.FAILED) {
+                    CustomDialog().hideLoadingDialog(dialog)
+                    CustomToast.showToast(
+                        context = this, "${
+                            response.message
+                        }"
+                    )
+                }
+            }
+        }
+    }
+
     //google onetap
     private val oneTapResult =
         registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
@@ -133,27 +172,49 @@ class LoginActivity : AppCompatActivity() {
                     idToken != null -> {
                         Log.d(LogTag.GOOGLE, "$idToken")
                         //authenticate through sever
-                        CustomToast.showToast(this, "$idToken")
+                        googleLoginViewModel.onEvent(
+                            GoogleLoginEvent.LoginWithGoogle(
+                                CommonRequestModel(googleAccessToken = idToken)
+                            )
+                        )
                     }
 
                     else -> {
                         Log.d(LogTag.GOOGLE, "No ID token!")
+                        googleLoginViewModel.onEvent(
+                            GoogleLoginEvent.HandleError(
+                                "Authentication failed,Try Again"
+                            )
+                        )
                     }
                 }
             } catch (e: ApiException) {
                 when (e.statusCode) {
                     CommonStatusCodes.CANCELED -> {
                         Log.d(LogTag.GOOGLE, "One-tap dialog was closed.")
+                        googleLoginViewModel.onEvent(
+                            GoogleLoginEvent.HandleError("Login Cancelled")
+                        )
                     }
 
                     CommonStatusCodes.NETWORK_ERROR -> {
                         Log.d(LogTag.GOOGLE, "One-tap encountered a network error.")
+                        googleLoginViewModel.onEvent(
+                            GoogleLoginEvent.HandleError(
+                                e.localizedMessage ?: "Network error"
+                            )
+                        )
                     }
 
                     else -> {
                         Log.d(
                             LogTag.GOOGLE,
                             "Couldn't get credential from result." + " (${e.localizedMessage})"
+                        )
+                        googleLoginViewModel.onEvent(
+                            GoogleLoginEvent.HandleError(
+                                e.localizedMessage ?: "Authentication failed,Try Again"
+                            )
                         )
                     }
                 }
@@ -167,10 +228,20 @@ class LoginActivity : AppCompatActivity() {
                 oneTapResult.launch(ib)
             } catch (e: IntentSender.SendIntentException) {
                 Log.e(LogTag.GOOGLE, "Couldn't start One Tap UI: ${e.localizedMessage}")
+                googleLoginViewModel.onEvent(
+                    GoogleLoginEvent.HandleError(
+                        e.localizedMessage ?: "Authentication failed,Try Again"
+                    )
+                )
             }
         }?.addOnFailureListener(this) { e ->
             // No Google Accounts found. Just continue presenting the signed-out UI.
             Log.d(LogTag.GOOGLE, e.localizedMessage!!)
+            googleLoginViewModel.onEvent(
+                GoogleLoginEvent.HandleError(
+                    e.localizedMessage ?: "Authentication failed,Try Again"
+                )
+            )
         }
     }
 }

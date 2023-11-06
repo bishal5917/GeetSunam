@@ -17,11 +17,13 @@ import com.example.geetsunam.features.domain.usecases.GetGenresUsecase
 import com.example.geetsunam.features.domain.usecases.GetNewSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetSingleSongUsecase
 import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
+import com.example.geetsunam.features.domain.usecases.GoogleLoginUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
 import com.example.geetsunam.features.domain.usecases.ToggleFavouriteUsecase
 import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsViewModel
 import com.example.geetsunam.features.presentation.home.featured_songs.viewmodel.FeaturedSongsViewModel
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreViewModel
+import com.example.geetsunam.features.presentation.login.google_login_viewmodel.GoogleLoginViewModel
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewModel
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavViewModel
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
@@ -72,6 +74,11 @@ object AppModule {
     }
 
     @Provides
+    fun providegoogleLoginUsecase(repo: UserRepository): GoogleLoginUsecase {
+        return GoogleLoginUsecase(repo)
+    }
+
+    @Provides
     fun provideGenreUsecase(repo: UserRepository): GetGenresUsecase {
         return GetGenresUsecase(repo)
     }
@@ -117,6 +124,13 @@ object AppModule {
         loginUsecase: LoginUsecase, localDatastore: LocalDatastore
     ): LoginViewModel {
         return LoginViewModel(loginUsecase, localDatastore)
+    }
+
+    @Provides
+    fun provideGoogleLoginViewModel(
+        googleLoginUsecase: GoogleLoginUsecase, localDatastore: LocalDatastore
+    ): GoogleLoginViewModel {
+        return GoogleLoginViewModel(googleLoginUsecase, localDatastore)
     }
 
     @Provides

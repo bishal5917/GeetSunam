@@ -24,6 +24,16 @@ class UserRepositoryImpl(
         return Resource.Error(message = "${response.errorBody()?.string()}")
     }
 
+    override suspend fun loginWithGoogle(commonRequestModel: CommonRequestModel): Resource<LoginResponseModel> {
+        val response = userRemoteDatasource.loginWithGoogle(commonRequestModel)
+        if (response.isSuccessful) {
+            response.body()?.let { result ->
+                return Resource.Success(result)
+            }
+        }
+        return Resource.Error(message = "${response.errorBody()?.string()}")
+    }
+
     override suspend fun getGenres(commonRequestModel: CommonRequestModel): Resource<GenreResponseModel> {
         val response = userRemoteDatasource.getGenres(commonRequestModel)
         if (response.isSuccessful) {
