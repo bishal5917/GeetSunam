@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageButton
+import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -20,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,29 +36,40 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setupWithNavController(navController)
 
         val drawerBtn = findViewById<ImageButton>(R.id.ibMenu)
+        drawerLayout = findViewById<DrawerLayout>(R.id.dlAppDrawer)
+        val navigationView = findViewById<NavigationView>(R.id.drawerNavView)
+        val toggle = ActionBarDrawerToggle(
+            this, drawerLayout, R.string.app_name, R.string.app_name
+        )
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
         drawerBtn.setOnClickListener {
-            //open drawer
+            if (drawerLayout.isDrawerOpen(navigationView)) {
+                drawerLayout.closeDrawer(navigationView)
+            } else {
+                drawerLayout.openDrawer(navigationView)
+            }
         }
 
-//        val drawerLayout = findViewById<DrawerLayout>(R.id.dlAppDrawer)
-//        val navigationView = findViewById<NavigationView>(R.id.drawerNavView)
-//        navigationView.setNavigationItemSelectedListener(this)
-//        val toggle = ActionBarDrawerToggle(
-//            this,
-//            drawerLayout,
-//            R.string.app_name,
-//            R.string.app_name
-//        )
-//        drawerLayout.addDrawerListener(toggle)
-//        toggle.syncState()
-//        if (savedInstanceState == null) {
-//            supportFragmentManager.beginTransaction()
-//                .replace(R.id.navHostFragment, HomeFragment()).commit()
-//            navigationView.setCheckedItem(R.id.homeFragment)
-//        }
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction().replace(R.id.navHostFragment, HomeFragment())
+                .commit()
+            navigationView.setCheckedItem(R.id.homeFragment)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            onBackPressedDispatcher.onBackPressed()
+        }
     }
 }
