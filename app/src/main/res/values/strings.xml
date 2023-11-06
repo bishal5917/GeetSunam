@@ -36,5 +36,6 @@
     <string name="confirm_password_hint">Confirm password</string>
     <string name="enter_full_name">Enter your full name</string>
     <string name="enter_password">Enter password</string>
+    <string name="goto_menu">Goto Menu</string>
 
 </resources>

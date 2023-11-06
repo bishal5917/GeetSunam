@@ -26,24 +26,11 @@ class MainActivity : AppCompatActivity() {
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.setupWithNavController(navController)
-
         //setting toolbar
-        val toolbar = findViewById<Toolbar>(R.id.tbMain)
-        setSupportActionBar(toolbar)
-        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
-//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setIcon(R.drawable.ic_menu)
+//        val toolbar = findViewById<Toolbar>(R.id.tbMain)
     }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
-    }
-
-    //going back to previous screen when back arrow is pressed
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.icon1) {
-            CustomToast.showToast(this, "I am pressed")
-        }
-        return super.onOptionsItemSelected(item)
     }
 }
