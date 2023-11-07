@@ -1,15 +1,16 @@
 package com.example.geetsunam.services.local
 
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.example.geetsunam.features.domain.entities.UserEntity
 import kotlinx.coroutines.flow.Flow
 
-val USER_TOKEN = stringPreferencesKey("token")
+val USER_TOKEN = stringPreferencesKey("user")
 
 interface LocalDatastore {
 
-    fun getToken(): Flow<String>
+    fun getUser(): Flow<UserEntity?>
 
-    suspend fun saveToken(id: String?)
+    suspend fun saveUser(userEntity: UserEntity?)
 
-    suspend fun removeToken()
+    suspend fun removeUser()
 }

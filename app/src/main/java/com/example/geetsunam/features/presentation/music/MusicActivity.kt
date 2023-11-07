@@ -1,16 +1,13 @@
 package com.example.geetsunam.features.presentation.music
 
 import android.app.Dialog
-import android.content.Intent
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.SeekBar
 import androidx.navigation.navArgs
-import com.example.geetsunam.MainActivity
 import com.example.geetsunam.R
 import com.example.geetsunam.databinding.ActivityMusicBinding
-import com.example.geetsunam.features.presentation.login.viewmodel.LoginState
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavEvent
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavState
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavViewModel
@@ -67,7 +64,7 @@ class MusicActivity : AppCompatActivity() {
         favBtn.setOnClickListener {
             toggleFavViewModel.onEvent(
                 ToggleFavEvent.AddFavourite(
-                    CommonRequestModel(splashViewModel.userIdFlow.value, args.song.id)
+                    CommonRequestModel(splashViewModel.userFlow.value?.token, args.song.id)
                 )
             )
         }

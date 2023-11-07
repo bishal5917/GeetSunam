@@ -1,5 +1,7 @@
 package com.example.geetsunam
 
+import android.app.Dialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -9,19 +11,36 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.example.geetsunam.features.presentation.login.LoginActivity
+import com.example.geetsunam.features.presentation.login.viewmodel.LoginEvent
+import com.example.geetsunam.features.presentation.login.viewmodel.LoginState
+import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewModel
+import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
+import com.example.geetsunam.utils.CustomDialog
 import com.example.geetsunam.utils.CustomToast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var drawerLayout: DrawerLayout
 
+    @Inject
+    lateinit var loginViewModel: LoginViewModel
+
+    @Inject
+    lateinit var splashViewModel: SplashViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //collecting flow
+        val userData = splashViewModel.userFlow.value
+        CustomToast.showToast(this, "${userData?.email}")
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
@@ -52,11 +71,41 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_logout -> {
                     drawerLayout.closeDrawer(navigationView)
-                    CustomToast.showToast(this, "Logged out")
+                    loginViewModel.onEvent(LoginEvent.LogoutUser)
                     true
                 }
 
-                else -> false
+                else -> true
+            }
+        }
+        observeLogoutProcess()
+    }
+
+    private fun observeLogoutProcess() {
+        val dialog = Dialog(this)
+        loginViewModel.loginState.observe(this) { response ->
+            if (response.status == LoginState.LoginStatus.LogoutLoading) {
+                //show loading dialog
+                CustomDialog().showLoadingDialog(dialog)
+            }
+            if (response.status == LoginState.LoginStatus.LogoutSuccess) {
+                CustomDialog().hideLoadingDialog(dialog)
+                CustomToast.showToast(
+                    context = this, "${
+                        response.message
+                    }"
+                )
+                val loginIntent = Intent(this, LoginActivity::class.java)
+                startActivity(loginIntent)
+                finish()
+            }
+            if (response.status == LoginState.LoginStatus.LogoutFailed) {
+                CustomDialog().hideLoadingDialog(dialog)
+                CustomToast.showToast(
+                    context = this, "${
+                        response.message
+                    }"
+                )
             }
         }
     }

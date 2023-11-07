@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ItemAnimator.AdapterChanges
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.geetsunam.R
 import com.example.geetsunam.features.presentation.new_song.adapters.NewsongsAdapter
@@ -15,10 +14,6 @@ import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongEve
 import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongState
 import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
-import com.example.geetsunam.features.presentation.trending.adapters.TrendingAdapter
-import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingEvent
-import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingState
-import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingViewModel
 import com.example.geetsunam.utils.CustomToast
 import com.example.geetsunam.utils.models.Song
 import com.facebook.shimmer.ShimmerFrameLayout
@@ -62,7 +57,7 @@ class NewSongFragment : Fragment() {
 
         newSongViewModel.newSongsState.observe(viewLifecycleOwner) { response ->
             if (response.status == NewSongState.NewSongStatus.IDLE) {
-                newSongViewModel.onEvent(NewSongEvent.GetNewSongs(splashViewModel.userIdFlow.value))
+                newSongViewModel.onEvent(NewSongEvent.GetNewSongs(splashViewModel.userFlow.value?.token ?:""))
             }
             if (response.status == NewSongState.NewSongStatus.LOADING) {
                 recyclerView.visibility = View.GONE
@@ -87,7 +82,7 @@ class NewSongFragment : Fragment() {
     private fun pullToRefresh() {
         val swipeToRefresh = gview.findViewById<SwipeRefreshLayout>(R.id.srlNewSong)
         swipeToRefresh.setOnRefreshListener {
-            newSongViewModel.onEvent(NewSongEvent.GetNewSongs(splashViewModel.userIdFlow.value))
+            newSongViewModel.onEvent(NewSongEvent.GetNewSongs(splashViewModel.userFlow.value?.token ?:""))
             swipeToRefresh.isRefreshing = false
         }
     }

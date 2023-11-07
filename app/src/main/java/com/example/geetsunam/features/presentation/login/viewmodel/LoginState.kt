@@ -12,6 +12,6 @@ data class LoginState(
     }
 
     enum class LoginStatus {
-        IDLE, LOADING, SUCCESS, FAILED
+        IDLE, LOADING, SUCCESS, FAILED, LogoutLoading, LogoutSuccess, LogoutFailed
     }
 }

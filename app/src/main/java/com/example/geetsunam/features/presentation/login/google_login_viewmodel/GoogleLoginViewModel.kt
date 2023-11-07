@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.geetsunam.features.domain.entities.UserEntity
 import com.example.geetsunam.features.domain.usecases.GoogleLoginUsecase
 import com.example.geetsunam.services.local.LocalDatastore
 import com.example.geetsunam.utils.Resource
@@ -59,7 +60,17 @@ class GoogleLoginViewModel @Inject constructor(
                             user = result.data?.data?.user,
                         )
                     )
-                    localDatastore.saveToken(result.data?.token ?: "")
+                    localDatastore.saveUser(
+                        UserEntity(
+                            token = result.data?.token,
+                            name = result
+                                .data?.data?.user?.fullname,
+                            email = result
+                                .data?.data?.user?.email,
+                            image = result
+                                .data?.data?.user?.profileImage
+                        )
+                    )
                 }
 
                 is Resource.Error -> {

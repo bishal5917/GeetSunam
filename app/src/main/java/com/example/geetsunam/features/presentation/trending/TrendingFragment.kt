@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.geetsunam.R
-import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.features.presentation.trending.adapters.TrendingAdapter
 import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingEvent
@@ -59,7 +58,7 @@ class TrendingFragment : Fragment() {
 
         trendingViewModel.trendingSongState.observe(viewLifecycleOwner) { response ->
             if (response.status == TrendingState.TrendingStatus.IDLE) {
-                trendingViewModel.onEvent(TrendingEvent.GetTrendingSongs(splashViewModel.userIdFlow.value))
+                trendingViewModel.onEvent(TrendingEvent.GetTrendingSongs(splashViewModel.userFlow.value?.token ?:""))
             }
             if (response.status == TrendingState.TrendingStatus.LOADING) {
                 recyclerView.visibility = View.GONE
@@ -84,7 +83,7 @@ class TrendingFragment : Fragment() {
     private fun pullToRefresh() {
         val swipeToRefresh = gview.findViewById<SwipeRefreshLayout>(R.id.srlTrending)
         swipeToRefresh.setOnRefreshListener {
-            trendingViewModel.onEvent(TrendingEvent.GetTrendingSongs(splashViewModel.userIdFlow.value))
+            trendingViewModel.onEvent(TrendingEvent.GetTrendingSongs(splashViewModel.userFlow.value?.token ?:""))
             swipeToRefresh.isRefreshing = false
         }
     }

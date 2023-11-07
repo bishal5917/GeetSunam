@@ -32,7 +32,7 @@ class SplashActivity : AppCompatActivity() {
     private fun delayAndNavigate() {
         GlobalScope.launch {
             // Delay for 1 second
-            delay(1000)
+            delay(2000)
             checkTokenAndNavigate()
         }
     }
@@ -40,11 +40,11 @@ class SplashActivity : AppCompatActivity() {
     private fun checkTokenAndNavigate() {
         val loginIntent = Intent(this, LoginActivity::class.java)
         val mainIntent = Intent(this, MainActivity::class.java)
-        if (splashViewModel.userIdFlow.value.isNotEmpty()) {
-            startActivity(mainIntent)
+        if (splashViewModel.userFlow.value?.token == null) {
+            startActivity(loginIntent)
             finish()
         } else {
-            startActivity(loginIntent)
+            startActivity(mainIntent)
             finish()
         }
     }

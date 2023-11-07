@@ -11,7 +11,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.geetsunam.R
 import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
 import com.example.geetsunam.features.data.models.genres.GenreResponseModel
-import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.features.presentation.home.featured_artists.adapters.FeaturedArtistsAdapter
 import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsEvent
 import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsState
@@ -69,12 +68,12 @@ class HomeFragment : Fragment() {
     private fun pullToRefresh() {
         val swipeToRefresh = gview.findViewById<SwipeRefreshLayout>(R.id.srlHome)
         swipeToRefresh.setOnRefreshListener {
-            genreViewModel.onEvent(GenreEvent.GetGenre(splashViewModel.userIdFlow.value))
+            genreViewModel.onEvent(GenreEvent.GetGenre(splashViewModel.userFlow.value?.token ?:""))
             featuredArtistsViewModel.onEvent(
-                FeaturedArtistsEvent.GetFeaturedArtists(splashViewModel.userIdFlow.value)
+                FeaturedArtistsEvent.GetFeaturedArtists(splashViewModel.userFlow.value?.token ?: "")
             )
             featuredSongsViewModel.onEvent(
-                FeaturedSongsEvent.GetFeaturedSongs(splashViewModel.userIdFlow.value)
+                FeaturedSongsEvent.GetFeaturedSongs(splashViewModel.userFlow.value?.token?:"")
             )
             swipeToRefresh.isRefreshing = false
         }
@@ -107,7 +106,7 @@ class HomeFragment : Fragment() {
 
         genreViewModel.genreState.observe(viewLifecycleOwner) { response ->
             if (response.status == GenreState.GenreStatus.IDLE) {
-                genreViewModel.onEvent(GenreEvent.GetGenre(splashViewModel.userIdFlow.value))
+                genreViewModel.onEvent(GenreEvent.GetGenre(splashViewModel.userFlow.value?.token ?:""))
             }
             if (response.status == GenreState.GenreStatus.LOADING) {
                 recyclerView.visibility = View.GONE
@@ -133,7 +132,7 @@ class HomeFragment : Fragment() {
         featuredArtistsViewModel.featuredArtistsState.observe(viewLifecycleOwner) { response ->
             if (response.status == FeaturedArtistsState.FeaturedArtistsStatus.IDLE) {
                 featuredArtistsViewModel.onEvent(
-                    FeaturedArtistsEvent.GetFeaturedArtists(splashViewModel.userIdFlow.value)
+                    FeaturedArtistsEvent.GetFeaturedArtists(splashViewModel.userFlow.value?.token ?:"")
                 )
             }
             if (response.status == FeaturedArtistsState.FeaturedArtistsStatus.LOADING) {
@@ -164,7 +163,7 @@ class HomeFragment : Fragment() {
         featuredSongsViewModel.featuredSongState.observe(viewLifecycleOwner) { response ->
             if (response.status == FeaturedSongsState.SongStatus.IDLE) {
                 featuredSongsViewModel.onEvent(
-                    FeaturedSongsEvent.GetFeaturedSongs(splashViewModel.userIdFlow.value)
+                    FeaturedSongsEvent.GetFeaturedSongs(splashViewModel.userFlow.value?.token ?:"")
                 )
             }
             if (response.status == FeaturedSongsState.SongStatus.LOADING) {

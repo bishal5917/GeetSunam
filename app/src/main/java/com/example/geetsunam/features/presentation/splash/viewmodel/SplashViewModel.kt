@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.geetsunam.features.presentation.login.viewmodel.LoginState
+import com.example.geetsunam.features.domain.entities.UserEntity
 import com.example.geetsunam.services.local.LocalDatastore
 import com.example.geetsunam.utils.LogTag
 import com.example.heartconnect.features.presentation.screens.splash.viewmodel.SplashEvent
@@ -23,13 +23,15 @@ class SplashViewModel @Inject constructor(private val localDatastore: LocalDatas
     private val _splashState = MutableLiveData(SplashState.IDLE)
     val splashState: LiveData<SplashState> = _splashState
 
-    val userIdFlow = localDatastore.getToken().stateIn(
-        scope = viewModelScope, started = SharingStarted.WhileSubscribed(), initialValue = ""
+    val userFlow = localDatastore.getUser().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = UserEntity()
     );
 
     init {
         viewModelScope.launch {
-            userIdFlow.collect()
+            userFlow.collect()
         }
     }
 
@@ -43,14 +45,14 @@ class SplashViewModel @Inject constructor(private val localDatastore: LocalDatas
 
     private fun checkStatus() = viewModelScope.launch {
         try {
-            if (userIdFlow.value.isEmpty()) {
+            if (userFlow.value?.token?.isEmpty() == true) {
                 _splashState.postValue(
                     _splashState.value?.copy(
                         status = SplashState.SplashStatus.LOGGEDOUT,
                         message = "Logged Out",
                     )
                 )
-                Log.d(LogTag.SPLASH, "ID: ${userIdFlow.value}")
+                Log.d(LogTag.SPLASH, "ID: ${userFlow.value}")
             } else {
                 _splashState.postValue(
                     _splashState.value?.copy(
@@ -58,7 +60,7 @@ class SplashViewModel @Inject constructor(private val localDatastore: LocalDatas
                         message = "Logged In",
                     )
                 )
-                Log.d(LogTag.SPLASH, "ID: ${userIdFlow.value}")
+                Log.d(LogTag.SPLASH, "ID: ${userFlow.value}")
             }
         } catch (ex: Exception) {
             _splashState.postValue(
