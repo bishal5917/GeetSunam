@@ -6,11 +6,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.example.geetsunam.databinding.ActivityMusicBinding
+import com.example.geetsunam.databinding.DrawerHeaderBinding
+import com.example.geetsunam.features.domain.entities.UserEntity
 import com.example.geetsunam.features.presentation.login.LoginActivity
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginEvent
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginState
@@ -27,6 +31,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var drawerHeaderBinding: DrawerHeaderBinding
 
     @Inject
     lateinit var loginViewModel: LoginViewModel
@@ -37,10 +42,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        drawerHeaderBinding = DrawerHeaderBinding.inflate(layoutInflater)
 
-        //collecting flow
+        //collecting flow and binding to the drawer header
         val userData = splashViewModel.userFlow.value
-        CustomToast.showToast(this, "${userData?.email}")
+        drawerHeaderBinding.user = userData as UserEntity
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
