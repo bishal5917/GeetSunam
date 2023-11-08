@@ -18,7 +18,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:text="@string/account_signup"
-            android:fontFamily="@font/urbanist_black"
+            android:fontFamily="@font/urbanist_bold"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,6 +33,7 @@
             android:layout_marginEnd="16dp"
             android:text="@string/become_member"
             android:textSize="14sp"
+            android:fontFamily="@font/urbanist_regular"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvSignupTitle" />
@@ -64,8 +65,8 @@
             android:hint="@string/enter_full_name"
             android:inputType="textEmailAddress"
             android:paddingStart="10dp"
+            android:fontFamily="@font/urbanist_thin"
             android:paddingEnd="10dp"
-            android:textColor="@color/neutral_400"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -97,9 +98,9 @@
             android:ems="10"
             android:hint="@string/enter_your_email"
             android:inputType="textEmailAddress"
+            android:fontFamily="@font/urbanist_thin"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:textColor="@color/neutral_400"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -139,9 +140,9 @@
                 android:background="@drawable/custom_input"
                 android:ems="10"
                 android:inputType="textPassword"
+                android:fontFamily="@font/urbanist_thin"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textColor="@color/neutral_400"
                 android:textSize="14sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -180,9 +181,9 @@
                 android:background="@drawable/custom_input"
                 android:ems="10"
                 android:inputType="textPassword"
+                android:fontFamily="@font/urbanist_thin"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textColor="@color/neutral_400"
                 android:textSize="14sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -196,6 +197,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:text="@string/sign_up"
+            android:fontFamily="@font/urbanist_bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"

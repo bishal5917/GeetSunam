@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/requesting_please_wait"
-        android:textColor="@color/neutral_800"
+        android:fontFamily="@font/urbanist_bold"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/pbCustomDialog"
         app:layout_constraintStart_toStartOf="@+id/pbCustomDialog"
