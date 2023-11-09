@@ -46,7 +46,11 @@
         android:id="@+id/likedSongFragment"
         android:name="com.example.geetsunam.features.presentation.liked_song.LikedSongFragment"
         android:label="fragment_liked_song"
-        tools:layout="@layout/fragment_liked_song" />
+        tools:layout="@layout/fragment_liked_song" >
+        <action
+            android:id="@+id/action_likedSongFragment_to_musicActivity"
+            app:destination="@id/musicActivity" />
+    </fragment>
     <activity
         android:id="@+id/musicActivity"
         android:name="com.example.geetsunam.features.presentation.music.MusicActivity"

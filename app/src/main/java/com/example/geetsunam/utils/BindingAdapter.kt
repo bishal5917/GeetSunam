@@ -10,6 +10,7 @@ import coil.load
 import com.example.geetsunam.R
 import com.example.geetsunam.features.domain.entities.SongEntity
 import com.example.geetsunam.features.presentation.home.HomeFragmentDirections
+import com.example.geetsunam.features.presentation.liked_song.LikedSongFragmentDirections
 import com.example.geetsunam.features.presentation.new_song.NewSongFragmentDirections
 import com.example.geetsunam.features.presentation.trending.TrendingFragmentDirections
 import com.example.geetsunam.utils.models.Song
@@ -45,8 +46,13 @@ class BindingAdapter {
                             HomeFragmentDirections.actionHomeFragmentToMusicActivity(songEntity)
                         songCard.findNavController().navigate(action)
                     } else if (from == "new_song") {
+                        val action = NewSongFragmentDirections.actionNewSongFragmentToMusicActivity(
+                            songEntity
+                        )
+                        songCard.findNavController().navigate(action)
+                    } else if (from == "favourites") {
                         val action =
-                            NewSongFragmentDirections.actionNewSongFragmentToMusicActivity(
+                            LikedSongFragmentDirections.actionLikedSongFragmentToMusicActivity(
                                 songEntity
                             )
                         songCard.findNavController().navigate(action)
