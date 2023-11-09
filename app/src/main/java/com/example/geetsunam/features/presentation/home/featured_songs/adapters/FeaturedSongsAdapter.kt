@@ -4,8 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.geetsunam.databinding.FeaturedSongCardBinding
-import com.example.geetsunam.features.data.models.songs.SongResponseModel
+import com.example.geetsunam.databinding.SongCardBinding
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.utils.models.Song
 import javax.inject.Inject
@@ -14,7 +13,7 @@ class FeaturedSongsAdapter : RecyclerView.Adapter<FeaturedSongsAdapter.MyViewHol
 
     private var songs = emptyList<Song>()
 
-    class MyViewHolder(private val binding: FeaturedSongCardBinding) :
+    class MyViewHolder(private val binding: SongCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @Inject
         lateinit var musicViewModel: MusicViewModel
@@ -28,7 +27,7 @@ class FeaturedSongsAdapter : RecyclerView.Adapter<FeaturedSongsAdapter.MyViewHol
         companion object {
             fun from(parent: ViewGroup): MyViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = FeaturedSongCardBinding.inflate(layoutInflater, parent, false)
+                val binding = SongCardBinding.inflate(layoutInflater, parent, false)
                 return MyViewHolder(binding)
             }
         }

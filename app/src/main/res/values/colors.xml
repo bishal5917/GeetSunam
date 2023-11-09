@@ -13,6 +13,7 @@
     <color name="neutral_700">#FF374151</color>
     <color name="neutral_800">#FF1F2937</color>
     <color name="success">#FF13CE66</color>
+    <color name="light_red">#FFFF6169</color>
     <color name="error">#FFFF000D</color>
     <color name="warning">#FFFD9900</color>
 </resources>

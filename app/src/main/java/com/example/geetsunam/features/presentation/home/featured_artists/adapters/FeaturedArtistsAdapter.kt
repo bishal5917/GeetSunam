@@ -4,14 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.geetsunam.databinding.FavArtistsCardBinding
+import com.example.geetsunam.databinding.ArtistCardBinding
 import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
 
 class FeaturedArtistsAdapter : RecyclerView.Adapter<FeaturedArtistsAdapter.MyViewHolder>() {
 
     private var artists = emptyList<ArtistResponseModel.Data.Artist>()
 
-    class MyViewHolder(private val binding: FavArtistsCardBinding) :
+    class MyViewHolder(private val binding: ArtistCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(result: ArtistResponseModel.Data.Artist) {
             binding.result = result
@@ -21,7 +21,7 @@ class FeaturedArtistsAdapter : RecyclerView.Adapter<FeaturedArtistsAdapter.MyVie
         companion object {
             fun from(parent: ViewGroup): MyViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = FavArtistsCardBinding.inflate(layoutInflater, parent, false)
+                val binding = ArtistCardBinding.inflate(layoutInflater, parent, false)
                 return MyViewHolder(binding)
             }
         }

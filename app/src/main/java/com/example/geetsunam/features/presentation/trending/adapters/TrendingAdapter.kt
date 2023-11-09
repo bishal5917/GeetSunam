@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.geetsunam.databinding.FeaturedSongCardBinding
+import com.example.geetsunam.databinding.SongCardBinding
 import com.example.geetsunam.features.presentation.home.featured_songs.adapters.FeaturedSongsDiffUtil
 import com.example.geetsunam.utils.models.Song
 
@@ -12,7 +12,7 @@ class TrendingAdapter : RecyclerView.Adapter<TrendingAdapter.MyViewHolder>() {
 
     private var songs = emptyList<Song>()
 
-    class MyViewHolder(private val binding: FeaturedSongCardBinding) :
+    class MyViewHolder(private val binding: SongCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(result: Song) {
@@ -24,7 +24,7 @@ class TrendingAdapter : RecyclerView.Adapter<TrendingAdapter.MyViewHolder>() {
         companion object {
             fun from(parent: ViewGroup): MyViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = FeaturedSongCardBinding.inflate(layoutInflater, parent, false)
+                val binding = SongCardBinding.inflate(layoutInflater, parent, false)
                 return MyViewHolder(binding)
             }
         }

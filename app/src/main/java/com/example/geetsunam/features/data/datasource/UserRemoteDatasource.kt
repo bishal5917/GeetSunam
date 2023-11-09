@@ -27,6 +27,9 @@ interface UserRemoteDatasource {
     suspend fun getNewSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel>
 
     suspend fun toggleFavourite(commonRequestModel: CommonRequestModel): Response<SingleSongResponseModel>
+
+    suspend fun getFavouriteSongs(commonRequestModel: CommonRequestModel):
+            Response<SongResponseModel>
 }
 
 class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiService) :
@@ -82,5 +85,9 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
                 "songs" to commonRequestModel.songId!!,
             )
         )
+    }
+
+    override suspend fun getFavouriteSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel> {
+        return apiService.getFavouriteSongs(authToken = "Bearer ${commonRequestModel.token}")
     }
 }

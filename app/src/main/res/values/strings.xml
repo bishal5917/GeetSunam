@@ -39,5 +39,7 @@
     <string name="goto_menu">Goto Menu</string>
     <string name="change_password">Change Password</string>
     <string name="logout">Logout</string>
+    <string name="playlist">PLAYLIST</string>
+    <string name="liked_songs">Liked Songs</string>
 
 </resources>

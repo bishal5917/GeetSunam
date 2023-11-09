@@ -16,7 +16,7 @@ interface ApiService {
         @Body body: Any
     ): Response<LoginResponseModel>
 
-    //login
+    //google login
     @POST("users/google")
     @JvmSuppressWildcards
     suspend fun loginWithGoogle(
@@ -58,17 +58,24 @@ interface ApiService {
         @Header("Authorization") authToken: String, @Path("id") songId: String
     ): Response<SingleSongResponseModel>
 
-    //get trending songs
+    //get newly released songs
     @GET("songs/new-releases")
     @JvmSuppressWildcards
     suspend fun getNewSongs(
         @Header("Authorization") authToken: String,
     ): Response<SongResponseModel>
 
-    // Get single song
+    // favourite / unfavourite songs
     @PATCH("favourite/songs/toggle")
     @JvmSuppressWildcards
     suspend fun toggleFavourites(
         @Header("Authorization") authToken: String, @Body body: Any
     ): Response<SingleSongResponseModel>
+
+    //get favourite songs
+    @GET("favourite/songs")
+    @JvmSuppressWildcards
+    suspend fun getFavouriteSongs(
+        @Header("Authorization") authToken: String,
+    ): Response<SongResponseModel>
 }
