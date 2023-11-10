@@ -2,6 +2,7 @@ package com.example.geetsunam.features.domain.usecases
 
 import android.util.Log
 import com.example.geetsunam.features.data.models.genres.GenreResponseModel
+import com.example.geetsunam.features.domain.entities.GenreEntity
 import com.example.geetsunam.features.domain.repositories.UserRepository
 import com.example.geetsunam.utils.LogTag
 import com.example.geetsunam.utils.Resource

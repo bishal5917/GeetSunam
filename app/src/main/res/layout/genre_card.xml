@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="result"
             type="com.example.geetsunam.features.data.models.genres.GenreResponseModel.Data.Genre" />
@@ -16,6 +17,7 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivGenre"
             loadImageFromUrl="@{result.image}"
+            onGenreClicked="@{result}"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="16dp"

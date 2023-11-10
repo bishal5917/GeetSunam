@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="result"
             type="com.example.geetsunam.features.data.models.artist.ArtistResponseModel.Data.Artist" />
@@ -16,6 +17,7 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivFavArtists"
             loadImageFromUrl="@{result.profileImage}"
+            onArtistClicked="@{result}"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="16dp"
@@ -28,10 +30,10 @@
 
         <TextView
             android:id="@+id/tvFavArtists"
+            setText="@{result.fullname}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            setText="@{result.fullname}"
             android:fontFamily="@font/urbanist_medium"
             app:layout_constraintEnd_toEndOf="@+id/ivFavArtists"
             app:layout_constraintStart_toStartOf="@+id/ivFavArtists"

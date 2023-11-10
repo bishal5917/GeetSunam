@@ -41,5 +41,8 @@
     <string name="logout">Logout</string>
     <string name="playlist">PLAYLIST</string>
     <string name="liked_songs">Liked Songs</string>
+    <string name="genre">GENRE</string>
+    <string name="artist">ARTIST</string>
+    <string name="no_songs">0 Songs</string>
 
 </resources>

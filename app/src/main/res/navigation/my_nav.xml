@@ -13,6 +13,12 @@
         <action
             android:id="@+id/action_homeFragment_to_musicActivity"
             app:destination="@id/musicActivity" />
+        <action
+            android:id="@+id/action_homeFragment_to_genreActivity"
+            app:destination="@id/genreActivity" />
+        <action
+            android:id="@+id/action_homeFragment_to_artistActivity"
+            app:destination="@id/artistActivity" />
     </fragment>
     <fragment
         android:id="@+id/trendingFragment"
@@ -59,5 +65,22 @@
         <argument
             android:name="song"
             app:argType="com.example.geetsunam.features.domain.entities.SongEntity" />
+    </activity>
+    <activity
+        android:id="@+id/genreActivity"
+        android:name="com.example.geetsunam.features.presentation.single_genre.GenreActivity"
+        android:label="activity_genre"
+        tools:layout="@layout/activity_genre" >
+        <argument
+            android:name="genre"
+            app:argType="com.example.geetsunam.features.data.models.genres.GenreResponseModel$Data$Genre" />
+    </activity>
+    <activity
+        android:id="@+id/artistActivity"
+        android:name="com.example.geetsunam.features.presentation.single_artist.ArtistActivity"
+        android:label="ArtistActivity" >
+        <argument
+            android:name="artist"
+            app:argType="com.example.geetsunam.features.data.models.artist.ArtistResponseModel$Data$Artist" />
     </activity>
 </navigation>

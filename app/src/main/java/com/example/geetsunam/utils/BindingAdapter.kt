@@ -8,6 +8,8 @@ import androidx.databinding.BindingAdapter
 import androidx.navigation.findNavController
 import coil.load
 import com.example.geetsunam.R
+import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
+import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.domain.entities.SongEntity
 import com.example.geetsunam.features.presentation.home.HomeFragmentDirections
 import com.example.geetsunam.features.presentation.liked_song.LikedSongFragmentDirections
@@ -62,6 +64,24 @@ class BindingAdapter {
                 }
             }
 
+        }
+
+        @BindingAdapter("onGenreClicked")
+        @JvmStatic
+        fun onGenreClicked(imageView: ImageView, genre: GenreResponseModel.Data.Genre) {
+            imageView.setOnClickListener {
+                val action = HomeFragmentDirections.actionHomeFragmentToGenreActivity(genre)
+                imageView.findNavController().navigate(action)
+            }
+        }
+
+        @BindingAdapter("onArtistClicked")
+        @JvmStatic
+        fun onArtistClicked(imageView: ImageView, artist: ArtistResponseModel.Data.Artist) {
+            imageView.setOnClickListener {
+                val action = HomeFragmentDirections.actionHomeFragmentToArtistActivity(artist)
+                imageView.findNavController().navigate(action)
+            }
         }
 
         @BindingAdapter("setText")
