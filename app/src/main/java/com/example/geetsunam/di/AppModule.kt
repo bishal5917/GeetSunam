@@ -14,6 +14,7 @@ import com.example.geetsunam.features.domain.repositories.UserRepository
 import com.example.geetsunam.features.domain.usecases.GetFavouriteSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetFeaturedArtistsUsecase
 import com.example.geetsunam.features.domain.usecases.GetFeaturedSongsUsecase
+import com.example.geetsunam.features.domain.usecases.GetGenreSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenresUsecase
 import com.example.geetsunam.features.domain.usecases.GetNewSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetSingleSongUsecase
@@ -30,6 +31,7 @@ import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewMode
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavViewModel
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongViewModel
+import com.example.geetsunam.features.presentation.single_genre.viewmodel.GenreSongViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingViewModel
 import com.example.geetsunam.services.local.LocalDatastore
@@ -120,6 +122,11 @@ object AppModule {
         return GetFavouriteSongsUsecase(repo)
     }
 
+    @Provides
+    fun provideGenreSongsUsecase(repo: UserRepository): GetGenreSongsUsecase {
+        return GetGenreSongsUsecase(repo)
+    }
+
     //registering viewmodels
     @Provides
     fun provideSplashViewModel(datastore: LocalDatastore): SplashViewModel {
@@ -194,5 +201,12 @@ object AppModule {
         getFavouriteSongsUsecase: GetFavouriteSongsUsecase
     ): FavSongViewModel {
         return FavSongViewModel(getFavouriteSongsUsecase)
+    }
+
+    @Provides
+    fun provideGenreSongViewModel(
+        getGenreSongsUsecase: GetGenreSongsUsecase
+    ): GenreSongViewModel {
+        return GenreSongViewModel(getGenreSongsUsecase)
     }
 }

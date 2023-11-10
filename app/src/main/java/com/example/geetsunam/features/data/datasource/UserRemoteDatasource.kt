@@ -30,6 +30,9 @@ interface UserRemoteDatasource {
 
     suspend fun getFavouriteSongs(commonRequestModel: CommonRequestModel):
             Response<SongResponseModel>
+
+    suspend fun getGenreSongs(commonRequestModel: CommonRequestModel):
+            Response<SongResponseModel>
 }
 
 class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiService) :
@@ -89,5 +92,12 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
 
     override suspend fun getFavouriteSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel> {
         return apiService.getFavouriteSongs(authToken = "Bearer ${commonRequestModel.token}")
+    }
+
+    override suspend fun getGenreSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel> {
+        return apiService.getGenreSongs(
+            authToken = "Bearer ${commonRequestModel.token}",
+            genreId = commonRequestModel.genreId ?: "abc"
+        )
     }
 }

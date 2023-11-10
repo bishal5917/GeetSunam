@@ -78,4 +78,11 @@ interface ApiService {
     suspend fun getFavouriteSongs(
         @Header("Authorization") authToken: String,
     ): Response<SongResponseModel>
+
+    //get genre songs
+    @GET("songs/genres/{id}")
+    @JvmSuppressWildcards
+    suspend fun getGenreSongs(
+        @Header("Authorization") authToken: String, @Path("id") genreId: String
+    ): Response<SongResponseModel>
 }

@@ -13,4 +13,5 @@ object LogTag {
     const val TOGGLEFAV = "toggle"
     const val GOOGLE = "token"
     const val FAVSONGS = "favourite"
+    const val GenreSongs = "genre_songs"
 }
