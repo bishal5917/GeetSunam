@@ -46,6 +46,7 @@ class BindingAdapter {
                                 songEntity
                             )
                         songCard.findNavController().navigate(action)
+
                     } else if (from == "featured") {
                         val action =
                             HomeFragmentDirections.actionHomeFragmentToMusicActivity(songEntity)

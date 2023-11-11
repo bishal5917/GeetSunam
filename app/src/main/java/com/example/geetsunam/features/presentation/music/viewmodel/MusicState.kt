@@ -1,17 +1,19 @@
 package com.example.geetsunam.features.presentation.music.viewmodel
 
-import com.example.geetsunam.utils.models.Song
+import com.example.geetsunam.features.data.models.songs.SongResponseModel
 
 data class MusicState(
     val status: MusicStatus,
     val message: String? = null,
-    val music: Song? = null
+    val playlistName: String? = null,
+    val currentSongId: String? = null,
+    val currentPlaylist: SongResponseModel.Data? = null
 ) {
     companion object {
         val idle = MusicState(MusicStatus.IDLE, message = "")
     }
 
     enum class MusicStatus {
-        IDLE, LOADING, SUCCESS, FAILED
+        IDLE, PLAYING, PAUSED, RELEASED
     }
 }

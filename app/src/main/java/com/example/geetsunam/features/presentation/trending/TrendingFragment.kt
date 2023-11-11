@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.geetsunam.R
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.features.presentation.trending.adapters.TrendingAdapter
 import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingEvent
@@ -32,6 +34,9 @@ class TrendingFragment : Fragment() {
 
     @Inject
     lateinit var trendingViewModel: TrendingViewModel
+
+    @Inject
+    lateinit var musicViewModel: MusicViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -58,7 +63,11 @@ class TrendingFragment : Fragment() {
 
         trendingViewModel.trendingSongState.observe(viewLifecycleOwner) { response ->
             if (response.status == TrendingState.TrendingStatus.IDLE) {
-                trendingViewModel.onEvent(TrendingEvent.GetTrendingSongs(splashViewModel.userFlow.value?.token ?:""))
+                trendingViewModel.onEvent(
+                    TrendingEvent.GetTrendingSongs(
+                        splashViewModel.userFlow.value?.token ?: ""
+                    )
+                )
             }
             if (response.status == TrendingState.TrendingStatus.LOADING) {
                 recyclerView.visibility = View.GONE
@@ -72,6 +81,7 @@ class TrendingFragment : Fragment() {
                 }
                 recyclerView.visibility = View.VISIBLE
                 shimmerView.visibility = View.GONE
+                musicViewModel.onEvent(MusicEvent.SetPlaylist(response.songs!!, "trending"))
             }
             if (response.status == TrendingState.TrendingStatus.FAILED) {
                 recyclerView.visibility = View.GONE
@@ -83,7 +93,11 @@ class TrendingFragment : Fragment() {
     private fun pullToRefresh() {
         val swipeToRefresh = gview.findViewById<SwipeRefreshLayout>(R.id.srlTrending)
         swipeToRefresh.setOnRefreshListener {
-            trendingViewModel.onEvent(TrendingEvent.GetTrendingSongs(splashViewModel.userFlow.value?.token ?:""))
+            trendingViewModel.onEvent(
+                TrendingEvent.GetTrendingSongs(
+                    splashViewModel.userFlow.value?.token ?: ""
+                )
+            )
             swipeToRefresh.isRefreshing = false
         }
     }

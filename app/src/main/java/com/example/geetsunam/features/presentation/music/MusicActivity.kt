@@ -12,10 +12,13 @@ import com.example.geetsunam.features.domain.entities.SongEntity
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavEvent
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavState
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavViewModel
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.utils.CustomDialog
 import com.example.geetsunam.utils.CustomToast
 import com.example.geetsunam.utils.models.CommonRequestModel
+import com.example.geetsunam.utils.models.Song
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -31,10 +34,15 @@ class MusicActivity : AppCompatActivity() {
     @Inject
     lateinit var toggleFavViewModel: ToggleFavViewModel
 
+    @Inject
+    lateinit var musicViewModel: MusicViewModel
+
     //getting argument (song)
     private val args by navArgs<MusicActivityArgs>()
 
     private lateinit var binding: ActivityMusicBinding
+
+    private lateinit var songEntity: SongEntity
 
     //handler for seekBar
     lateinit var runnable: Runnable
@@ -43,9 +51,16 @@ class MusicActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMusicBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSong()
         playMusic()
         setFavDrawable()
         addToFavourite()
+        binding.ibPlayNext.setOnClickListener {
+            playNextSong(true)
+        }
+        binding.ibPlayPrevious.setOnClickListener {
+            playNextSong(false)
+        }
     }
 
     private fun setFavDrawable() {
@@ -90,20 +105,67 @@ class MusicActivity : AppCompatActivity() {
         }
     }
 
+    private fun setSong() {
+        val song = musicViewModel.musicState.value?.currentPlaylist?.songs?.find { song ->
+            song?.id == args.song.id
+        }
+        songEntity = SongEntity(
+            id = song?.id,
+            coverArt = song?.coverArt,
+            artistName = song?.artists?.fullname,
+            songName = song?.title,
+            duration = song?.duration,
+            source = song?.source,
+            stream = song?.stream,
+            isFavourite = song?.isFavourite,
+        )
+        musicViewModel.onEvent(MusicEvent.SetCurrentSongId(songEntity.id!!))
+    }
+
+    private fun playNextSong(isNext: Boolean) {
+        val song: Song?
+        //find current song index
+        val currSong = musicViewModel.musicState.value?.currentPlaylist?.songs?.find { song ->
+            song?.id == songEntity.id
+        }
+        val currIdx = musicViewModel.musicState.value?.currentPlaylist?.songs?.indexOf(currSong)
+        song = if (isNext) {
+            musicViewModel.musicState.value?.currentPlaylist?.songs?.elementAt(currIdx!! + 1)
+        } else {
+            if (currIdx == 0) {
+                return
+            }
+            musicViewModel.musicState.value?.currentPlaylist?.songs?.elementAt(currIdx!! - 1)
+        }
+        mediaPlayer.reset()
+        binding.ibPlay.setImageResource(R.drawable.ic_play)
+        binding.seekBar.progress = 0
+        songEntity = SongEntity(
+            id = song?.id,
+            coverArt = song?.coverArt,
+            artistName = song?.artists?.fullname,
+            songName = song?.title,
+            duration = song?.duration,
+            source = song?.source,
+            stream = song?.stream,
+            isFavourite = song?.isFavourite,
+        )
+        playMusic()
+    }
+
     private fun playMusic() {
-        binding.result = args.song
-        val response = args.song
-        mediaPlayer?.setDataSource(response.source)
-        mediaPlayer?.prepareAsync() // Asynchronous preparation
-        mediaPlayer?.setOnPreparedListener { player ->
+        binding.result = songEntity
+        mediaPlayer.setDataSource(songEntity.source)
+        mediaPlayer.prepareAsync() // Asynchronous preparation
+        mediaPlayer.setOnPreparedListener { player ->
             // Start playing when the media is prepared
             player.start()
             binding.seekBar.progress = 0
-            binding.seekBar.max = mediaPlayer!!.duration
+            binding.seekBar.max = mediaPlayer.duration
             binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                     if (p2) {
-                        mediaPlayer!!.seekTo(p1)
+                        mediaPlayer.seekTo(p1)
                     }
                 }
 
@@ -120,11 +182,12 @@ class MusicActivity : AppCompatActivity() {
 //            }, 3000)
             binding.ibPlay.setImageResource(R.drawable.ic_pause)
             binding.ibPlay.setOnClickListener {
-                if (mediaPlayer!!.isPlaying) {
-                    mediaPlayer!!.pause()
+                if (mediaPlayer.isPlaying) {
+                    mediaPlayer.pause()
                     binding.ibPlay.setImageResource(R.drawable.ic_play)
-                } else if (!mediaPlayer!!.isPlaying) {
-                    mediaPlayer!!.start()
+
+                } else if (!mediaPlayer.isPlaying) {
+                    mediaPlayer.start()
                     binding.ibPlay.setImageResource(R.drawable.ic_pause)
                 }
             }
@@ -132,7 +195,7 @@ class MusicActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        mediaPlayer?.release()
+        mediaPlayer.release()
         super.onDestroy()
     }
 }

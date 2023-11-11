@@ -134,93 +134,92 @@ object AppModule {
         return GetArtistSongsUsecase(repo)
     }
 
-    //registering viewmodels
-    @Provides
-    fun provideSplashViewModel(datastore: LocalDatastore): SplashViewModel {
-        return SplashViewModel(datastore)
-    }
-
-    @Provides
-    fun provideLoginViewModel(
-        loginUsecase: LoginUsecase, localDatastore: LocalDatastore
-    ): LoginViewModel {
-        return LoginViewModel(loginUsecase, localDatastore)
-    }
-
-    @Provides
-    fun provideGoogleLoginViewModel(
-        googleLoginUsecase: GoogleLoginUsecase, localDatastore: LocalDatastore
-    ): GoogleLoginViewModel {
-        return GoogleLoginViewModel(googleLoginUsecase, localDatastore)
-    }
-
-    @Provides
-    fun provideGenreViewModel(
-        getGenresUsecase: GetGenresUsecase
-    ): GenreViewModel {
-        return GenreViewModel(getGenresUsecase)
-    }
-
-    @Provides
-    fun provideFeaturedArtistsViewModel(
-        getFeaturedArtistsUsecase: GetFeaturedArtistsUsecase
-    ): FeaturedArtistsViewModel {
-        return FeaturedArtistsViewModel(getFeaturedArtistsUsecase)
-    }
-
-    @Provides
-    fun provideFeaturedSongsViewModel(
-        getFeaturedSongsUsecase: GetFeaturedSongsUsecase
-    ): FeaturedSongsViewModel {
-        return FeaturedSongsViewModel(getFeaturedSongsUsecase)
-    }
-
-    @Provides
-    fun provideTrendingSongsViewModel(
-        getTrendingSongsUsecase: GetTrendingSongsUsecase
-    ): TrendingViewModel {
-        return TrendingViewModel(getTrendingSongsUsecase)
-    }
-
-    @Provides
-    fun provideSingleSongViewModel(
-        getSingleSongUsecase: GetSingleSongUsecase
-    ): MusicViewModel {
-        return MusicViewModel(getSingleSongUsecase)
-    }
-
-    @Provides
-    fun provideNewSongsViewModel(
-        getNewSongsUsecase: GetNewSongsUsecase
-    ): NewSongViewModel {
-        return NewSongViewModel(getNewSongsUsecase)
-    }
-
-    @Provides
-    fun provideToggleFavViewModel(
-        toggleFavouriteUsecase: ToggleFavouriteUsecase
-    ): ToggleFavViewModel {
-        return ToggleFavViewModel(toggleFavouriteUsecase)
-    }
-
-    @Provides
-    fun provideFavouriteSongViewModel(
-        getFavouriteSongsUsecase: GetFavouriteSongsUsecase
-    ): FavSongViewModel {
-        return FavSongViewModel(getFavouriteSongsUsecase)
-    }
-
-    @Provides
-    fun provideGenreSongViewModel(
-        getGenreSongsUsecase: GetGenreSongsUsecase
-    ): GenreSongViewModel {
-        return GenreSongViewModel(getGenreSongsUsecase)
-    }
-
-    @Provides
-    fun provideArtistSongViewModel(
-        getArtistSongsUsecase: GetArtistSongsUsecase
-    ): ArtistSongViewModel {
-        return ArtistSongViewModel(getArtistSongsUsecase)
-    }
+//    //registering viewmodels
+//    @Provides
+//    fun provideSplashViewModel(datastore: LocalDatastore): SplashViewModel {
+//        return SplashViewModel(datastore)
+//    }
+//
+//    @Provides
+//    fun provideLoginViewModel(
+//        loginUsecase: LoginUsecase, localDatastore: LocalDatastore
+//    ): LoginViewModel {
+//        return LoginViewModel(loginUsecase, localDatastore)
+//    }
+//
+//    @Provides
+//    fun provideGoogleLoginViewModel(
+//        googleLoginUsecase: GoogleLoginUsecase, localDatastore: LocalDatastore
+//    ): GoogleLoginViewModel {
+//        return GoogleLoginViewModel(googleLoginUsecase, localDatastore)
+//    }
+//
+//    @Provides
+//    fun provideGenreViewModel(
+//        getGenresUsecase: GetGenresUsecase
+//    ): GenreViewModel {
+//        return GenreViewModel(getGenresUsecase)
+//    }
+//
+//    @Provides
+//    fun provideFeaturedArtistsViewModel(
+//        getFeaturedArtistsUsecase: GetFeaturedArtistsUsecase
+//    ): FeaturedArtistsViewModel {
+//        return FeaturedArtistsViewModel(getFeaturedArtistsUsecase)
+//    }
+//
+//    @Provides
+//    fun provideFeaturedSongsViewModel(
+//        getFeaturedSongsUsecase: GetFeaturedSongsUsecase
+//    ): FeaturedSongsViewModel {
+//        return FeaturedSongsViewModel(getFeaturedSongsUsecase)
+//    }
+//
+//    @Provides
+//    fun provideTrendingSongsViewModel(
+//        getTrendingSongsUsecase: GetTrendingSongsUsecase
+//    ): TrendingViewModel {
+//        return TrendingViewModel(getTrendingSongsUsecase)
+//    }
+//
+//    @Provides
+//    fun provideSingleSongViewModel(
+//    ): MusicViewModel {
+//        return MusicViewModel()
+//    }
+//
+//    @Provides
+//    fun provideNewSongsViewModel(
+//        getNewSongsUsecase: GetNewSongsUsecase
+//    ): NewSongViewModel {
+//        return NewSongViewModel(getNewSongsUsecase)
+//    }
+//
+//    @Provides
+//    fun provideToggleFavViewModel(
+//        toggleFavouriteUsecase: ToggleFavouriteUsecase
+//    ): ToggleFavViewModel {
+//        return ToggleFavViewModel(toggleFavouriteUsecase)
+//    }
+//
+//    @Provides
+//    fun provideFavouriteSongViewModel(
+//        getFavouriteSongsUsecase: GetFavouriteSongsUsecase
+//    ): FavSongViewModel {
+//        return FavSongViewModel(getFavouriteSongsUsecase)
+//    }
+//
+//    @Provides
+//    fun provideGenreSongViewModel(
+//        getGenreSongsUsecase: GetGenreSongsUsecase
+//    ): GenreSongViewModel {
+//        return GenreSongViewModel(getGenreSongsUsecase)
+//    }
+//
+//    @Provides
+//    fun provideArtistSongViewModel(
+//        getArtistSongsUsecase: GetArtistSongsUsecase
+//    ): ArtistSongViewModel {
+//        return ArtistSongViewModel(getArtistSongsUsecase)
+//    }
 }
