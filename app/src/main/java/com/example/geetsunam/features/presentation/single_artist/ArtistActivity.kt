@@ -7,8 +7,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.navigation.navArgs
 import com.example.geetsunam.R
 import com.example.geetsunam.databinding.ActivityArtistBinding
-import com.example.geetsunam.databinding.ActivityGenreBinding
-import com.example.geetsunam.features.presentation.single_genre.GenreActivityArgs
 
 class ArtistActivity : AppCompatActivity() {
     //getting argument (artist)

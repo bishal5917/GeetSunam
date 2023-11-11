@@ -7,13 +7,8 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.geetsunam.R
 import com.example.geetsunam.databinding.ActivityGenreBinding
-import com.example.geetsunam.features.presentation.liked_song.adapters.FavSongsAdapter
-import com.example.geetsunam.features.presentation.liked_song.viewmodel.FavSongEvent
-import com.example.geetsunam.features.presentation.liked_song.viewmodel.FavSongState
-import com.example.geetsunam.features.presentation.liked_song.viewmodel.FavSongViewModel
 import com.example.geetsunam.features.presentation.single_genre.adapters.GenreSongsAdapter
 import com.example.geetsunam.features.presentation.single_genre.viewmodel.GenreSongEvent
 import com.example.geetsunam.features.presentation.single_genre.viewmodel.GenreSongState
@@ -22,7 +17,6 @@ import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewMo
 import com.example.geetsunam.utils.CustomToast
 import com.example.geetsunam.utils.models.CommonRequestModel
 import com.example.geetsunam.utils.models.Song
-import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

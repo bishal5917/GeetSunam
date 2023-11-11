@@ -8,6 +8,7 @@ import android.widget.SeekBar
 import androidx.navigation.navArgs
 import com.example.geetsunam.R
 import com.example.geetsunam.databinding.ActivityMusicBinding
+import com.example.geetsunam.features.domain.entities.SongEntity
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavEvent
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavState
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavViewModel
@@ -42,12 +43,6 @@ class MusicActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMusicBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        // Initialize and set up the MediaPlayer
-//        mediaPlayer = MediaPlayer()
-//        mediaPlayer?.setAudioAttributes(
-//            AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-//                .setUsage(AudioAttributes.USAGE_MEDIA).build()
-//        )
         playMusic()
         setFavDrawable()
         addToFavourite()

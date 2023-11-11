@@ -69,8 +69,7 @@
     <activity
         android:id="@+id/genreActivity"
         android:name="com.example.geetsunam.features.presentation.single_genre.GenreActivity"
-        android:label="activity_genre"
-        tools:layout="@layout/activity_genre" >
+        android:label="GenreActivity" >
         <argument
             android:name="genre"
             app:argType="com.example.geetsunam.features.data.models.genres.GenreResponseModel$Data$Genre" />
