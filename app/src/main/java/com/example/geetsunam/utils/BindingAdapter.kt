@@ -61,7 +61,7 @@ class BindingAdapter {
                                 songEntity
                             )
                         songCard.findNavController().navigate(action)
-                    } else if (from == "genre_songs") {
+                    } else if (from == "genre_songs" || from == "artist_songs") {
                         val intent = Intent(songCard.context, MusicActivity::class.java)
                         intent.putExtra("song", songEntity)
                         songCard.context.startActivity(intent)
@@ -70,7 +70,6 @@ class BindingAdapter {
                     Log.d("setOnClickListener", "${ex.message}")
                 }
             }
-
         }
 
         @BindingAdapter("onGenreClicked")

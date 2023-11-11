@@ -11,6 +11,7 @@ import com.example.geetsunam.features.data.datasource.UserRemoteDatasource
 import com.example.geetsunam.features.data.datasource.UserRemoteDatasourceImpl
 import com.example.geetsunam.features.data.repositories.UserRepositoryImpl
 import com.example.geetsunam.features.domain.repositories.UserRepository
+import com.example.geetsunam.features.domain.usecases.GetArtistSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetFavouriteSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetFeaturedArtistsUsecase
 import com.example.geetsunam.features.domain.usecases.GetFeaturedSongsUsecase
@@ -31,6 +32,7 @@ import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewMode
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavViewModel
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongViewModel
+import com.example.geetsunam.features.presentation.single_artist.viewmodel.ArtistSongViewModel
 import com.example.geetsunam.features.presentation.single_genre.viewmodel.GenreSongViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingViewModel
@@ -127,6 +129,11 @@ object AppModule {
         return GetGenreSongsUsecase(repo)
     }
 
+    @Provides
+    fun provideArtistSongsUsecase(repo: UserRepository): GetArtistSongsUsecase {
+        return GetArtistSongsUsecase(repo)
+    }
+
     //registering viewmodels
     @Provides
     fun provideSplashViewModel(datastore: LocalDatastore): SplashViewModel {
@@ -208,5 +215,12 @@ object AppModule {
         getGenreSongsUsecase: GetGenreSongsUsecase
     ): GenreSongViewModel {
         return GenreSongViewModel(getGenreSongsUsecase)
+    }
+
+    @Provides
+    fun provideArtistSongViewModel(
+        getArtistSongsUsecase: GetArtistSongsUsecase
+    ): ArtistSongViewModel {
+        return ArtistSongViewModel(getArtistSongsUsecase)
     }
 }
