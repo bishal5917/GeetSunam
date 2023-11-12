@@ -9,6 +9,8 @@ import androidx.navigation.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geetsunam.R
 import com.example.geetsunam.databinding.ActivityGenreBinding
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.single_genre.adapters.GenreSongsAdapter
 import com.example.geetsunam.features.presentation.single_genre.viewmodel.GenreSongEvent
 import com.example.geetsunam.features.presentation.single_genre.viewmodel.GenreSongState
@@ -35,6 +37,9 @@ class GenreActivity : AppCompatActivity() {
 
     @Inject
     lateinit var genreSongViewModel: GenreSongViewModel
+
+    @Inject
+    lateinit var musicViewModel: MusicViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +83,7 @@ class GenreActivity : AppCompatActivity() {
                 binding.rvGenreSongs.visibility = View.VISIBLE
                 binding.shlGenreSongs.visibility = View.GONE
                 binding.tvGenreSongsQty.text = "${response.songs?.songs?.size.toString()} Songs"
+                musicViewModel.onEvent(MusicEvent.SetPlaylist(response.songs!!, "genres"))
             }
             if (response.status == GenreSongState.GenreSongStatus.FAILED) {
                 binding.rvGenreSongs.visibility = View.GONE

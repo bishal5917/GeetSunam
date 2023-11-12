@@ -13,6 +13,7 @@ import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.To
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavState
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavViewModel
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicState
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.utils.CustomDialog
@@ -51,21 +52,20 @@ class MusicActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMusicBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSong()
+
+        //set current song
+        musicViewModel.onEvent(MusicEvent.SetCurrentSong(args.song.id!!))
+
+        songEntity = args.song
         playMusic()
-        setFavDrawable()
         addToFavourite()
         binding.ibPlayNext.setOnClickListener {
-            playNextSong(true)
+            musicViewModel.onEvent(MusicEvent.PlayNextSong)
+            resetAndPlay()
         }
         binding.ibPlayPrevious.setOnClickListener {
-            playNextSong(false)
-        }
-    }
-
-    private fun setFavDrawable() {
-        if (args.song.isFavourite == true) {
-            binding.ibLike.setImageResource(R.drawable.ic_favorite_fill)
+            musicViewModel.onEvent(MusicEvent.PlayPreviousSong)
+            resetAndPlay()
         }
     }
 
@@ -105,51 +105,11 @@ class MusicActivity : AppCompatActivity() {
         }
     }
 
-    private fun setSong() {
-        val song = musicViewModel.musicState.value?.currentPlaylist?.songs?.find { song ->
-            song?.id == args.song.id
-        }
-        songEntity = SongEntity(
-            id = song?.id,
-            coverArt = song?.coverArt,
-            artistName = song?.artists?.fullname,
-            songName = song?.title,
-            duration = song?.duration,
-            source = song?.source,
-            stream = song?.stream,
-            isFavourite = song?.isFavourite,
-        )
-        musicViewModel.onEvent(MusicEvent.SetCurrentSongId(songEntity.id!!))
-    }
-
-    private fun playNextSong(isNext: Boolean) {
-        val song: Song?
-        //find current song index
-        val currSong = musicViewModel.musicState.value?.currentPlaylist?.songs?.find { song ->
-            song?.id == songEntity.id
-        }
-        val currIdx = musicViewModel.musicState.value?.currentPlaylist?.songs?.indexOf(currSong)
-        song = if (isNext) {
-            musicViewModel.musicState.value?.currentPlaylist?.songs?.elementAt(currIdx!! + 1)
-        } else {
-            if (currIdx == 0) {
-                return
-            }
-            musicViewModel.musicState.value?.currentPlaylist?.songs?.elementAt(currIdx!! - 1)
-        }
+    private fun resetAndPlay() {
+        songEntity = musicViewModel.musicState.value?.currentSong!!
         mediaPlayer.reset()
         binding.ibPlay.setImageResource(R.drawable.ic_play)
         binding.seekBar.progress = 0
-        songEntity = SongEntity(
-            id = song?.id,
-            coverArt = song?.coverArt,
-            artistName = song?.artists?.fullname,
-            songName = song?.title,
-            duration = song?.duration,
-            source = song?.source,
-            stream = song?.stream,
-            isFavourite = song?.isFavourite,
-        )
         playMusic()
     }
 

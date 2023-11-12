@@ -2,6 +2,7 @@ package com.example.geetsunam.utils
 
 import android.content.Intent
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -88,6 +89,16 @@ class BindingAdapter {
             imageView.setOnClickListener {
                 val action = HomeFragmentDirections.actionHomeFragmentToArtistActivity(artist)
                 imageView.findNavController().navigate(action)
+            }
+        }
+
+        @BindingAdapter("setImageBtnDrawable")
+        @JvmStatic
+        fun setImageBtnDrawable(imageButton: ImageButton, isFav: Boolean) {
+            if (isFav) {
+                imageButton.setImageResource(R.drawable.ic_favorite_fill)
+            } else {
+                imageButton.setImageResource(R.drawable.ic_favorite)
             }
         }
 

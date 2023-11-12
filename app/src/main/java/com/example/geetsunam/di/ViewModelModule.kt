@@ -34,7 +34,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ViewModelModule {
-    //registering viewmodels
     @Provides
     @Singleton
     fun provideSplashViewModel(datastore: LocalDatastore): SplashViewModel {
@@ -42,7 +41,6 @@ object ViewModelModule {
     }
 
     @Provides
-    @Singleton
     fun provideLoginViewModel(
         loginUsecase: LoginUsecase, localDatastore: LocalDatastore
     ): LoginViewModel {
@@ -50,7 +48,6 @@ object ViewModelModule {
     }
 
     @Provides
-    @Singleton
     fun provideGoogleLoginViewModel(
         googleLoginUsecase: GoogleLoginUsecase, localDatastore: LocalDatastore
     ): GoogleLoginViewModel {

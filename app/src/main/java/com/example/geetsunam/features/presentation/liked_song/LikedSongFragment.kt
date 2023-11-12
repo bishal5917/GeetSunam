@@ -13,6 +13,8 @@ import com.example.geetsunam.features.presentation.liked_song.adapters.FavSongsA
 import com.example.geetsunam.features.presentation.liked_song.viewmodel.FavSongEvent
 import com.example.geetsunam.features.presentation.liked_song.viewmodel.FavSongState
 import com.example.geetsunam.features.presentation.liked_song.viewmodel.FavSongViewModel
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingEvent
 import com.example.geetsunam.utils.CustomToast
@@ -32,6 +34,9 @@ class LikedSongFragment : Fragment() {
 
     @Inject
     lateinit var favSongViewModel: FavSongViewModel
+
+    @Inject
+    lateinit var musicViewModel: MusicViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,6 +82,8 @@ class LikedSongFragment : Fragment() {
                 }
                 recyclerView.visibility = View.VISIBLE
                 shimmerView.visibility = View.GONE
+                musicViewModel.onEvent(MusicEvent.SetPlaylist(response.songs!!, "liked"))
+
             }
             if (response.status == FavSongState.FavSongStatus.FAILED) {
                 recyclerView.visibility = View.GONE

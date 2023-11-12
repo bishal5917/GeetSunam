@@ -23,6 +23,8 @@ import com.example.geetsunam.features.presentation.home.genres.adapters.GenreAda
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreEvent
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreState
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreViewModel
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.utils.CustomToast
 import com.example.geetsunam.utils.models.Song
@@ -51,6 +53,10 @@ class HomeFragment : Fragment() {
     @Inject
     lateinit var splashViewModel: SplashViewModel
 
+    @Inject
+    lateinit var musicViewModel: MusicViewModel
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -68,12 +74,12 @@ class HomeFragment : Fragment() {
     private fun pullToRefresh() {
         val swipeToRefresh = gview.findViewById<SwipeRefreshLayout>(R.id.srlHome)
         swipeToRefresh.setOnRefreshListener {
-            genreViewModel.onEvent(GenreEvent.GetGenre(splashViewModel.userFlow.value?.token ?:""))
+            genreViewModel.onEvent(GenreEvent.GetGenre(splashViewModel.userFlow.value?.token ?: ""))
             featuredArtistsViewModel.onEvent(
                 FeaturedArtistsEvent.GetFeaturedArtists(splashViewModel.userFlow.value?.token ?: "")
             )
             featuredSongsViewModel.onEvent(
-                FeaturedSongsEvent.GetFeaturedSongs(splashViewModel.userFlow.value?.token?:"")
+                FeaturedSongsEvent.GetFeaturedSongs(splashViewModel.userFlow.value?.token ?: "")
             )
             swipeToRefresh.isRefreshing = false
         }
@@ -106,7 +112,11 @@ class HomeFragment : Fragment() {
 
         genreViewModel.genreState.observe(viewLifecycleOwner) { response ->
             if (response.status == GenreState.GenreStatus.IDLE) {
-                genreViewModel.onEvent(GenreEvent.GetGenre(splashViewModel.userFlow.value?.token ?:""))
+                genreViewModel.onEvent(
+                    GenreEvent.GetGenre(
+                        splashViewModel.userFlow.value?.token ?: ""
+                    )
+                )
             }
             if (response.status == GenreState.GenreStatus.LOADING) {
                 recyclerView.visibility = View.GONE
@@ -132,7 +142,9 @@ class HomeFragment : Fragment() {
         featuredArtistsViewModel.featuredArtistsState.observe(viewLifecycleOwner) { response ->
             if (response.status == FeaturedArtistsState.FeaturedArtistsStatus.IDLE) {
                 featuredArtistsViewModel.onEvent(
-                    FeaturedArtistsEvent.GetFeaturedArtists(splashViewModel.userFlow.value?.token ?:"")
+                    FeaturedArtistsEvent.GetFeaturedArtists(
+                        splashViewModel.userFlow.value?.token ?: ""
+                    )
                 )
             }
             if (response.status == FeaturedArtistsState.FeaturedArtistsStatus.LOADING) {
@@ -163,7 +175,7 @@ class HomeFragment : Fragment() {
         featuredSongsViewModel.featuredSongState.observe(viewLifecycleOwner) { response ->
             if (response.status == FeaturedSongsState.SongStatus.IDLE) {
                 featuredSongsViewModel.onEvent(
-                    FeaturedSongsEvent.GetFeaturedSongs(splashViewModel.userFlow.value?.token ?:"")
+                    FeaturedSongsEvent.GetFeaturedSongs(splashViewModel.userFlow.value?.token ?: "")
                 )
             }
             if (response.status == FeaturedSongsState.SongStatus.LOADING) {
@@ -178,6 +190,7 @@ class HomeFragment : Fragment() {
                 }
                 recyclerView.visibility = View.VISIBLE
                 shimmerView.visibility = View.GONE
+                musicViewModel.onEvent(MusicEvent.SetPlaylist(response.songs!!, "featured"))
             }
             if (response.status == FeaturedSongsState.SongStatus.FAILED) {
                 recyclerView.visibility = View.GONE

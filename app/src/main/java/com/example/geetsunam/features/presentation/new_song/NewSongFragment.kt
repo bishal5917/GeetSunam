@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.geetsunam.R
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.new_song.adapters.NewsongsAdapter
 import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongEvent
 import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongState
@@ -31,6 +33,9 @@ class NewSongFragment : Fragment() {
 
     @Inject
     lateinit var newSongViewModel: NewSongViewModel
+
+    @Inject
+    lateinit var musicViewModel: MusicViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -57,7 +62,11 @@ class NewSongFragment : Fragment() {
 
         newSongViewModel.newSongsState.observe(viewLifecycleOwner) { response ->
             if (response.status == NewSongState.NewSongStatus.IDLE) {
-                newSongViewModel.onEvent(NewSongEvent.GetNewSongs(splashViewModel.userFlow.value?.token ?:""))
+                newSongViewModel.onEvent(
+                    NewSongEvent.GetNewSongs(
+                        splashViewModel.userFlow.value?.token ?: ""
+                    )
+                )
             }
             if (response.status == NewSongState.NewSongStatus.LOADING) {
                 recyclerView.visibility = View.GONE
@@ -71,6 +80,7 @@ class NewSongFragment : Fragment() {
                 }
                 recyclerView.visibility = View.VISIBLE
                 shimmerView.visibility = View.GONE
+                musicViewModel.onEvent(MusicEvent.SetPlaylist(response.songs!!, "new"))
             }
             if (response.status == NewSongState.NewSongStatus.FAILED) {
                 recyclerView.visibility = View.GONE
@@ -82,7 +92,11 @@ class NewSongFragment : Fragment() {
     private fun pullToRefresh() {
         val swipeToRefresh = gview.findViewById<SwipeRefreshLayout>(R.id.srlNewSong)
         swipeToRefresh.setOnRefreshListener {
-            newSongViewModel.onEvent(NewSongEvent.GetNewSongs(splashViewModel.userFlow.value?.token ?:""))
+            newSongViewModel.onEvent(
+                NewSongEvent.GetNewSongs(
+                    splashViewModel.userFlow.value?.token ?: ""
+                )
+            )
             swipeToRefresh.isRefreshing = false
         }
     }

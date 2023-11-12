@@ -6,6 +6,11 @@ sealed class MusicEvent {
     data class SetPlaylist(val playlist: SongResponseModel.Data, val playlistName: String) :
         MusicEvent()
 
-    data class SetCurrentSongId(val songId: String) :
-        MusicEvent()
+    data class SetCurrentSong(val songId: String) : MusicEvent()
+
+    object PlayNextSong : MusicEvent()
+
+    object PlayPreviousSong : MusicEvent()
+
+    object Shuffle : MusicEvent()
 }
