@@ -18,6 +18,9 @@
         android:theme="@style/Theme.GeetSunam"
         tools:targetApi="31">
         <activity
+            android:name=".features.presentation.home.search.SearchActivity"
+            android:exported="false" />
+        <activity
             android:name=".features.presentation.single_artist.ArtistActivity"
             android:exported="false" />
         <activity

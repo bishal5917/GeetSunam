@@ -12,6 +12,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.geetsunam.databinding.DrawerHeaderBinding
 import com.example.geetsunam.features.domain.entities.UserEntity
+import com.example.geetsunam.features.presentation.home.search.SearchActivity
 import com.example.geetsunam.features.presentation.login.LoginActivity
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginEvent
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginState
@@ -68,6 +69,13 @@ class MainActivity : AppCompatActivity() {
             } else {
                 drawerLayout.openDrawer(navigationView)
             }
+        }
+
+        //goto search screen
+        val searchBtn = findViewById<ImageButton>(R.id.ibSearch)
+        searchBtn.setOnClickListener {
+            val searchIntent = Intent(this, SearchActivity::class.java)
+            startActivity(searchIntent)
         }
 
         navigationView.setNavigationItemSelectedListener { item ->

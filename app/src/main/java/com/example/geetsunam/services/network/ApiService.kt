@@ -3,6 +3,7 @@ package com.example.geetsunam.services.network
 import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
 import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
+import com.example.geetsunam.features.data.models.search.SearchResponseModel
 import com.example.geetsunam.features.data.models.songs.SingleSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import retrofit2.Response
@@ -92,4 +93,11 @@ interface ApiService {
     suspend fun getArtistSongs(
         @Header("Authorization") authToken: String, @Path("id") genreId: String
     ): Response<SongResponseModel>
+
+    //global search
+    @GET("search")
+    @JvmSuppressWildcards
+    suspend fun search(
+        @Header("Authorization") authToken: String, @QueryMap queryMap: Map<String, Any>
+    ): Response<SearchResponseModel>
 }

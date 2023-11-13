@@ -10,10 +10,12 @@ import com.example.geetsunam.features.domain.usecases.GetNewSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GoogleLoginUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
+import com.example.geetsunam.features.domain.usecases.SearchUsecase
 import com.example.geetsunam.features.domain.usecases.ToggleFavouriteUsecase
 import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsViewModel
 import com.example.geetsunam.features.presentation.home.featured_songs.viewmodel.FeaturedSongsViewModel
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreViewModel
+import com.example.geetsunam.features.presentation.home.search.viewmodel.SearchViewModel
 import com.example.geetsunam.features.presentation.liked_song.viewmodel.FavSongViewModel
 import com.example.geetsunam.features.presentation.login.google_login_viewmodel.GoogleLoginViewModel
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewModel
@@ -128,5 +130,12 @@ object ViewModelModule {
         getArtistSongsUsecase: GetArtistSongsUsecase
     ): ArtistSongViewModel {
         return ArtistSongViewModel(getArtistSongsUsecase)
+    }
+
+    @Provides
+    fun provideSearchViewModel(
+        searchUsecase: SearchUsecase
+    ): SearchViewModel {
+        return SearchViewModel(searchUsecase)
     }
 }

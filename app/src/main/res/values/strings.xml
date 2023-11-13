@@ -44,5 +44,7 @@
     <string name="genre">GENRE</string>
     <string name="artist">ARTIST</string>
     <string name="no_songs">0 Songs</string>
+    <string name="artists">Artists</string>
+    <string name="songs">Songs</string>
 
 </resources>

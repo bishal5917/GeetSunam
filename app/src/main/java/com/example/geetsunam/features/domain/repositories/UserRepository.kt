@@ -4,11 +4,13 @@ import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
 import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
+import com.example.geetsunam.features.data.models.search.SearchResponseModel
 import com.example.geetsunam.features.data.models.songs.SingleSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.utils.Resource
 import com.example.geetsunam.utils.models.CommonRequestModel
 import com.example.geetsunam.utils.models.CommonResponseModel
+import com.example.geetsunam.utils.models.QueryRequestModel
 
 interface UserRepository {
     suspend fun login(loginRequestModel: LoginRequestModel): Resource<LoginResponseModel>
@@ -41,4 +43,7 @@ interface UserRepository {
 
     suspend fun getArtistSongs(commonRequestModel: CommonRequestModel):
             Resource<SongResponseModel>
+
+    suspend fun search(queryRequestModel: QueryRequestModel):
+            Resource<SearchResponseModel>
 }

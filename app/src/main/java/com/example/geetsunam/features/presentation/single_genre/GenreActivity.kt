@@ -46,7 +46,7 @@ class GenreActivity : AppCompatActivity() {
         binding = ActivityGenreBinding.inflate(layoutInflater)
         binding.genre = args.genre
         setContentView(binding.root)
-        val toolbar = findViewById<Toolbar>(R.id.tbGenreActivity)
+        val toolbar = binding.tbGenreActivity
         toolbar.title = ""
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

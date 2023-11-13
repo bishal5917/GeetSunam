@@ -45,7 +45,7 @@ class ArtistActivity : AppCompatActivity() {
         binding = ActivityArtistBinding.inflate(layoutInflater)
         binding.artist = args.artist
         setContentView(binding.root)
-        val toolbar = findViewById<Toolbar>(R.id.tbArtistActivity)
+        val toolbar = binding.tbArtistActivity
         toolbar.title = ""
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

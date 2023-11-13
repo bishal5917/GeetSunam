@@ -12,6 +12,7 @@ import com.example.geetsunam.features.domain.usecases.GetSingleSongUsecase
 import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GoogleLoginUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
+import com.example.geetsunam.features.domain.usecases.SearchUsecase
 import com.example.geetsunam.features.domain.usecases.ToggleFavouriteUsecase
 import dagger.Module
 import dagger.Provides
@@ -86,5 +87,10 @@ object UsecaseModule {
     @Provides
     fun provideArtistSongsUsecase(repo: UserRepository): GetArtistSongsUsecase {
         return GetArtistSongsUsecase(repo)
+    }
+
+    @Provides
+    fun provideSearchUsecase(repo: UserRepository): SearchUsecase {
+        return SearchUsecase(repo)
     }
 }

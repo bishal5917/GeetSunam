@@ -4,17 +4,19 @@ import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
 import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
+import com.example.geetsunam.features.data.models.search.SearchResponseModel
 import com.example.geetsunam.features.data.models.songs.SingleSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.services.network.ApiService
+import com.example.geetsunam.utils.GetQuery
 import com.example.geetsunam.utils.models.CommonRequestModel
+import com.example.geetsunam.utils.models.QueryRequestModel
 import retrofit2.Response
 import javax.inject.Inject
 
 interface UserRemoteDatasource {
     suspend fun login(loginRequestModel: LoginRequestModel): Response<LoginResponseModel>
-    suspend fun loginWithGoogle(commonRequestModel: CommonRequestModel):
-            Response<LoginResponseModel>
+    suspend fun loginWithGoogle(commonRequestModel: CommonRequestModel): Response<LoginResponseModel>
 
     suspend fun getGenres(commonRequestModel: CommonRequestModel): Response<GenreResponseModel>
     suspend fun getFeaturedArtists(commonRequestModel: CommonRequestModel): Response<ArtistResponseModel>
@@ -28,14 +30,13 @@ interface UserRemoteDatasource {
 
     suspend fun toggleFavourite(commonRequestModel: CommonRequestModel): Response<SingleSongResponseModel>
 
-    suspend fun getFavouriteSongs(commonRequestModel: CommonRequestModel):
-            Response<SongResponseModel>
+    suspend fun getFavouriteSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel>
 
-    suspend fun getGenreSongs(commonRequestModel: CommonRequestModel):
-            Response<SongResponseModel>
+    suspend fun getGenreSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel>
 
-    suspend fun getArtistSongs(commonRequestModel: CommonRequestModel):
-            Response<SongResponseModel>
+    suspend fun getArtistSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel>
+
+    suspend fun search(queryRequestModel: QueryRequestModel): Response<SearchResponseModel>
 }
 
 class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiService) :
@@ -108,6 +109,13 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
         return apiService.getArtistSongs(
             authToken = "Bearer ${commonRequestModel.token}",
             genreId = commonRequestModel.artistId ?: "abc"
+        )
+    }
+
+    override suspend fun search(queryRequestModel: QueryRequestModel): Response<SearchResponseModel> {
+        return apiService.search(
+            authToken = "Bearer ${queryRequestModel.token}",
+            queryMap = GetQuery.getQueryMap(queryRequestModel)
         )
     }
 }
