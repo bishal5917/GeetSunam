@@ -16,7 +16,6 @@ import com.example.geetsunam.features.presentation.liked_song.viewmodel.FavSongV
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
-import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingEvent
 import com.example.geetsunam.utils.CustomToast
 import com.example.geetsunam.utils.models.Song
 import com.facebook.shimmer.ShimmerFrameLayout

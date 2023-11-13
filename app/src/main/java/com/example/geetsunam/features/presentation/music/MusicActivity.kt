@@ -4,7 +4,9 @@ import android.app.Dialog
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.SeekBar
+import android.os.Handler
+import android.os.Message
+import android.util.Log
 import androidx.navigation.navArgs
 import com.example.geetsunam.R
 import com.example.geetsunam.databinding.ActivityMusicBinding
@@ -13,14 +15,15 @@ import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.To
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavState
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavViewModel
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
-import com.example.geetsunam.features.presentation.music.viewmodel.MusicState
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.utils.CustomDialog
 import com.example.geetsunam.utils.CustomToast
+import com.example.geetsunam.utils.LogTag
+import com.example.geetsunam.utils.PlayerUtil
 import com.example.geetsunam.utils.models.CommonRequestModel
-import com.example.geetsunam.utils.models.Song
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.Exception
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -45,9 +48,6 @@ class MusicActivity : AppCompatActivity() {
 
     private lateinit var songEntity: SongEntity
 
-    //handler for seekBar
-    lateinit var runnable: Runnable
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMusicBinding.inflate(layoutInflater)
@@ -66,6 +66,14 @@ class MusicActivity : AppCompatActivity() {
         binding.ibPlayPrevious.setOnClickListener {
             musicViewModel.onEvent(MusicEvent.PlayPreviousSong)
             resetAndPlay()
+        }
+        mediaPlayer.setOnCompletionListener {
+            mediaPlayer.reset()
+            musicViewModel.onEvent(MusicEvent.PlayNextSong)
+            binding.seekBar.progress = 0
+            songEntity = musicViewModel.musicState.value?.currentSong!!
+            binding.ibPlay.setImageResource(R.drawable.ic_play)
+            playMusic()
         }
     }
 
@@ -106,10 +114,10 @@ class MusicActivity : AppCompatActivity() {
     }
 
     private fun resetAndPlay() {
-        songEntity = musicViewModel.musicState.value?.currentSong!!
         mediaPlayer.reset()
-        binding.ibPlay.setImageResource(R.drawable.ic_play)
         binding.seekBar.progress = 0
+        songEntity = musicViewModel.musicState.value?.currentSong!!
+        binding.ibPlay.setImageResource(R.drawable.ic_play)
         playMusic()
     }
 
@@ -122,25 +130,8 @@ class MusicActivity : AppCompatActivity() {
             player.start()
             binding.seekBar.progress = 0
             binding.seekBar.max = mediaPlayer.duration
-            binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                    if (p2) {
-                        mediaPlayer.seekTo(p1)
-                    }
-                }
-
-                override fun onStartTrackingTouch(p0: SeekBar?) {
-                }
-
-                override fun onStopTrackingTouch(p0: SeekBar?) {
-                }
-            })
-//            Handler(Looper.getMainLooper()).postDelayed({
-//                runnable = Runnable {
-//                    binding.seekBar.progress = mediaPlayer!!.currentPosition
-//                }
-//            }, 3000)
             binding.ibPlay.setImageResource(R.drawable.ic_pause)
+            PlayerUtil().setSeekbar(binding.seekBar, mediaPlayer)
             binding.ibPlay.setOnClickListener {
                 if (mediaPlayer.isPlaying) {
                     mediaPlayer.pause()
@@ -151,6 +142,29 @@ class MusicActivity : AppCompatActivity() {
                     binding.ibPlay.setImageResource(R.drawable.ic_pause)
                 }
             }
+            //setting handlers
+            val handler = object : Handler() {
+                override fun handleMessage(msg: Message) {
+                    val currentPos = msg.what
+                    binding.seekBar.progress = currentPos
+                    val elapsedTime = PlayerUtil().calculateTime(currentPos)
+                    binding.tvDurationStart.text = elapsedTime
+                    super.handleMessage(msg)
+                }
+            }
+            Thread(Runnable {
+                while (true) {
+                    try {
+                        val msg = Message()
+                        msg.what = mediaPlayer.currentPosition
+                        handler.sendMessage(msg)
+                        Thread.sleep(1000)
+                    } catch (ex: Exception) {
+                        Log.d(LogTag.PLAYER, "${ex.message}")
+                    }
+                }
+
+            }).start()
         }
     }
 

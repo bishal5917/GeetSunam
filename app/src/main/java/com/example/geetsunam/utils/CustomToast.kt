@@ -2,7 +2,6 @@ package com.example.geetsunam.utils
 
 import android.content.Context
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 
 class CustomToast {
     companion object {

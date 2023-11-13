@@ -4,15 +4,12 @@ import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
 import android.widget.ImageButton
-import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.example.geetsunam.databinding.ActivityMusicBinding
 import com.example.geetsunam.databinding.DrawerHeaderBinding
 import com.example.geetsunam.features.domain.entities.UserEntity
 import com.example.geetsunam.features.presentation.login.LoginActivity
