@@ -2,10 +2,11 @@ package com.example.geetsunam.features.presentation.home.featured_artists.adapte
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
+import com.example.geetsunam.utils.models.Artist
 
 class FeaturedArtistsDiffUtil(
-    private val oldList: List<ArtistResponseModel.Data.Artist>,
-    private val newList: List<ArtistResponseModel.Data.Artist>
+    private val oldList: List<Artist>,
+    private val newList: List<Artist>
 ) : DiffUtil.Callback() {
     override fun getOldListSize(): Int {
         return oldList.size

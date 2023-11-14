@@ -80,6 +80,6 @@
         android:label="ArtistActivity" >
         <argument
             android:name="artist"
-            app:argType="com.example.geetsunam.features.data.models.artist.ArtistResponseModel$Data$Artist" />
+            app:argType="com.example.geetsunam.utils.models.Artist" />
     </activity>
 </navigation>

@@ -3,8 +3,8 @@ package com.example.geetsunam.features.presentation.music.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.geetsunam.R
 import com.example.geetsunam.features.domain.entities.SongEntity
+import com.example.geetsunam.utils.models.Song
 
 class MusicViewModel : ViewModel() {
     private val _musicState = MutableLiveData(MusicState.idle)
@@ -17,7 +17,20 @@ class MusicViewModel : ViewModel() {
                     _musicState.value?.copy(
                         playlistName = event.playlistName,
                         currentPlaylist = event.playlist,
-                        totalSongs = event.playlist.songs?.size
+                        totalSongs = event.playlist?.size
+                    )
+                )
+            }
+
+            is MusicEvent.SetAndRetainPlaylist -> {
+                val newPlaylist = ArrayList<Song>()
+                newPlaylist.addAll(_musicState.value?.currentPlaylist as ArrayList<Song>)
+                newPlaylist.addAll(event.playlist as ArrayList<Song>)
+                _musicState.postValue(
+                    _musicState.value?.copy(
+                        playlistName = event.playlistName,
+                        currentPlaylist = newPlaylist,
+                        totalSongs = newPlaylist.size
                     )
                 )
             }
@@ -34,12 +47,20 @@ class MusicViewModel : ViewModel() {
                 playNextSong(isNext = false)
             }
 
+            is MusicEvent.Reset -> {
+                _musicState.postValue(
+                    _musicState.value?.copy(
+                        playlistName = null, currentPlaylist = null, totalSongs = null
+                    )
+                )
+            }
+
             else -> {}
         }
     }
 
     private fun setSong(songId: String) {
-        val song = _musicState.value?.currentPlaylist?.songs?.find { song ->
+        val song = _musicState.value?.currentPlaylist?.find { song ->
             song?.id == songId
         }
         _musicState.postValue(
@@ -60,20 +81,20 @@ class MusicViewModel : ViewModel() {
 
     private fun playNextSong(isNext: Boolean) {
         //find current song index
-        val currSong = _musicState.value?.currentPlaylist?.songs?.find { song ->
+        val currSong = _musicState.value?.currentPlaylist?.find { song ->
             song?.id == _musicState.value?.currentSong?.id
         }
-        val currIdx = _musicState.value?.currentPlaylist?.songs?.indexOf(currSong)
+        val currIdx = _musicState.value?.currentPlaylist?.indexOf(currSong)
         val song = if (isNext) {
             if (currIdx == _musicState.value?.totalSongs!! - 1) {
                 return
             }
-            _musicState.value?.currentPlaylist?.songs?.elementAt(currIdx!! + 1)
+            _musicState.value?.currentPlaylist?.elementAt(currIdx!! + 1)
         } else {
             if (currIdx == 0) {
                 return
             }
-            _musicState.value?.currentPlaylist?.songs?.elementAt(currIdx!! - 1)
+            _musicState.value?.currentPlaylist?.elementAt(currIdx!! - 1)
         }
         _musicState.postValue(
             _musicState.value?.copy(

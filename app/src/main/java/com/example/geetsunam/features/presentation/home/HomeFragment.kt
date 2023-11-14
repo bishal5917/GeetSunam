@@ -27,6 +27,7 @@ import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.utils.CustomToast
+import com.example.geetsunam.utils.models.Artist
 import com.example.geetsunam.utils.models.Song
 import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,7 +56,6 @@ class HomeFragment : Fragment() {
 
     @Inject
     lateinit var musicViewModel: MusicViewModel
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -154,7 +154,7 @@ class HomeFragment : Fragment() {
             if (response.status == FeaturedArtistsState.FeaturedArtistsStatus.SUCCESS) {
                 response.artists?.let {
                     featuredArtistsAdapter.setData(
-                        response.artists.artists as List<ArtistResponseModel.Data.Artist>
+                        response.artists.artists as List<Artist>
                     )
                 }
                 recyclerView.visibility = View.VISIBLE
@@ -190,7 +190,7 @@ class HomeFragment : Fragment() {
                 }
                 recyclerView.visibility = View.VISIBLE
                 shimmerView.visibility = View.GONE
-                musicViewModel.onEvent(MusicEvent.SetPlaylist(response.songs!!, "featured"))
+                musicViewModel.onEvent(MusicEvent.SetPlaylist(response.songs?.songs!!, "featured"))
             }
             if (response.status == FeaturedSongsState.SongStatus.FAILED) {
                 recyclerView.visibility = View.GONE

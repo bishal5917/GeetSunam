@@ -17,8 +17,10 @@ import com.example.geetsunam.features.presentation.home.HomeFragmentDirections
 import com.example.geetsunam.features.presentation.liked_song.LikedSongFragmentDirections
 import com.example.geetsunam.features.presentation.music.MusicActivity
 import com.example.geetsunam.features.presentation.new_song.NewSongFragmentDirections
+import com.example.geetsunam.features.presentation.single_artist.ArtistActivity
 import com.example.geetsunam.features.presentation.single_genre.GenreActivity
 import com.example.geetsunam.features.presentation.trending.TrendingFragmentDirections
+import com.example.geetsunam.utils.models.Artist
 import com.example.geetsunam.utils.models.Song
 
 class BindingAdapter {
@@ -63,7 +65,7 @@ class BindingAdapter {
                                 songEntity
                             )
                         songCard.findNavController().navigate(action)
-                    } else if (from == "genre_songs" || from == "artist_songs") {
+                    } else if (from == "genre_songs" || from == "artist_songs" || from == "search") {
                         val intent = Intent(songCard.context, MusicActivity::class.java)
                         intent.putExtra("song", songEntity)
                         songCard.context.startActivity(intent)
@@ -83,12 +85,18 @@ class BindingAdapter {
             }
         }
 
-        @BindingAdapter("onArtistClicked")
+        @BindingAdapter("clickedFrom", "onArtistClicked", requireAll = true)
         @JvmStatic
-        fun onArtistClicked(imageView: ImageView, artist: ArtistResponseModel.Data.Artist) {
+        fun onArtistCardClickedListener(imageView: ImageView, from: String, artist: Artist) {
             imageView.setOnClickListener {
-                val action = HomeFragmentDirections.actionHomeFragmentToArtistActivity(artist)
-                imageView.findNavController().navigate(action)
+                if (from == "featured") {
+                    val action = HomeFragmentDirections.actionHomeFragmentToArtistActivity(artist)
+                    imageView.findNavController().navigate(action)
+                } else {
+                    val intent = Intent(imageView.context, ArtistActivity::class.java)
+                    intent.putExtra("artist", artist)
+                    imageView.context.startActivity(intent)
+                }
             }
         }
 

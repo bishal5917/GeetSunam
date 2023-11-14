@@ -81,7 +81,7 @@ class LikedSongFragment : Fragment() {
                 }
                 recyclerView.visibility = View.VISIBLE
                 shimmerView.visibility = View.GONE
-                musicViewModel.onEvent(MusicEvent.SetPlaylist(response.songs!!, "liked"))
+                musicViewModel.onEvent(MusicEvent.SetPlaylist(response.songs?.songs!!, "liked"))
 
             }
             if (response.status == FavSongState.FavSongStatus.FAILED) {

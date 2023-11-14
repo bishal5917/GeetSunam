@@ -1,14 +1,14 @@
-package com.example.geetsunam.features.presentation.home.featured_artists.adapters
+package com.example.geetsunam.features.presentation.home.search.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geetsunam.databinding.ArtistCardBinding
-import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
+import com.example.geetsunam.features.presentation.home.featured_artists.adapters.FeaturedArtistsDiffUtil
 import com.example.geetsunam.utils.models.Artist
 
-class FeaturedArtistsAdapter : RecyclerView.Adapter<FeaturedArtistsAdapter.MyViewHolder>() {
+class ArtistSearchAdapter : RecyclerView.Adapter<ArtistSearchAdapter.MyViewHolder>() {
 
     private var artists = emptyList<Artist>()
 
@@ -16,7 +16,7 @@ class FeaturedArtistsAdapter : RecyclerView.Adapter<FeaturedArtistsAdapter.MyVie
         RecyclerView.ViewHolder(binding.root) {
         fun bind(result: Artist) {
             binding.result = result
-            binding.from = "featured"
+            binding.from = "search"
             binding.executePendingBindings()
         }
 
@@ -43,8 +43,8 @@ class FeaturedArtistsAdapter : RecyclerView.Adapter<FeaturedArtistsAdapter.MyVie
     }
 
     fun setData(newData: List<Artist>) {
-        val recipesDiffUtil = FeaturedArtistsDiffUtil(artists, newData)
-        val diffUtilResult = DiffUtil.calculateDiff(recipesDiffUtil)
+        val artistDiffUtil = FeaturedArtistsDiffUtil(artists, newData)
+        val diffUtilResult = DiffUtil.calculateDiff(artistDiffUtil)
         artists = newData
         diffUtilResult.dispatchUpdatesTo(this)
     }
