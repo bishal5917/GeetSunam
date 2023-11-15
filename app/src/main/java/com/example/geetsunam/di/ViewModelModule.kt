@@ -37,7 +37,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ViewModelModule {
     @Provides
-    @Singleton
     fun provideSplashViewModel(datastore: LocalDatastore): SplashViewModel {
         return SplashViewModel(datastore)
     }

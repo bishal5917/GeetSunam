@@ -46,24 +46,20 @@ class LoginViewModel @Inject constructor(
                 }
 
                 is Resource.Success -> {
+                    val user = UserEntity(
+                        token = result.data?.token,
+                        name = result.data?.data?.user?.fullname,
+                        email = result.data?.data?.user?.email,
+                        image = result.data?.data?.user?.profileImage
+                    )
                     _loginState.postValue(
                         _loginState.value?.copy(
                             status = LoginState.LoginStatus.SUCCESS,
                             message = "Logged in successfully",
-                            user = result.data?.data?.user,
+                            user = user,
                         )
                     )
-                    localDatastore.saveUser(
-                        UserEntity(
-                            token = result.data?.token,
-                            name = result
-                                .data?.data?.user?.fullname,
-                            email = result
-                                .data?.data?.user?.email,
-                            image = result
-                                .data?.data?.user?.profileImage
-                        )
-                    )
+                    localDatastore.saveUser(user)
                 }
 
                 is Resource.Error -> {

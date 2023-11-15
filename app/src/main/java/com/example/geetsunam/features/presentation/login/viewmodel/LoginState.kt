@@ -1,11 +1,11 @@
 package com.example.geetsunam.features.presentation.login.viewmodel
 
-import com.example.geetsunam.features.data.models.login.LoginResponseModel
+import com.example.geetsunam.features.domain.entities.UserEntity
 
 data class LoginState(
     val status: LoginStatus,
     val message: String? = null,
-    val user: LoginResponseModel.Data.User? = null
+    val user: UserEntity? = null
 ) {
     companion object {
         val idle = LoginState(LoginStatus.IDLE, message = "")

@@ -9,7 +9,6 @@ import com.example.geetsunam.features.domain.entities.UserEntity
 import com.example.geetsunam.services.local.LocalDatastore
 import com.example.geetsunam.utils.LogTag
 import com.example.heartconnect.features.presentation.screens.splash.viewmodel.SplashEvent
-import com.example.heartconnect.features.presentation.screens.splash.viewmodel.SplashState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -48,7 +47,7 @@ class SplashViewModel @Inject constructor(private val localDatastore: LocalDatas
             if (userFlow.value?.token?.isEmpty() == true) {
                 _splashState.postValue(
                     _splashState.value?.copy(
-                        status = SplashState.SplashStatus.LOGGEDOUT,
+                        status = SplashState.SplashStatus.LoggedOut,
                         message = "Logged Out",
                     )
                 )
@@ -56,16 +55,17 @@ class SplashViewModel @Inject constructor(private val localDatastore: LocalDatas
             } else {
                 _splashState.postValue(
                     _splashState.value?.copy(
-                        status = SplashState.SplashStatus.LOGGEDIN,
+                        status = SplashState.SplashStatus.LoggedIn,
                         message = "Logged In",
-                    )
+
+                        )
                 )
                 Log.d(LogTag.SPLASH, "ID: ${userFlow.value}")
             }
         } catch (ex: Exception) {
             _splashState.postValue(
                 _splashState.value?.copy(
-                    status = SplashState.SplashStatus.FAILED,
+                    status = SplashState.SplashStatus.LoggedOut,
                     message = "Some error occured",
                 )
             )

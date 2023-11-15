@@ -25,6 +25,15 @@ class FavSongViewModel @Inject constructor(
                 getFavouriteSongs(event.token)
             }
 
+            is FavSongEvent.Reset -> {
+                _liveState.postValue(
+                    _liveState.value?.copy(
+                        status = FavSongState.FavSongStatus.IDLE,
+                        message = "IDLE"
+                    )
+                )
+            }
+
             else -> {}
         }
     }

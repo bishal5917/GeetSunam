@@ -11,8 +11,9 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.geetsunam.databinding.DrawerHeaderBinding
-import com.example.geetsunam.features.domain.entities.UserEntity
 import com.example.geetsunam.features.presentation.home.search.SearchActivity
+import com.example.geetsunam.features.presentation.liked_song.viewmodel.FavSongEvent
+import com.example.geetsunam.features.presentation.liked_song.viewmodel.FavSongViewModel
 import com.example.geetsunam.features.presentation.login.LoginActivity
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginEvent
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginState
@@ -37,14 +38,16 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var splashViewModel: SplashViewModel
 
+    @Inject
+    lateinit var favSongViewModel: FavSongViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         drawerHeaderBinding = DrawerHeaderBinding.inflate(layoutInflater)
 
-        //collecting flow and binding to the drawer header
-        val userData = splashViewModel.userFlow.value
-        drawerHeaderBinding.user = userData as UserEntity
+        //Getting user and binding to the drawer header
+        drawerHeaderBinding.user = splashViewModel.userFlow.value
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
@@ -106,6 +109,7 @@ class MainActivity : AppCompatActivity() {
                         response.message
                     }"
                 )
+                favSongViewModel.onEvent(FavSongEvent.Reset)
                 val loginIntent = Intent(this, LoginActivity::class.java)
                 startActivity(loginIntent)
                 finish()

@@ -57,7 +57,7 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/ivLikedLogo"
                 app:layout_constraintTop_toBottomOf="@+id/tvPlaylist" />
-
+ 
             <TextView
                 android:id="@+id/tvLikedSongsQty"
                 android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/urbanist_regular"
-                android:text="4 Songs"
+                android:text="0 Songs"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@+id/ivLikedLogo"
                 app:layout_constraintTop_toBottomOf="@+id/tvLikedSongs" />
