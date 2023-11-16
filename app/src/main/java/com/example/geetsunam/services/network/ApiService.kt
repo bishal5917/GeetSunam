@@ -6,6 +6,7 @@ import com.example.geetsunam.features.data.models.login.LoginResponseModel
 import com.example.geetsunam.features.data.models.search.SearchResponseModel
 import com.example.geetsunam.features.data.models.songs.SingleSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SongResponseModel
+import com.example.geetsunam.utils.models.CommonResponseModel
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -16,6 +17,12 @@ interface ApiService {
     suspend fun login(
         @Body body: Any
     ): Response<LoginResponseModel>
+
+    @POST("users/signup")
+    @JvmSuppressWildcards
+    suspend fun signUp(
+        @Body body: Any
+    ): Response<CommonResponseModel>
 
     //google login
     @POST("users/google")

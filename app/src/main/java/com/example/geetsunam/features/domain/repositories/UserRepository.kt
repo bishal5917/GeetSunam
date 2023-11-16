@@ -5,6 +5,7 @@ import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
 import com.example.geetsunam.features.data.models.search.SearchResponseModel
+import com.example.geetsunam.features.data.models.signup.SignupRequestModel
 import com.example.geetsunam.features.data.models.songs.SingleSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.utils.Resource
@@ -14,6 +15,8 @@ import com.example.geetsunam.utils.models.QueryRequestModel
 
 interface UserRepository {
     suspend fun login(loginRequestModel: LoginRequestModel): Resource<LoginResponseModel>
+    suspend fun signUp(signupRequestModel: SignupRequestModel): Resource<CommonResponseModel>
+
     suspend fun loginWithGoogle(commonRequestModel: CommonRequestModel): Resource<LoginResponseModel>
 
     suspend fun getGenres(commonRequestModel: CommonRequestModel): Resource<GenreResponseModel>

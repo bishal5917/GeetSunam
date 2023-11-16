@@ -6,11 +6,13 @@ import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
 import com.example.geetsunam.features.data.models.search.SearchResponseModel
+import com.example.geetsunam.features.data.models.signup.SignupRequestModel
 import com.example.geetsunam.features.data.models.songs.SingleSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.features.domain.repositories.UserRepository
 import com.example.geetsunam.utils.Resource
 import com.example.geetsunam.utils.models.CommonRequestModel
+import com.example.geetsunam.utils.models.CommonResponseModel
 import com.example.geetsunam.utils.models.QueryRequestModel
 
 class UserRepositoryImpl(
@@ -18,6 +20,16 @@ class UserRepositoryImpl(
 ) : UserRepository {
     override suspend fun login(loginRequestModel: LoginRequestModel): Resource<LoginResponseModel> {
         val response = userRemoteDatasource.login(loginRequestModel)
+        if (response.isSuccessful) {
+            response.body()?.let { result ->
+                return Resource.Success(result)
+            }
+        }
+        return Resource.Error(message = "${response.errorBody()?.string()}")
+    }
+
+    override suspend fun signUp(signupRequestModel: SignupRequestModel): Resource<CommonResponseModel> {
+        val response = userRemoteDatasource.signUp(signupRequestModel)
         if (response.isSuccessful) {
             response.body()?.let { result ->
                 return Resource.Success(result)

@@ -13,6 +13,7 @@ import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GoogleLoginUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
 import com.example.geetsunam.features.domain.usecases.SearchUsecase
+import com.example.geetsunam.features.domain.usecases.SignupUsecase
 import com.example.geetsunam.features.domain.usecases.ToggleFavouriteUsecase
 import dagger.Module
 import dagger.Provides
@@ -26,6 +27,11 @@ object UsecaseModule {
     @Provides
     fun provideLoginUsecase(repo: UserRepository): LoginUsecase {
         return LoginUsecase(repo)
+    }
+
+    @Provides
+    fun providesSignupUsecase(repo: UserRepository): SignupUsecase {
+        return SignupUsecase(repo)
     }
 
     @Provides

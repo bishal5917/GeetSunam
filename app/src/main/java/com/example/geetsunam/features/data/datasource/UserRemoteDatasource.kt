@@ -5,17 +5,21 @@ import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
 import com.example.geetsunam.features.data.models.search.SearchResponseModel
+import com.example.geetsunam.features.data.models.signup.SignupRequestModel
 import com.example.geetsunam.features.data.models.songs.SingleSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.services.network.ApiService
 import com.example.geetsunam.utils.GetQuery
 import com.example.geetsunam.utils.models.CommonRequestModel
+import com.example.geetsunam.utils.models.CommonResponseModel
 import com.example.geetsunam.utils.models.QueryRequestModel
 import retrofit2.Response
 import javax.inject.Inject
 
 interface UserRemoteDatasource {
     suspend fun login(loginRequestModel: LoginRequestModel): Response<LoginResponseModel>
+    suspend fun signUp(signupRequestModel: SignupRequestModel): Response<CommonResponseModel>
+
     suspend fun loginWithGoogle(commonRequestModel: CommonRequestModel): Response<LoginResponseModel>
 
     suspend fun getGenres(commonRequestModel: CommonRequestModel): Response<GenreResponseModel>
@@ -46,6 +50,18 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
             body = mapOf<String, String>(
                 "email" to loginRequestModel.email,
                 "password" to loginRequestModel.password,
+            )
+        )
+    }
+
+    override suspend fun signUp(signupRequestModel: SignupRequestModel): Response<CommonResponseModel> {
+        return apiService.signUp(
+            body = mapOf<String, String>(
+                "email" to signupRequestModel.email,
+                "password" to signupRequestModel.password,
+                "fullname" to signupRequestModel.fullname,
+                "confirmPassword" to signupRequestModel.confirmPassword,
+                "role" to signupRequestModel.role,
             )
         )
     }

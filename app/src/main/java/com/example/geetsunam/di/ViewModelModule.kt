@@ -11,6 +11,7 @@ import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GoogleLoginUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
 import com.example.geetsunam.features.domain.usecases.SearchUsecase
+import com.example.geetsunam.features.domain.usecases.SignupUsecase
 import com.example.geetsunam.features.domain.usecases.ToggleFavouriteUsecase
 import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsViewModel
 import com.example.geetsunam.features.presentation.home.featured_songs.viewmodel.FeaturedSongsViewModel
@@ -22,6 +23,7 @@ import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewMode
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavViewModel
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongViewModel
+import com.example.geetsunam.features.presentation.signup.viewmodel.SignupViewModel
 import com.example.geetsunam.features.presentation.single_artist.viewmodel.ArtistSongViewModel
 import com.example.geetsunam.features.presentation.single_genre.viewmodel.GenreSongViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
@@ -46,6 +48,13 @@ object ViewModelModule {
         loginUsecase: LoginUsecase, localDatastore: LocalDatastore
     ): LoginViewModel {
         return LoginViewModel(loginUsecase, localDatastore)
+    }
+
+    @Provides
+    fun provideSignupViewModel(
+        signupUsecase: SignupUsecase
+    ): SignupViewModel {
+        return SignupViewModel(signupUsecase)
     }
 
     @Provides
