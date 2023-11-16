@@ -17,4 +17,5 @@ object LogTag {
     const val ArtistSongs = "artist_songs"
     const val PLAYER = "player"
     const val SEARCH = "search"
+    const val OnChange = "onchange"
 }
