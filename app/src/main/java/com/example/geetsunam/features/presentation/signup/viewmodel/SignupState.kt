@@ -11,13 +11,12 @@ data class SignupState(
     val isEmailValid: Boolean = false,
     val isPasswordValid: Boolean = false,
     val isConfirmPasswordValid: Boolean = false,
-    val isFormValid: Boolean = false,
 ) {
     companion object {
         val idle = SignupState(SignupStatus.IDLE, message = "")
     }
 
     enum class SignupStatus {
-        IDLE, LOADING, SUCCESS, FAILED
+        IDLE, LOADING, SUCCESS, FAILED, FieldChanging, FormValid, FormInvalid
     }
 }

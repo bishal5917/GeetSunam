@@ -24,9 +24,9 @@ class SignupViewModel @Inject constructor(
             is SignupEvent.FullNameChanged -> {
                 _liveState.postValue(
                     _liveState.value?.copy(
+                        status = SignupState.SignupStatus.FieldChanging,
                         name = event.fieldValue,
                         isNameValid = event.validationResult.isValid,
-                        isFormValid = isFormValid()
                     )
                 )
             }
@@ -34,9 +34,9 @@ class SignupViewModel @Inject constructor(
             is SignupEvent.EmailChanged -> {
                 _liveState.postValue(
                     _liveState.value?.copy(
+                        status = SignupState.SignupStatus.FieldChanging,
                         email = event.fieldValue,
                         isEmailValid = event.validationResult.isValid,
-                        isFormValid = isFormValid()
                     )
                 )
             }
@@ -44,9 +44,9 @@ class SignupViewModel @Inject constructor(
             is SignupEvent.PasswordChanged -> {
                 _liveState.postValue(
                     _liveState.value?.copy(
+                        status = SignupState.SignupStatus.FieldChanging,
                         password = event.fieldValue,
                         isPasswordValid = event.validationResult.isValid,
-                        isFormValid = isFormValid()
                     )
                 )
             }
@@ -54,9 +54,9 @@ class SignupViewModel @Inject constructor(
             is SignupEvent.ConfirmPasswordChanged -> {
                 _liveState.postValue(
                     _liveState.value?.copy(
+                        status = SignupState.SignupStatus.FieldChanging,
                         confirmPassword = event.fieldValue,
                         isConfirmPasswordValid = event.validationResult.isValid,
-                        isFormValid = isFormValid()
                     )
                 )
             }
@@ -66,7 +66,14 @@ class SignupViewModel @Inject constructor(
             }
 
             is SignupEvent.CheckValidation -> {
-                isFormValid()
+                val result = isFormValid()
+                _liveState.postValue(
+                    _liveState.value?.copy(
+                        status = if (result) SignupState.SignupStatus.FormValid else SignupState
+                            .SignupStatus.FormInvalid,
+                        message = if (result) "Validated" else "Please validate all data",
+                    )
+                )
             }
 
             is SignupEvent.Reset -> {
@@ -77,18 +84,13 @@ class SignupViewModel @Inject constructor(
                     )
                 )
             }
+
+            else -> {}
         }
     }
 
     private fun isFormValid(): Boolean {
-        val isValid =
-            _liveState.value?.isNameValid == true && _liveState.value?.isEmailValid == true && _liveState.value?.isPasswordValid == true && _liveState.value?.isConfirmPasswordValid == true
-        _liveState.postValue(
-            _liveState.value?.copy(
-                isFormValid = isValid
-            )
-        )
-        return isValid
+        return _liveState.value?.isNameValid == true && _liveState.value?.isEmailValid == true && _liveState.value?.isPasswordValid == true && _liveState.value?.isConfirmPasswordValid == true
     }
 
     private fun signUp() {

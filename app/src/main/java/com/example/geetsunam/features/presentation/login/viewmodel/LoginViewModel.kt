@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.domain.entities.UserEntity
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
+import com.example.geetsunam.features.presentation.signup.viewmodel.SignupEvent
+import com.example.geetsunam.features.presentation.signup.viewmodel.SignupState
 import com.example.geetsunam.services.local.LocalDatastore
 import com.example.geetsunam.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,13 +21,52 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val loginUsecase: LoginUsecase, private val localDatastore: LocalDatastore
 ) : ViewModel() {
-    private val _loginState = MutableLiveData(LoginState.idle)
-    val loginState: LiveData<LoginState> = _loginState
+    private val _liveState = MutableLiveData(LoginState.idle)
+    val loginState: LiveData<LoginState> = _liveState
 
     fun onEvent(event: LoginEvent) {
         when (event) {
+            is LoginEvent.EmailChanged -> {
+                _liveState.postValue(
+                    _liveState.value?.copy(
+                        status = LoginState.LoginStatus.FieldChanging,
+                        email = event.fieldValue,
+                        isEmailValid = event.validationResult.isValid,
+                    )
+                )
+            }
+
+            is LoginEvent.PasswordChanged -> {
+                _liveState.postValue(
+                    _liveState.value?.copy(
+                        status = LoginState.LoginStatus.FieldChanging,
+                        password = event.fieldValue,
+                        isPasswordValid = event.validationResult.isValid,
+                    )
+                )
+            }
+
+            is LoginEvent.CheckValidation -> {
+                val result = isFormValid()
+                _liveState.postValue(
+                    _liveState.value?.copy(
+                        status = if (result) LoginState.LoginStatus.FormValid else LoginState.LoginStatus.FormInvalid,
+                        message = if (result) "Validated" else "Please validate all data",
+                    )
+                )
+            }
+
+            is LoginEvent.Reset -> {
+                _liveState.postValue(
+                    _liveState.value?.copy(
+                        status = LoginState.LoginStatus.IDLE,
+                        message = null,
+                    )
+                )
+            }
+
             is LoginEvent.LoginUser -> {
-                login(event.email, event.password)
+                login()
             }
 
             is LoginEvent.LogoutUser -> {
@@ -34,55 +75,65 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun login(email: String, pass: String) {
-        loginUsecase.call(LoginRequestModel(email, pass)).onEach { result ->
-            when (result) {
-                is Resource.Loading -> {
-                    _loginState.postValue(
-                        _loginState.value?.copy(
-                            status = LoginState.LoginStatus.LOADING, message = "Logging in ..."
-                        )
-                    )
-                }
+    private fun isFormValid(): Boolean {
+        return _liveState.value?.isEmailValid == true && _liveState.value?.isPasswordValid == true
+    }
 
-                is Resource.Success -> {
-                    val user = UserEntity(
-                        token = result.data?.token,
-                        name = result.data?.data?.user?.fullname,
-                        email = result.data?.data?.user?.email,
-                        image = result.data?.data?.user?.profileImage
-                    )
-                    _loginState.postValue(
-                        _loginState.value?.copy(
-                            status = LoginState.LoginStatus.SUCCESS,
-                            message = "Logged in successfully",
-                            user = user,
+    private fun login() {
+        loginUsecase.call(
+            LoginRequestModel(
+                _liveState.value?.email.toString(), _liveState.value
+                    ?.password.toString()
+            )
+        )
+            .onEach { result ->
+                when (result) {
+                    is Resource.Loading -> {
+                        _liveState.postValue(
+                            _liveState.value?.copy(
+                                status = LoginState.LoginStatus.LOADING, message = "Logging in ..."
+                            )
                         )
-                    )
-                    localDatastore.saveUser(user)
-                }
+                    }
 
-                is Resource.Error -> {
-                    _loginState.postValue(
-                        _loginState.value?.copy(
-                            status = LoginState.LoginStatus.FAILED, message = result.message
+                    is Resource.Success -> {
+                        val user = UserEntity(
+                            token = result.data?.token,
+                            name = result.data?.data?.user?.fullname,
+                            email = result.data?.data?.user?.email,
+                            image = result.data?.data?.user?.profileImage
                         )
-                    )
+                        _liveState.postValue(
+                            _liveState.value?.copy(
+                                status = LoginState.LoginStatus.SUCCESS,
+                                message = "Logged in successfully",
+                                user = user,
+                            )
+                        )
+                        localDatastore.saveUser(user)
+                    }
+
+                    is Resource.Error -> {
+                        _liveState.postValue(
+                            _liveState.value?.copy(
+                                status = LoginState.LoginStatus.FAILED, message = result.message
+                            )
+                        )
+                    }
                 }
-            }
-        }.launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
     }
 
     private fun logout() {
         viewModelScope.launch {
-            _loginState.postValue(
-                _loginState.value?.copy(
+            _liveState.postValue(
+                _liveState.value?.copy(
                     status = LoginState.LoginStatus.LogoutLoading, message = "Logging out"
                 )
             )
             localDatastore.removeUser()
-            _loginState.postValue(
-                _loginState.value?.copy(
+            _liveState.postValue(
+                _liveState.value?.copy(
                     status = LoginState.LoginStatus.LogoutSuccess,
                     message = "Logged out",
                     user = null

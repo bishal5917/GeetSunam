@@ -1,8 +1,6 @@
 package com.example.geetsunam.utils
 
 object Validation {
-    private val regexPattern = Regex("^[A-Za-z0-9+_.-]+@(.+)\$")
-
     fun validateName(value: String): ValidationResult {
         return if (value.isEmpty()) {
             ValidationResult(isValid = false, message = "Cannot be empty")
@@ -16,7 +14,7 @@ object Validation {
     fun validateEmail(value: String): ValidationResult {
         return if (value.isEmpty()) {
             ValidationResult(isValid = false, message = "Cannot be empty")
-        } else if (!regexPattern.matches(value)) {
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(value).matches()) {
             ValidationResult(isValid = false, message = "Please enter valid email")
         } else ValidationResult(isValid = true, message = "")
     }

@@ -46,14 +46,8 @@ class SignupActivity : AppCompatActivity() {
         watchTextChange(binding.etSignupPassword, 2)
         watchTextChange(binding.etConfirmPassword, 3)
         binding.btnSignupSubmit.setOnClickListener {
-            signupViewModel.onEvent(SignupEvent.CheckValidation)
             LocalController().unfocusKeyboard(this)
-            if (signupViewModel.signupState.value?.isFormValid == true) {
-//                signupViewModel.onEvent(SignupEvent.Signup)
-                CustomToast.showToast(this, "Valid")
-            } else {
-                CustomToast.showToast(this, "Please validate all data")
-            }
+            signupViewModel.onEvent(SignupEvent.CheckValidation)
         }
         observeSignup()
     }
@@ -61,6 +55,12 @@ class SignupActivity : AppCompatActivity() {
     private fun observeSignup() {
         val dialog = Dialog(this)
         signupViewModel.signupState.observe(this) { response ->
+            if (response.status == SignupState.SignupStatus.FormValid) {
+                signupViewModel.onEvent(SignupEvent.Signup)
+            }
+            if (response.status == SignupState.SignupStatus.FormInvalid) {
+                CustomToast.showToast(this, "${response.message}")
+            }
             if (response.status == SignupState.SignupStatus.LOADING) {
                 //show loading dialog
                 CustomDialog().showLoadingDialog(dialog)
@@ -132,58 +132,5 @@ class SignupActivity : AppCompatActivity() {
                 }
             }
         }
-//        editText.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//            }
-//
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//            }
-//
-//            override fun afterTextChanged(s: Editable?) {
-//                when (index) {
-//                    0 -> {
-//                        val validationResult = Validation.validateName(s.toString())
-//                        binding.tvNameError.text = validationResult.message
-//                        signupViewModel.onEvent(
-//                            SignupEvent.FullNameChanged(
-//                                validationResult, s.toString()
-//                            )
-//                        )
-//                    }
-//
-//                    1 -> {
-//                        val validationResult = Validation.validateEmail(s.toString())
-//                        binding.tvEmailError.text = validationResult.message
-//                        signupViewModel.onEvent(
-//                            SignupEvent.EmailChanged(
-//                                validationResult, s.toString()
-//                            )
-//                        )
-//                    }
-//
-//                    2 -> {
-//                        val validationResult = Validation.validatePassword(s.toString())
-//                        binding.tvPasswordError.text = validationResult.message
-//                        signupViewModel.onEvent(
-//                            SignupEvent.PasswordChanged(
-//                                validationResult, s.toString()
-//                            )
-//                        )
-//                    }
-//
-//                    3 -> {
-//                        val validationResult = Validation.confirmPassword(
-//                            binding.etSignupPassword.text.toString(), s.toString()
-//                        )
-//                        binding.tvConfirmPasswordError.text = validationResult.message
-//                        signupViewModel.onEvent(
-//                            SignupEvent.ConfirmPasswordChanged(
-//                                validationResult, s.toString()
-//                            )
-//                        )
-//                    }
-//                }
-//            }
-//        })
     }
 }

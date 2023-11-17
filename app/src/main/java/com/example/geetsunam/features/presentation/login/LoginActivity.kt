@@ -12,8 +12,10 @@ import android.widget.TextView
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doOnTextChanged
 import com.example.geetsunam.MainActivity
 import com.example.geetsunam.R
+import com.example.geetsunam.databinding.ActivityLoginBinding
 import com.example.geetsunam.features.presentation.login.google_login_viewmodel.GoogleLoginEvent
 import com.example.geetsunam.features.presentation.login.google_login_viewmodel.GoogleLoginState
 import com.example.geetsunam.features.presentation.login.google_login_viewmodel.GoogleLoginViewModel
@@ -21,10 +23,13 @@ import com.example.geetsunam.features.presentation.login.viewmodel.LoginEvent
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginState
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewModel
 import com.example.geetsunam.features.presentation.signup.SignupActivity
+import com.example.geetsunam.features.presentation.signup.viewmodel.SignupEvent
+import com.example.geetsunam.features.presentation.signup.viewmodel.SignupState
 import com.example.geetsunam.utils.CustomDialog
 import com.example.geetsunam.utils.CustomToast
 import com.example.geetsunam.utils.LocalController
 import com.example.geetsunam.utils.LogTag
+import com.example.geetsunam.utils.Validation
 import com.example.geetsunam.utils.models.CommonRequestModel
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
@@ -39,6 +44,8 @@ class LoginActivity : AppCompatActivity() {
     private var oneTapClient: SignInClient? = null
     private var signUpRequest: BeginSignInRequest? = null
 
+    private lateinit var binding: ActivityLoginBinding
+
     @Inject
     lateinit var loginViewModel: LoginViewModel
 
@@ -47,7 +54,8 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         //one tap builders
         oneTapClient = Identity.getSignInClient(this)
@@ -58,69 +66,84 @@ class LoginActivity : AppCompatActivity() {
                 // Show all accounts on the device.
                 .setFilterByAuthorizedAccounts(false).build()
         ).build()
-        //
-        val loginBtn = findViewById<Button>(R.id.btnLogin)
-        val forgotPassword = findViewById<TextView>(R.id.tvForgotPassword)
-        val gotoSignUpBtn = findViewById<Button>(R.id.btnSignup)
-        val googleSignInBtn = findViewById<ImageButton>(R.id.ibGoogle)
-        loginBtn.setOnClickListener {
+        binding.btnLogin.setOnClickListener {
             LocalController().unfocusKeyboard(this)
-            loginUser()
+            loginViewModel.onEvent(LoginEvent.CheckValidation)
         }
-        forgotPassword.setOnClickListener {
+        binding.tvForgotPassword.setOnClickListener {
             //navigate to forgot password fragment/activity
         }
-        gotoSignUpBtn.setOnClickListener {
+        binding.btnSignup.setOnClickListener {
             val signupIntent = Intent(this, SignupActivity::class.java)
             startActivity(signupIntent)
         }
-        googleSignInBtn.setOnClickListener {
+        binding.ibGoogle.setOnClickListener {
             oneTapClient!!.signOut()
             displaySignUp()
         }
-        observeLiveData()
+        watchTextChange(binding.etLoginEmail, 0)
+        watchTextChange(binding.etLoginPassword, 1)
+        observeNormalLogin()
         observeGoogleLogin()
     }
 
-    private fun loginUser() {
-        val email = findViewById<EditText>(R.id.etLoginEmail).text.toString()
-        val pass = findViewById<EditText>(R.id.etLoginPassword).text.toString()
-        if (email.isNotEmpty() && pass.isNotEmpty()) {
-            loginViewModel.onEvent(
-                LoginEvent.LoginUser(
-                    email = email, password = pass
-                )
-            )
+    private fun watchTextChange(editText: EditText, index: Int) {
+        editText.doOnTextChanged { text, start, before, count ->
+            when (index) {
+                0 -> {
+                    val validationResult = Validation.validateEmail(text.toString())
+                    binding.tvLoginEmailError.text = validationResult.message
+                    loginViewModel.onEvent(
+                        LoginEvent.EmailChanged(
+                            validationResult, text.toString()
+                        )
+                    )
+                }
+
+                1 -> {
+                    val validationResult = Validation.validatePassword(text.toString())
+                    binding.tvLoginPasswordError.text = validationResult.message
+                    loginViewModel.onEvent(
+                        LoginEvent.PasswordChanged(
+                            validationResult, text.toString()
+                        )
+                    )
+                }
+            }
         }
     }
 
-    private fun observeLiveData() {
+    private fun observeNormalLogin() {
         val dialog = Dialog(this)
         loginViewModel.loginState.observe(this) { response ->
-            if (response != null) {
-                if (response.status == LoginState.LoginStatus.LOADING) {
-                    //show loading dialog
-                    CustomDialog().showLoadingDialog(dialog)
-                }
-                if (response.status == LoginState.LoginStatus.SUCCESS) {
-                    CustomDialog().hideLoadingDialog(dialog)
-                    CustomToast.showToast(
-                        context = this, "${
-                            response.message
-                        }"
-                    )
-                    val mainIntent = Intent(this, MainActivity::class.java)
-                    startActivity(mainIntent)
-                    finish()
-                }
-                if (response.status == LoginState.LoginStatus.FAILED) {
-                    CustomDialog().hideLoadingDialog(dialog)
-                    CustomToast.showToast(
-                        context = this, "${
-                            response.message
-                        }"
-                    )
-                }
+            if (response.status == LoginState.LoginStatus.FormValid) {
+                loginViewModel.onEvent(LoginEvent.LoginUser)
+            }
+            if (response.status == LoginState.LoginStatus.FormInvalid) {
+                CustomToast.showToast(this, "${response.message}")
+            }
+            if (response.status == LoginState.LoginStatus.LOADING) {
+                //show loading dialog
+                CustomDialog().showLoadingDialog(dialog)
+            }
+            if (response.status == LoginState.LoginStatus.SUCCESS) {
+                CustomDialog().hideLoadingDialog(dialog)
+                CustomToast.showToast(
+                    context = this, "${
+                        response.message
+                    }"
+                )
+                val mainIntent = Intent(this, MainActivity::class.java)
+                startActivity(mainIntent)
+                finish()
+            }
+            if (response.status == LoginState.LoginStatus.FAILED) {
+                CustomDialog().hideLoadingDialog(dialog)
+                CustomToast.showToast(
+                    context = this, "${
+                        response.message
+                    }"
+                )
             }
         }
     }
@@ -128,30 +151,28 @@ class LoginActivity : AppCompatActivity() {
     private fun observeGoogleLogin() {
         val dialog = Dialog(this)
         googleLoginViewModel.googleLoginState.observe(this) { response ->
-            if (response != null) {
-                if (response.status == GoogleLoginState.GoogleLoginStatus.LOADING) {
-                    //show loading dialog
-                    CustomDialog().showLoadingDialog(dialog)
-                }
-                if (response.status == GoogleLoginState.GoogleLoginStatus.SUCCESS) {
-                    CustomDialog().hideLoadingDialog(dialog)
-                    CustomToast.showToast(
-                        context = this, "${
-                            response.message
-                        }"
-                    )
-                    val mainIntent = Intent(this, MainActivity::class.java)
-                    startActivity(mainIntent)
-                    finish()
-                }
-                if (response.status == GoogleLoginState.GoogleLoginStatus.FAILED) {
-                    CustomDialog().hideLoadingDialog(dialog)
-                    CustomToast.showToast(
-                        context = this, "${
-                            response.message
-                        }"
-                    )
-                }
+            if (response.status == GoogleLoginState.GoogleLoginStatus.LOADING) {
+                //show loading dialog
+                CustomDialog().showLoadingDialog(dialog)
+            }
+            if (response.status == GoogleLoginState.GoogleLoginStatus.SUCCESS) {
+                CustomDialog().hideLoadingDialog(dialog)
+                CustomToast.showToast(
+                    context = this, "${
+                        response.message
+                    }"
+                )
+                val mainIntent = Intent(this, MainActivity::class.java)
+                startActivity(mainIntent)
+                finish()
+            }
+            if (response.status == GoogleLoginState.GoogleLoginStatus.FAILED) {
+                CustomDialog().hideLoadingDialog(dialog)
+                CustomToast.showToast(
+                    context = this, "${
+                        response.message
+                    }"
+                )
             }
         }
     }
@@ -195,7 +216,7 @@ class LoginActivity : AppCompatActivity() {
                         Log.d(LogTag.GOOGLE, "One-tap encountered a network error.")
                         googleLoginViewModel.onEvent(
                             GoogleLoginEvent.HandleError(
-                                e.localizedMessage ?: "Network error"
+                                "Please check your internet connection"
                             )
                         )
                     }
@@ -207,7 +228,7 @@ class LoginActivity : AppCompatActivity() {
                         )
                         googleLoginViewModel.onEvent(
                             GoogleLoginEvent.HandleError(
-                                e.localizedMessage ?: "Authentication failed,Try Again"
+                                "Authentication failed,Try Again"
                             )
                         )
                     }
