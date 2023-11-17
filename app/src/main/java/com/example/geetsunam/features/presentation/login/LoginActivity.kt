@@ -16,6 +16,7 @@ import androidx.core.widget.doOnTextChanged
 import com.example.geetsunam.MainActivity
 import com.example.geetsunam.R
 import com.example.geetsunam.databinding.ActivityLoginBinding
+import com.example.geetsunam.features.presentation.login.forgot_password.ForgotPasswordActivity
 import com.example.geetsunam.features.presentation.login.google_login_viewmodel.GoogleLoginEvent
 import com.example.geetsunam.features.presentation.login.google_login_viewmodel.GoogleLoginState
 import com.example.geetsunam.features.presentation.login.google_login_viewmodel.GoogleLoginViewModel
@@ -71,7 +72,9 @@ class LoginActivity : AppCompatActivity() {
             loginViewModel.onEvent(LoginEvent.CheckValidation)
         }
         binding.tvForgotPassword.setOnClickListener {
-            //navigate to forgot password fragment/activity
+            //navigate to forgot password activity
+            val forgotPasswordIntent = Intent(this, ForgotPasswordActivity::class.java)
+            startActivity(forgotPasswordIntent)
         }
         binding.btnSignup.setOnClickListener {
             val signupIntent = Intent(this, SignupActivity::class.java)

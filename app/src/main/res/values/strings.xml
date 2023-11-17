@@ -46,5 +46,7 @@
     <string name="no_songs">0 Songs</string>
     <string name="artists">Artists</string>
     <string name="songs">Songs</string>
+    <string name="submit">Submit</string>
+    <string name="provide_email">Just provide your email and we can do the rest.</string>
 
 </resources>
