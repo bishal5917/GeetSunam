@@ -5,5 +5,6 @@ data class CommonRequestModel(
     val songId: String? = null,
     val genreId: String? = null,
     val artistId: String? = null,
-    val googleAccessToken: String? = null
+    val googleAccessToken: String? = null,
+    val email: String? = null
 )

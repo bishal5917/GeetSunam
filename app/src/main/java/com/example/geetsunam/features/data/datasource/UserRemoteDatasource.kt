@@ -18,6 +18,8 @@ import javax.inject.Inject
 
 interface UserRemoteDatasource {
     suspend fun login(loginRequestModel: LoginRequestModel): Response<LoginResponseModel>
+    suspend fun forgotPassword(commonRequestModel: CommonRequestModel): Response<CommonResponseModel>
+
     suspend fun signUp(signupRequestModel: SignupRequestModel): Response<CommonResponseModel>
 
     suspend fun loginWithGoogle(commonRequestModel: CommonRequestModel): Response<LoginResponseModel>
@@ -50,6 +52,14 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
             body = mapOf<String, String>(
                 "email" to loginRequestModel.email,
                 "password" to loginRequestModel.password,
+            )
+        )
+    }
+
+    override suspend fun forgotPassword(commonRequestModel: CommonRequestModel): Response<CommonResponseModel> {
+        return apiService.forgotPassword(
+            body = mapOf<String, String>(
+                "email" to commonRequestModel.email!!,
             )
         )
     }

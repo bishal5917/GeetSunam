@@ -1,5 +1,6 @@
 package com.example.geetsunam.di
 
+import com.example.geetsunam.features.domain.usecases.ForgotPasswordUsecase
 import com.example.geetsunam.features.domain.usecases.GetArtistSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetFavouriteSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetFeaturedArtistsUsecase
@@ -18,6 +19,7 @@ import com.example.geetsunam.features.presentation.home.featured_songs.viewmodel
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreViewModel
 import com.example.geetsunam.features.presentation.home.search.viewmodel.SearchViewModel
 import com.example.geetsunam.features.presentation.liked_song.viewmodel.FavSongViewModel
+import com.example.geetsunam.features.presentation.login.forgot_password.viewmodel.ForgotPasswordViewModel
 import com.example.geetsunam.features.presentation.login.google_login_viewmodel.GoogleLoginViewModel
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewModel
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavViewModel
@@ -48,6 +50,13 @@ object ViewModelModule {
         loginUsecase: LoginUsecase, localDatastore: LocalDatastore
     ): LoginViewModel {
         return LoginViewModel(loginUsecase, localDatastore)
+    }
+
+    @Provides
+    fun forgotPasswordViewModel(
+        forgotPasswordUsecase: ForgotPasswordUsecase
+    ): ForgotPasswordViewModel {
+        return ForgotPasswordViewModel(forgotPasswordUsecase)
     }
 
     @Provides

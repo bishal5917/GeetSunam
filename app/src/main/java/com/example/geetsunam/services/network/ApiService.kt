@@ -18,6 +18,12 @@ interface ApiService {
         @Body body: Any
     ): Response<LoginResponseModel>
 
+    @POST("users/forget-password")
+    @JvmSuppressWildcards
+    suspend fun forgotPassword(
+        @Body body: Any
+    ): Response<CommonResponseModel>
+
     @POST("users/signup")
     @JvmSuppressWildcards
     suspend fun signUp(

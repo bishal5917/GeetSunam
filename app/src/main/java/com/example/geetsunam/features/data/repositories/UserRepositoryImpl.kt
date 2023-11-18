@@ -28,6 +28,16 @@ class UserRepositoryImpl(
         return Resource.Error(message = "${response.errorBody()?.string()}")
     }
 
+    override suspend fun forgotPassword(commonRequestModel: CommonRequestModel): Resource<CommonResponseModel> {
+        val response = userRemoteDatasource.forgotPassword(commonRequestModel)
+        if (response.isSuccessful) {
+            response.body()?.let { result ->
+                return Resource.Success(result)
+            }
+        }
+        return Resource.Error(message = "${response.errorBody()?.string()}")
+    }
+
     override suspend fun signUp(signupRequestModel: SignupRequestModel): Resource<CommonResponseModel> {
         val response = userRemoteDatasource.signUp(signupRequestModel)
         if (response.isSuccessful) {

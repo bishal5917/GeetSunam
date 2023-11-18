@@ -3,6 +3,7 @@ package com.example.geetsunam.utils
 object LogTag {
     //Logs
     const val LOGIN = "login"
+    const val ForgotPassword = "forgot_password"
     const val SIGNUP = "signup"
     const val SPLASH = "splash"
     const val GENRE = "genre"
