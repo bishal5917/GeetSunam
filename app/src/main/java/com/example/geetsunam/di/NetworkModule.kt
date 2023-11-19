@@ -25,8 +25,8 @@ object NetworkModule {
 //            this.level = HttpLoggingInterceptor.Level.BODY
 //        }
         val client = OkHttpClient.Builder().apply {
-            this.connectTimeout(30, TimeUnit.SECONDS).readTimeout(20, TimeUnit.SECONDS)
-                .writeTimeout(25, TimeUnit.SECONDS)
+            this.connectTimeout(60, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
         }.build()
 
         return Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).client(client)

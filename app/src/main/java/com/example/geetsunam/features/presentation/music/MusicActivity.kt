@@ -14,6 +14,9 @@ import com.example.geetsunam.features.domain.entities.SongEntity
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavEvent
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavState
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavViewModel
+import com.example.geetsunam.features.presentation.music.track.viewmodel.TrackSongEvent
+import com.example.geetsunam.features.presentation.music.track.viewmodel.TrackSongState
+import com.example.geetsunam.features.presentation.music.track.viewmodel.TrackSongViewModel
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
@@ -37,6 +40,9 @@ class MusicActivity : AppCompatActivity() {
 
     @Inject
     lateinit var toggleFavViewModel: ToggleFavViewModel
+
+    @Inject
+    lateinit var trackSongViewModel: TrackSongViewModel
 
     @Inject
     lateinit var musicViewModel: MusicViewModel
@@ -75,6 +81,7 @@ class MusicActivity : AppCompatActivity() {
             binding.ibPlay.setImageResource(R.drawable.ic_play)
             playMusic()
         }
+//        observeSongTracking()
     }
 
     private fun addToFavourite() {
@@ -113,6 +120,21 @@ class MusicActivity : AppCompatActivity() {
         }
     }
 
+    private fun observeSongTracking() {
+        //observing (FOR TESTING ONLY,COMMENT THIS IN PRODUCTION)
+        trackSongViewModel.trackSongState.observe(this) { response ->
+            if (response.status == TrackSongState.TrackSongStatus.TRACKING) {
+                CustomToast.showToast(context = this, "${response.message}")
+            }
+            if (response.status == TrackSongState.TrackSongStatus.TRACKED) {
+                CustomToast.showToast(context = this, "${response.message}")
+            }
+            if (response.status == TrackSongState.TrackSongStatus.FAILED) {
+                CustomToast.showToast(context = this, "${response.message}")
+            }
+        }
+    }
+
     private fun resetAndPlay() {
         mediaPlayer.reset()
         binding.seekBar.progress = 0
@@ -146,12 +168,20 @@ class MusicActivity : AppCompatActivity() {
             val handler = object : Handler() {
                 override fun handleMessage(msg: Message) {
                     val currentPos = msg.what
-                    if (currentPos == 30000) {
-                        //call api to track song played
-                    }
                     binding.seekBar.progress = currentPos
                     val elapsedTime = PlayerUtil().calculateTime(currentPos)
                     binding.tvDurationStart.text = elapsedTime
+                    if (elapsedTime == "0:30") {
+                        //call api to track song played
+                        trackSongViewModel.onEvent(
+                            TrackSongEvent.TrackCurrentSong(
+                                CommonRequestModel(
+                                    token = splashViewModel.userFlow.value?.token.toString(),
+                                    songId = songEntity?.id
+                                )
+                            )
+                        )
+                    }
                     super.handleMessage(msg)
                 }
             }

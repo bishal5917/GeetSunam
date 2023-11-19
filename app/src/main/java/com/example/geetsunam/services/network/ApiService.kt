@@ -121,4 +121,12 @@ interface ApiService {
     suspend fun getRecommendedSongs(
         @Header("Authorization") authToken: String,
     ): Response<RecommendedSongResponseModel>
+
+    //track played song
+    @PATCH("users/songs/track")
+    @JvmSuppressWildcards
+    suspend fun trackPlayedSong(
+        @Header("Authorization") authToken: String,
+        @Body body: Any
+    ): Response<CommonResponseModel>
 }

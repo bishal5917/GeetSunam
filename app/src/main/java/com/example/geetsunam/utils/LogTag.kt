@@ -19,6 +19,7 @@ object LogTag {
     const val ArtistSongs = "api"
     const val PLAYER = "player"
     const val SEARCH = "api"
+    const val TrackPlayedSong = "api"
     const val RECOMMENDED = "api"
     const val OnChange = "onchange"
     const val FORM = "form"

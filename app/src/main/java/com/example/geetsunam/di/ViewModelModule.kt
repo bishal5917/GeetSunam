@@ -15,6 +15,7 @@ import com.example.geetsunam.features.domain.usecases.LoginUsecase
 import com.example.geetsunam.features.domain.usecases.SearchUsecase
 import com.example.geetsunam.features.domain.usecases.SignupUsecase
 import com.example.geetsunam.features.domain.usecases.ToggleFavouriteUsecase
+import com.example.geetsunam.features.domain.usecases.TrackPlayedSongUsecase
 import com.example.geetsunam.features.presentation.for_you.viewmodel.RecommendViewModel
 import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsViewModel
 import com.example.geetsunam.features.presentation.home.featured_songs.viewmodel.FeaturedSongsViewModel
@@ -25,6 +26,7 @@ import com.example.geetsunam.features.presentation.login.forgot_password.viewmod
 import com.example.geetsunam.features.presentation.login.google_login_viewmodel.GoogleLoginViewModel
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewModel
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavViewModel
+import com.example.geetsunam.features.presentation.music.track.viewmodel.TrackSongViewModel
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongViewModel
 import com.example.geetsunam.features.presentation.signup.viewmodel.SignupViewModel
@@ -164,5 +166,12 @@ object ViewModelModule {
         getRecommendedSongsUsecase: GetRecommendedSongsUsecase
     ): RecommendViewModel {
         return RecommendViewModel(getRecommendedSongsUsecase)
+    }
+
+    @Provides
+    fun provideTrackSOngViewModel(
+        trackPlayedSongUsecase: TrackPlayedSongUsecase
+    ): TrackSongViewModel {
+        return TrackSongViewModel(trackPlayedSongUsecase)
     }
 }

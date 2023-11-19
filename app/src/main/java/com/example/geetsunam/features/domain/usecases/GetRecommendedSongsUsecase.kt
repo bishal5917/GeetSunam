@@ -25,7 +25,12 @@ class GetRecommendedSongsUsecase(private val userRepository: UserRepository) {
                 emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
             } catch (e: IOException) {
                 Log.d(LogTag.RECOMMENDED, e.localizedMessage!!)
-                emit(Resource.Error("Couldn't reach server. Check your internet connection."))
+                emit(
+                    Resource.Error(
+                        e.localizedMessage
+                            ?: "Couldn't reach server. Check your internet connection."
+                    )
+                )
             }
         }
 }

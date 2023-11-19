@@ -17,6 +17,7 @@ import com.example.geetsunam.features.domain.usecases.LoginUsecase
 import com.example.geetsunam.features.domain.usecases.SearchUsecase
 import com.example.geetsunam.features.domain.usecases.SignupUsecase
 import com.example.geetsunam.features.domain.usecases.ToggleFavouriteUsecase
+import com.example.geetsunam.features.domain.usecases.TrackPlayedSongUsecase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -111,5 +112,10 @@ object UsecaseModule {
     @Singleton
     fun provideRecommendedSongsUsecase(repo: UserRepository): GetRecommendedSongsUsecase {
         return GetRecommendedSongsUsecase(repo)
+    }
+
+    @Provides
+    fun provideTrackSongUsecase(repo: UserRepository): TrackPlayedSongUsecase {
+        return TrackPlayedSongUsecase(repo)
     }
 }
