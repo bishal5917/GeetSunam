@@ -1,18 +1,14 @@
 package com.example.geetsunam.features.presentation.login.forgot_password
 
 import android.app.Dialog
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
 import androidx.core.widget.doOnTextChanged
-import com.example.geetsunam.MainActivity
 import com.example.geetsunam.databinding.ActivityForgotPasswordBinding
 import com.example.geetsunam.features.presentation.login.forgot_password.viewmodel.ForgotPasswordEvent
 import com.example.geetsunam.features.presentation.login.forgot_password.viewmodel.ForgotPasswordState
 import com.example.geetsunam.features.presentation.login.forgot_password.viewmodel.ForgotPasswordViewModel
-import com.example.geetsunam.features.presentation.login.viewmodel.LoginEvent
-import com.example.geetsunam.features.presentation.login.viewmodel.LoginState
 import com.example.geetsunam.utils.CustomDialog
 import com.example.geetsunam.utils.CustomToast
 import com.example.geetsunam.utils.LocalController

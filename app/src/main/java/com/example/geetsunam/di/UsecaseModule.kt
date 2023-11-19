@@ -9,6 +9,7 @@ import com.example.geetsunam.features.domain.usecases.GetFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenreSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenresUsecase
 import com.example.geetsunam.features.domain.usecases.GetNewSongsUsecase
+import com.example.geetsunam.features.domain.usecases.GetRecommendedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetSingleSongUsecase
 import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GoogleLoginUsecase
@@ -104,5 +105,11 @@ object UsecaseModule {
     @Provides
     fun provideSearchUsecase(repo: UserRepository): SearchUsecase {
         return SearchUsecase(repo)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRecommendedSongsUsecase(repo: UserRepository): GetRecommendedSongsUsecase {
+        return GetRecommendedSongsUsecase(repo)
     }
 }

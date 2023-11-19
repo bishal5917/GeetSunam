@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -60,7 +61,7 @@ class LikedSongFragment : Fragment() {
         //find recyclerview and shimmerview
         val recyclerView = gview.findViewById<RecyclerView>(R.id.rvLikedSongs)
         val shimmerView = gview.findViewById<ShimmerFrameLayout>(R.id.shlLikedSong)
-
+        val likedSongsQty = gview.findViewById<TextView>(R.id.tvLikedSongsQty)
         favSongViewModel.favSongsState.observe(viewLifecycleOwner) { response ->
             if (response.status == FavSongState.FavSongStatus.IDLE) {
                 favSongViewModel.onEvent(
@@ -79,6 +80,7 @@ class LikedSongFragment : Fragment() {
                         response.songs.songs as List<Song>
                     )
                 }
+                likedSongsQty.text = "${response.songs?.songs?.size} Songs"
                 recyclerView.visibility = View.VISIBLE
                 shimmerView.visibility = View.GONE
                 musicViewModel.onEvent(MusicEvent.SetPlaylist(response.songs?.songs!!, "liked"))

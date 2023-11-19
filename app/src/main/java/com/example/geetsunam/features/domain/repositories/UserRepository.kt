@@ -52,4 +52,7 @@ interface UserRepository {
 
     suspend fun search(queryRequestModel: QueryRequestModel):
             Resource<SearchResponseModel>
+
+    suspend fun getRecommendedSongs(commonRequestModel: CommonRequestModel):
+            Resource<SongResponseModel>
 }

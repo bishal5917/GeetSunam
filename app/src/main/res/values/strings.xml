@@ -49,4 +49,7 @@
     <string name="submit">Submit</string>
     <string name="provide_email">Just provide your email and we can do the rest.</string>
 
+    //Error message during api calls
+    <string name="some_error">Some error occured.</string>
+    <string name="parse_error">Error parsing response.</string>
 </resources>

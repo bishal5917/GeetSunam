@@ -1,6 +1,8 @@
 package com.example.geetsunam.di
 
+import android.app.Application
 import android.content.Context
+import android.content.res.Resources
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
@@ -14,6 +16,7 @@ import com.example.geetsunam.features.domain.repositories.UserRepository
 import com.example.geetsunam.services.local.LocalDatastore
 import com.example.geetsunam.services.local.LocalDatastoreImpl
 import com.example.geetsunam.services.network.ApiService
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +27,16 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+    @Provides
+    fun provideContext(application: Application): Context {
+        return application.applicationContext
+    }
+
+    @Provides
+    fun provideResources(context: Context): Resources {
+        return context.resources
+    }
+
     @Provides
     @Singleton
     fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
@@ -44,7 +57,8 @@ object AppModule {
     @Provides
     fun provideRepository(
         remoteDataSource: UserRemoteDatasource,
+        gson: Gson, resources: Resources
     ): UserRepository {
-        return UserRepositoryImpl(remoteDataSource)
+        return UserRepositoryImpl(remoteDataSource, gson, resources)
     }
 }

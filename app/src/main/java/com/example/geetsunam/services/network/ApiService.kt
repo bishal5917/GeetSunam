@@ -113,4 +113,11 @@ interface ApiService {
     suspend fun search(
         @Header("Authorization") authToken: String, @QueryMap queryMap: Map<String, Any>
     ): Response<SearchResponseModel>
+
+    //get favourite songs
+    @GET("users/songs/recommend")
+    @JvmSuppressWildcards
+    suspend fun getRecommendedSongs(
+        @Header("Authorization") authToken: String,
+    ): Response<SongResponseModel>
 }

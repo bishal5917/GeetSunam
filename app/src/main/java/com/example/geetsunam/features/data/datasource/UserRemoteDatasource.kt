@@ -43,6 +43,10 @@ interface UserRemoteDatasource {
     suspend fun getArtistSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel>
 
     suspend fun search(queryRequestModel: QueryRequestModel): Response<SearchResponseModel>
+
+    suspend fun getRecommendedSongs(commonRequestModel: CommonRequestModel):
+            Response<SongResponseModel>
+
 }
 
 class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiService) :
@@ -142,6 +146,12 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
         return apiService.search(
             authToken = "Bearer ${queryRequestModel.token}",
             queryMap = GetQuery.getQueryMap(queryRequestModel)
+        )
+    }
+
+    override suspend fun getRecommendedSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel> {
+        return apiService.getRecommendedSongs(
+            authToken = "Bearer ${commonRequestModel.token}",
         )
     }
 }

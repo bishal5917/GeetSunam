@@ -8,12 +8,14 @@ import com.example.geetsunam.features.domain.usecases.GetFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenreSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenresUsecase
 import com.example.geetsunam.features.domain.usecases.GetNewSongsUsecase
+import com.example.geetsunam.features.domain.usecases.GetRecommendedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GoogleLoginUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
 import com.example.geetsunam.features.domain.usecases.SearchUsecase
 import com.example.geetsunam.features.domain.usecases.SignupUsecase
 import com.example.geetsunam.features.domain.usecases.ToggleFavouriteUsecase
+import com.example.geetsunam.features.presentation.for_you.viewmodel.RecommendViewModel
 import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsViewModel
 import com.example.geetsunam.features.presentation.home.featured_songs.viewmodel.FeaturedSongsViewModel
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreViewModel
@@ -154,5 +156,13 @@ object ViewModelModule {
         searchUsecase: SearchUsecase
     ): SearchViewModel {
         return SearchViewModel(searchUsecase)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRecommendedSongsViewModel(
+        getRecommendedSongsUsecase: GetRecommendedSongsUsecase
+    ): RecommendViewModel {
+        return RecommendViewModel(getRecommendedSongsUsecase)
     }
 }
