@@ -13,6 +13,7 @@ import com.example.geetsunam.R
 import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
 import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.domain.entities.SongEntity
+import com.example.geetsunam.features.presentation.for_you.ForYouFragmentDirections
 import com.example.geetsunam.features.presentation.home.HomeFragmentDirections
 import com.example.geetsunam.features.presentation.liked_song.LikedSongFragmentDirections
 import com.example.geetsunam.features.presentation.music.MusicActivity
@@ -64,6 +65,11 @@ class BindingAdapter {
                             LikedSongFragmentDirections.actionLikedSongFragmentToMusicActivity(
                                 songEntity
                             )
+                        songCard.findNavController().navigate(action)
+                    } else if (from == "recommended") {
+                        val action = ForYouFragmentDirections.actionForYouFragmentToMusicActivity(
+                            songEntity
+                        )
                         songCard.findNavController().navigate(action)
                     } else if (from == "genre_songs" || from == "artist_songs" || from == "search") {
                         val intent = Intent(songCard.context, MusicActivity::class.java)

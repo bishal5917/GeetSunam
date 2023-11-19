@@ -1,4 +1,4 @@
-package com.example.geetsunam.features.presentation.home.search.adapters
+package com.example.geetsunam.features.presentation.for_you.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import com.example.geetsunam.databinding.SongCardBinding
 import com.example.geetsunam.utils.SongDiffUtil
 import com.example.geetsunam.utils.models.Song
 
-class SongSearchAdapter : RecyclerView.Adapter<SongSearchAdapter.MyViewHolder>() {
+class RecommendedSongsAdapter : RecyclerView.Adapter<RecommendedSongsAdapter.MyViewHolder>() {
 
     private var songs = emptyList<Song>()
 
@@ -17,7 +17,7 @@ class SongSearchAdapter : RecyclerView.Adapter<SongSearchAdapter.MyViewHolder>()
 
         fun bind(result: Song) {
             binding.result = result
-            binding.from = "search"
+            binding.from = "recommended"
             binding.executePendingBindings()
         }
 
@@ -44,8 +44,8 @@ class SongSearchAdapter : RecyclerView.Adapter<SongSearchAdapter.MyViewHolder>()
     }
 
     fun setData(newData: List<Song>) {
-        val searchedSongDiffUtil = SongDiffUtil(songs, newData)
-        val diffUtilResult = DiffUtil.calculateDiff(searchedSongDiffUtil)
+        val recommendedDiffUtil = SongDiffUtil(songs, newData)
+        val diffUtilResult = DiffUtil.calculateDiff(recommendedDiffUtil)
         songs = newData
         diffUtilResult.dispatchUpdatesTo(this)
     }

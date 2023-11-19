@@ -6,6 +6,7 @@ import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
 import com.example.geetsunam.features.data.models.search.SearchResponseModel
 import com.example.geetsunam.features.data.models.signup.SignupRequestModel
+import com.example.geetsunam.features.data.models.songs.RecommendedSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SingleSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.services.network.ApiService
@@ -45,7 +46,7 @@ interface UserRemoteDatasource {
     suspend fun search(queryRequestModel: QueryRequestModel): Response<SearchResponseModel>
 
     suspend fun getRecommendedSongs(commonRequestModel: CommonRequestModel):
-            Response<SongResponseModel>
+            Response<RecommendedSongResponseModel>
 
 }
 
@@ -149,7 +150,7 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
         )
     }
 
-    override suspend fun getRecommendedSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel> {
+    override suspend fun getRecommendedSongs(commonRequestModel: CommonRequestModel): Response<RecommendedSongResponseModel> {
         return apiService.getRecommendedSongs(
             authToken = "Bearer ${commonRequestModel.token}",
         )

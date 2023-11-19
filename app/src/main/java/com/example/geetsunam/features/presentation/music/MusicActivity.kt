@@ -146,6 +146,9 @@ class MusicActivity : AppCompatActivity() {
             val handler = object : Handler() {
                 override fun handleMessage(msg: Message) {
                     val currentPos = msg.what
+                    if (currentPos == 30000) {
+                        //call api to track song played
+                    }
                     binding.seekBar.progress = currentPos
                     val elapsedTime = PlayerUtil().calculateTime(currentPos)
                     binding.tvDurationStart.text = elapsedTime

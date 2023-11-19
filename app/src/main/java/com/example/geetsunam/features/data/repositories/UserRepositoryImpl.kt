@@ -9,6 +9,7 @@ import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
 import com.example.geetsunam.features.data.models.search.SearchResponseModel
 import com.example.geetsunam.features.data.models.signup.SignupRequestModel
+import com.example.geetsunam.features.data.models.songs.RecommendedSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SingleSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.features.domain.repositories.UserRepository
@@ -355,7 +356,7 @@ class UserRepositoryImpl @Inject constructor(
         return Resource.Error(message = resources.getString(R.string.some_error))
     }
 
-    override suspend fun getRecommendedSongs(commonRequestModel: CommonRequestModel): Resource<SongResponseModel> {
+    override suspend fun getRecommendedSongs(commonRequestModel: CommonRequestModel): Resource<RecommendedSongResponseModel> {
         val response = userRemoteDatasource.getRecommendedSongs(commonRequestModel)
         if (response.isSuccessful) {
             response.body()?.let { result ->

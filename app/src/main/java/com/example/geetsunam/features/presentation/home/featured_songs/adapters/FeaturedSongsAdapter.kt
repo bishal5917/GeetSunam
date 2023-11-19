@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geetsunam.databinding.SongCardBinding
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
+import com.example.geetsunam.utils.SongDiffUtil
 import com.example.geetsunam.utils.models.Song
 import javax.inject.Inject
 
@@ -20,7 +21,6 @@ class FeaturedSongsAdapter : RecyclerView.Adapter<FeaturedSongsAdapter.MyViewHol
         fun bind(result: Song) {
             binding.result = result
             binding.from = "featured"
-//            binding.musicViewModel = musicViewModel
             binding.executePendingBindings()
         }
 
@@ -47,7 +47,7 @@ class FeaturedSongsAdapter : RecyclerView.Adapter<FeaturedSongsAdapter.MyViewHol
     }
 
     fun setData(newData: List<Song>) {
-        val recipesDiffUtil = FeaturedSongsDiffUtil(songs, newData)
+        val recipesDiffUtil = SongDiffUtil(songs, newData)
         val diffUtilResult = DiffUtil.calculateDiff(recipesDiffUtil)
         songs = newData
         diffUtilResult.dispatchUpdatesTo(this)

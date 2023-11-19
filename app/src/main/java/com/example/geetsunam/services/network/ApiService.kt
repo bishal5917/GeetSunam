@@ -4,6 +4,7 @@ import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
 import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
 import com.example.geetsunam.features.data.models.search.SearchResponseModel
+import com.example.geetsunam.features.data.models.songs.RecommendedSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SingleSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.utils.models.CommonResponseModel
@@ -119,5 +120,5 @@ interface ApiService {
     @JvmSuppressWildcards
     suspend fun getRecommendedSongs(
         @Header("Authorization") authToken: String,
-    ): Response<SongResponseModel>
+    ): Response<RecommendedSongResponseModel>
 }

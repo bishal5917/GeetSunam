@@ -1,10 +1,9 @@
-package com.example.geetsunam.features.presentation.home.featured_songs.adapters
+package com.example.geetsunam.utils
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.utils.models.Song
 
-class FeaturedSongsDiffUtil(
+class SongDiffUtil(
     private val oldList: List<Song>,
     private val newList: List<Song>
 ) : DiffUtil.Callback() {
@@ -31,6 +30,26 @@ class FeaturedSongsDiffUtil(
             }
 
             oldList[oldItemPosition].duration != newList[newItemPosition].duration -> {
+                false
+            }
+
+            oldList[oldItemPosition].coverArt != newList[newItemPosition].coverArt -> {
+                false
+            }
+
+            oldList[oldItemPosition].isFeatured != newList[newItemPosition].isFeatured -> {
+                false
+            }
+
+            oldList[oldItemPosition].isFavourite != newList[newItemPosition].isFavourite -> {
+                false
+            }
+
+            oldList[oldItemPosition].source != newList[newItemPosition].source -> {
+                false
+            }
+
+            oldList[oldItemPosition].stream != newList[newItemPosition].stream -> {
                 false
             }
 

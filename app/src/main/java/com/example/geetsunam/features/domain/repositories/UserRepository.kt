@@ -6,6 +6,7 @@ import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
 import com.example.geetsunam.features.data.models.search.SearchResponseModel
 import com.example.geetsunam.features.data.models.signup.SignupRequestModel
+import com.example.geetsunam.features.data.models.songs.RecommendedSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SingleSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SongResponseModel
 import com.example.geetsunam.utils.Resource
@@ -54,5 +55,5 @@ interface UserRepository {
             Resource<SearchResponseModel>
 
     suspend fun getRecommendedSongs(commonRequestModel: CommonRequestModel):
-            Resource<SongResponseModel>
+            Resource<RecommendedSongResponseModel>
 }

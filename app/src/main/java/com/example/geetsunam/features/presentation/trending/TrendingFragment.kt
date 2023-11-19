@@ -49,6 +49,18 @@ class TrendingFragment : Fragment() {
         return gview
     }
 
+    private fun pullToRefresh() {
+        val swipeToRefresh = gview.findViewById<SwipeRefreshLayout>(R.id.srlTrending)
+        swipeToRefresh.setOnRefreshListener {
+            trendingViewModel.onEvent(
+                TrendingEvent.GetTrendingSongs(
+                    splashViewModel.userFlow.value?.token ?: ""
+                )
+            )
+            swipeToRefresh.isRefreshing = false
+        }
+    }
+
     private fun setupRecyclerView() {
         val songsRecView = gview.findViewById<RecyclerView>(R.id.rvTrendingSongs)
         songsRecView.adapter = trendingAdapter
@@ -87,18 +99,6 @@ class TrendingFragment : Fragment() {
                 recyclerView.visibility = View.GONE
                 CustomToast.showToast(context = requireContext(), "${response.message}")
             }
-        }
-    }
-
-    private fun pullToRefresh() {
-        val swipeToRefresh = gview.findViewById<SwipeRefreshLayout>(R.id.srlTrending)
-        swipeToRefresh.setOnRefreshListener {
-            trendingViewModel.onEvent(
-                TrendingEvent.GetTrendingSongs(
-                    splashViewModel.userFlow.value?.token ?: ""
-                )
-            )
-            swipeToRefresh.isRefreshing = false
         }
     }
 }

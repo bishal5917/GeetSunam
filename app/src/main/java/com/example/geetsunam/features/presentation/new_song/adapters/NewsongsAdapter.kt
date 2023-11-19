@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geetsunam.databinding.SongCardBinding
-import com.example.geetsunam.features.presentation.home.featured_songs.adapters.FeaturedSongsDiffUtil
+import com.example.geetsunam.utils.SongDiffUtil
 import com.example.geetsunam.utils.models.Song
 
 class NewsongsAdapter : RecyclerView.Adapter<NewsongsAdapter.MyViewHolder>() {
@@ -44,7 +44,7 @@ class NewsongsAdapter : RecyclerView.Adapter<NewsongsAdapter.MyViewHolder>() {
     }
 
     fun setData(newData: List<Song>) {
-        val newSongDiffUtil = FeaturedSongsDiffUtil(songs, newData)
+        val newSongDiffUtil = SongDiffUtil(songs, newData)
         val diffUtilResult = DiffUtil.calculateDiff(newSongDiffUtil)
         songs = newData
         diffUtilResult.dispatchUpdatesTo(this)
