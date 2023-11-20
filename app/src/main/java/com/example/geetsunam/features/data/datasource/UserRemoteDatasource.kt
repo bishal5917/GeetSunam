@@ -45,11 +45,11 @@ interface UserRemoteDatasource {
 
     suspend fun search(queryRequestModel: QueryRequestModel): Response<SearchResponseModel>
 
-    suspend fun getRecommendedSongs(commonRequestModel: CommonRequestModel):
-            Response<RecommendedSongResponseModel>
+    suspend fun getRecommendedSongs(commonRequestModel: CommonRequestModel): Response<RecommendedSongResponseModel>
 
-    suspend fun trackPlayedSong(commonRequestModel: CommonRequestModel):
-            Response<CommonResponseModel>
+    suspend fun trackPlayedSong(commonRequestModel: CommonRequestModel): Response<CommonResponseModel>
+
+    suspend fun changePassword(commonRequestModel: CommonRequestModel): Response<CommonResponseModel>
 }
 
 class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiService) :
@@ -162,6 +162,16 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
         return apiService.trackPlayedSong(
             authToken = "Bearer ${commonRequestModel.token}", body = mapOf<String, String>(
                 "id" to commonRequestModel.songId!!,
+            )
+        )
+    }
+
+    override suspend fun changePassword(commonRequestModel: CommonRequestModel): Response<CommonResponseModel> {
+        return apiService.changePassword(
+            authToken = "Bearer ${commonRequestModel.token}", body = mapOf<String, String>(
+                "currentPassword" to commonRequestModel.currentPassword!!,
+                "newPassword" to commonRequestModel.newPassword!!,
+                "confirmNewPassword" to commonRequestModel.confirmNewPassword!!,
             )
         )
     }

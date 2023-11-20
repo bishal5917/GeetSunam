@@ -1,6 +1,7 @@
 package com.example.geetsunam.di
 
 import com.example.geetsunam.features.domain.repositories.UserRepository
+import com.example.geetsunam.features.domain.usecases.ChangePasswordUsecase
 import com.example.geetsunam.features.domain.usecases.ForgotPasswordUsecase
 import com.example.geetsunam.features.domain.usecases.GetArtistSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetFavouriteSongsUsecase
@@ -117,5 +118,10 @@ object UsecaseModule {
     @Provides
     fun provideTrackSongUsecase(repo: UserRepository): TrackPlayedSongUsecase {
         return TrackPlayedSongUsecase(repo)
+    }
+
+    @Provides
+    fun provideChangePasswordUsecase(repo: UserRepository): ChangePasswordUsecase {
+        return ChangePasswordUsecase(repo)
     }
 }

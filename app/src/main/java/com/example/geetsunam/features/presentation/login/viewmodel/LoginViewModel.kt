@@ -7,8 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.domain.entities.UserEntity
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
-import com.example.geetsunam.features.presentation.signup.viewmodel.SignupEvent
-import com.example.geetsunam.features.presentation.signup.viewmodel.SignupState
 import com.example.geetsunam.services.local.LocalDatastore
 import com.example.geetsunam.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel

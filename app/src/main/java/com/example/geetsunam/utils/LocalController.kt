@@ -5,6 +5,7 @@ import android.view.inputmethod.InputMethodManager
 
 class LocalController {
     companion object
+
     fun unfocusKeyboard(activity: Activity) {
         val inputMethodManager =
             activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager

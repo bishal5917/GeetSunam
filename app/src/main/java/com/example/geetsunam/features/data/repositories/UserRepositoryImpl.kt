@@ -399,4 +399,26 @@ class UserRepositoryImpl @Inject constructor(
         }
         return Resource.Error(message = resources.getString(R.string.some_error))
     }
+
+    override suspend fun changePassword(commonRequestModel: CommonRequestModel): Resource<CommonResponseModel> {
+        val response = userRemoteDatasource.changePassword(commonRequestModel)
+        if (response.isSuccessful) {
+            response.body()?.let { result ->
+                return Resource.Success(result)
+            }
+        }
+        //handle error response
+        val errorBodyString = response.errorBody()?.string()
+        errorBodyString?.let {
+            try {
+                val errorData = gson.fromJson(it, CommonResponseModel::class.java)
+                return Resource.Error(
+                    message = errorData?.message ?: resources.getString(R.string.some_error)
+                )
+            } catch (e: JsonSyntaxException) {
+                return Resource.Error(message = resources.getString(R.string.parse_error))
+            }
+        }
+        return Resource.Error(message = resources.getString(R.string.some_error))
+    }
 }

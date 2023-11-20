@@ -12,6 +12,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.geetsunam.databinding.DrawerHeaderBinding
+import com.example.geetsunam.features.presentation.for_you.viewmodel.RecommendEvent
+import com.example.geetsunam.features.presentation.for_you.viewmodel.RecommendViewModel
 import com.example.geetsunam.features.presentation.home.search.SearchActivity
 import com.example.geetsunam.features.presentation.liked_song.viewmodel.FavSongEvent
 import com.example.geetsunam.features.presentation.liked_song.viewmodel.FavSongViewModel
@@ -41,6 +43,9 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var favSongViewModel: FavSongViewModel
+
+    @Inject
+    lateinit var recommendViewModel: RecommendViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,6 +119,7 @@ class MainActivity : AppCompatActivity() {
                     }"
                 )
                 favSongViewModel.onEvent(FavSongEvent.Reset)
+                recommendViewModel.onEvent(RecommendEvent.Reset)
                 val loginIntent = Intent(this, LoginActivity::class.java)
                 startActivity(loginIntent)
                 finish()

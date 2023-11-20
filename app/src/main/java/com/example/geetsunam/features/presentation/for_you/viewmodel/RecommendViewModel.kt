@@ -25,6 +25,15 @@ class RecommendViewModel @Inject constructor(
                 getRecommendedSongs(event.token)
             }
 
+            is RecommendEvent.Reset -> {
+                _liveState.postValue(
+                    _liveState.value?.copy(
+                        status = RecommendState.RecommendStatus.IDLE,
+                        message = "IDLE",
+                    )
+                )
+            }
+
             else -> {}
         }
     }
@@ -54,8 +63,7 @@ class RecommendViewModel @Inject constructor(
                 is Resource.Error -> {
                     _liveState.postValue(
                         _liveState.value?.copy(
-                            status = RecommendState.RecommendStatus.FAILED,
-                            message = result.message
+                            status = RecommendState.RecommendStatus.FAILED, message = result.message
                         )
                     )
                 }

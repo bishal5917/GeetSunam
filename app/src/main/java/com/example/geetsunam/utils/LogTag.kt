@@ -23,4 +23,5 @@ object LogTag {
     const val RECOMMENDED = "api"
     const val OnChange = "onchange"
     const val FORM = "form"
+    const val ChangePassword = "change_password"
 }

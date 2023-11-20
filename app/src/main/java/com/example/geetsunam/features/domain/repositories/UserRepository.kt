@@ -59,4 +59,7 @@ interface UserRepository {
 
     suspend fun trackPlayedSong(commonRequestModel: CommonRequestModel):
             Resource<CommonResponseModel>
+
+    suspend fun changePassword(commonRequestModel: CommonRequestModel):
+            Resource<CommonResponseModel>
 }

@@ -1,5 +1,6 @@
 package com.example.geetsunam.di
 
+import com.example.geetsunam.features.domain.usecases.ChangePasswordUsecase
 import com.example.geetsunam.features.domain.usecases.ForgotPasswordUsecase
 import com.example.geetsunam.features.domain.usecases.GetArtistSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetFavouriteSongsUsecase
@@ -17,6 +18,7 @@ import com.example.geetsunam.features.domain.usecases.SignupUsecase
 import com.example.geetsunam.features.domain.usecases.ToggleFavouriteUsecase
 import com.example.geetsunam.features.domain.usecases.TrackPlayedSongUsecase
 import com.example.geetsunam.features.presentation.for_you.viewmodel.RecommendViewModel
+import com.example.geetsunam.features.presentation.home.change_password.viewmodel.ChangePasswordViewModel
 import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsViewModel
 import com.example.geetsunam.features.presentation.home.featured_songs.viewmodel.FeaturedSongsViewModel
 import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreViewModel
@@ -169,9 +171,16 @@ object ViewModelModule {
     }
 
     @Provides
-    fun provideTrackSOngViewModel(
+    fun provideTrackSongViewModel(
         trackPlayedSongUsecase: TrackPlayedSongUsecase
     ): TrackSongViewModel {
         return TrackSongViewModel(trackPlayedSongUsecase)
+    }
+
+    @Provides
+    fun provideChangePasswordViewModel(
+        changePasswordUsecase: ChangePasswordUsecase
+    ): ChangePasswordViewModel {
+        return ChangePasswordViewModel(changePasswordUsecase)
     }
 }
