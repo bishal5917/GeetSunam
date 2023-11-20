@@ -82,4 +82,9 @@
             android:name="artist"
             app:argType="com.example.geetsunam.utils.models.Artist" />
     </activity>
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.geetsunam.features.presentation.home.change_password.ChangePasswordFragment"
+        android:label="fragment_change_password"
+        tools:layout="@layout/fragment_change_password" />
 </navigation>

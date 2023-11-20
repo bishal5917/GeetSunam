@@ -9,6 +9,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.geetsunam.databinding.DrawerHeaderBinding
 import com.example.geetsunam.features.presentation.home.search.SearchActivity
@@ -44,10 +45,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        drawerHeaderBinding = DrawerHeaderBinding.inflate(layoutInflater)
 
         //Getting user and binding to the drawer header
+        drawerHeaderBinding = DrawerHeaderBinding.inflate(layoutInflater)
         drawerHeaderBinding.user = splashViewModel.userFlow.value
+        drawerHeaderBinding.executePendingBindings()
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
@@ -86,11 +88,13 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_logout -> {
                     drawerLayout.closeDrawer(navigationView)
                     loginViewModel.onEvent(LoginEvent.LogoutUser)
-                    true
                 }
-
-                else -> true
             }
+            val handled = NavigationUI.onNavDestinationSelected(item, navController)
+            if (handled) {
+                drawerLayout.closeDrawer(navigationView)
+            }
+            handled
         }
         observeLogoutProcess()
     }

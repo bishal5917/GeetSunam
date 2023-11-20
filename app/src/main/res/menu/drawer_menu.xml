@@ -6,14 +6,14 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/homeFragment"
-            android:icon="@drawable/ic_home"
             android:fontFamily="@font/urbanist_regular"
+            android:icon="@drawable/ic_home"
             android:title="@string/home" />
 
         <item
             android:id="@+id/changePasswordFragment"
-            android:icon="@drawable/ic_lock"
             android:fontFamily="@font/urbanist_regular"
+            android:icon="@drawable/ic_lock"
             android:title="@string/change_password" />
     </group>
 
@@ -21,8 +21,8 @@
         <menu>
             <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_logout"
                 android:fontFamily="@font/urbanist_regular"
+                android:icon="@drawable/ic_logout"
                 android:title="@string/logout" />
         </menu>
     </item>

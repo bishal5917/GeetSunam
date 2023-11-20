@@ -129,4 +129,12 @@ interface ApiService {
         @Header("Authorization") authToken: String,
         @Body body: Any
     ): Response<CommonResponseModel>
+
+    //change password
+    @PATCH("users/change-password")
+    @JvmSuppressWildcards
+    suspend fun changePassword(
+        @Header("Authorization") authToken: String,
+        @Body body: Any
+    ): Response<CommonResponseModel>
 }

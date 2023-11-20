@@ -52,4 +52,10 @@
     //Error message during api calls
     <string name="some_error">Some error occured.</string>
     <string name="parse_error">Error parsing response.</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="repeat_new_password">Repeat New Password</string>
+    <string name="enter_current_password">Enter your current password</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="confirm_new_password">Confirm new password</string>
 </resources>
