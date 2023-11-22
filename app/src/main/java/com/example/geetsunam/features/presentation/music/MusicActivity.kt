@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.navArgs
+import com.example.geetsunam.R
 import com.example.geetsunam.databinding.ActivityMusicBinding
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavEvent
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavState
@@ -49,16 +50,19 @@ class MusicActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMusicBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         //set current song and play it
         musicViewModel.onEvent(
             MusicEvent.SetAndPlayCurrent(
                 args.song.id!!, binding, mediaPlayer
             )
         )
+        setPlayModeDrawables()
         addToFavourite()
         trackSong()
 //        observeSongTracking()
+        binding.ibPlayMode.setOnClickListener {
+            musicViewModel.onEvent(MusicEvent.ChangePlayMode)
+        }
         binding.ibPlayNext.setOnClickListener {
             musicViewModel.onEvent(MusicEvent.PlayNextSong(binding, mediaPlayer))
         }
@@ -67,6 +71,23 @@ class MusicActivity : AppCompatActivity() {
         }
         mediaPlayer.setOnCompletionListener {
             musicViewModel.onEvent(MusicEvent.PlayNextSong(binding, mediaPlayer))
+        }
+        binding.ibShuffle.setOnClickListener {
+            musicViewModel.onEvent(MusicEvent.Shuffle(binding, mediaPlayer))
+        }
+    }
+
+    private fun setPlayModeDrawables() {
+        musicViewModel.musicState.observe(this) { response ->
+            if (response.playMode == MusicState.PlayMode.Serial) {
+                binding.ibPlayMode.setImageResource(R.drawable.ic_repeat)
+            }
+            if (response.playMode == MusicState.PlayMode.Random) {
+                binding.ibPlayMode.setImageResource(R.drawable.ic_shuffle)
+            }
+            if (response.playMode == MusicState.PlayMode.LoopCurrent) {
+                binding.ibPlayMode.setImageResource(R.drawable.ic_repeat_one)
+            }
         }
     }
 

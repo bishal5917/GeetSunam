@@ -13,6 +13,7 @@ import com.example.geetsunam.features.domain.entities.SongEntity
 import com.example.geetsunam.utils.LogTag
 import com.example.geetsunam.utils.PlayerUtil
 import com.example.geetsunam.utils.models.Song
+import kotlin.random.Random
 
 class MusicViewModel : ViewModel() {
     private val _musicState = MutableLiveData(MusicState.idle)
@@ -54,6 +55,32 @@ class MusicViewModel : ViewModel() {
 
             is MusicEvent.PlayPreviousSong -> {
                 setNextSong(isNext = false, event.binding, event.mediaPlayer)
+            }
+
+            is MusicEvent.ChangePlayMode -> {
+                if (_musicState.value?.playMode == MusicState.PlayMode.Serial) {
+                    _musicState.postValue(
+                        _musicState.value?.copy(playMode = MusicState.PlayMode.LoopCurrent)
+                    )
+                }
+                if (_musicState.value?.playMode == MusicState.PlayMode.LoopCurrent) {
+                    _musicState.postValue(
+                        _musicState.value?.copy(playMode = MusicState.PlayMode.Random)
+                    )
+                }
+                if (_musicState.value?.playMode == MusicState.PlayMode.Random) {
+                    _musicState.postValue(
+                        _musicState.value?.copy(playMode = MusicState.PlayMode.Serial)
+                    )
+                }
+            }
+
+            is MusicEvent.Shuffle -> {
+                findRandomSong()
+                event.mediaPlayer.reset()
+                event.binding.seekBar.progress = 0
+                event.binding.ibPlay.setImageResource(R.drawable.ic_play)
+                playSong(event.binding, event.mediaPlayer)
             }
 
             is MusicEvent.Reset -> {
@@ -199,5 +226,23 @@ class MusicViewModel : ViewModel() {
             binding.ibPlay.setImageResource(R.drawable.ic_play)
             playSong(binding, mediaPlayer)
         }
+    }
+
+    private fun findRandomSong() {
+        //find random index between 0 and size of playlist-1(BOTH INCLUDED)
+        val randomIdx = Random.nextInt(0, _musicState.value?.currentPlaylist?.size!! - 1)
+        val song = _musicState.value?.currentPlaylist?.elementAt(randomIdx)
+        _musicState.value = _musicState.value?.copy(
+            currentSong = SongEntity(
+                id = song?.id,
+                coverArt = song?.coverArt,
+                artistName = song?.artists?.fullname,
+                songName = song?.title,
+                duration = song?.duration,
+                source = song?.source,
+                stream = song?.stream,
+                isFavourite = song?.isFavourite,
+            )
+        )
     }
 }

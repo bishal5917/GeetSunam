@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.geetsunam"
-        minSdk = 22
+        minSdk = 23
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"

@@ -59,7 +59,7 @@
             loadImageFromUrl="@{result.coverArt}"
             android:layout_width="300dp"
             android:layout_height="300dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="32dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -97,6 +97,30 @@
             app:layout_constraintTop_toBottomOf="@+id/tvMusic" />
 
         <ImageButton
+            android:id="@+id/ibShuffle"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/custom_button_bg"
+            android:contentDescription="@string/shuffle"
+            android:src="@drawable/ic_shuffle"
+            app:layout_constraintBottom_toTopOf="@+id/seekBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ibPlayNext"
+            app:layout_constraintTop_toBottomOf="@+id/tvMusicArtist" />
+
+        <ImageButton
+            android:id="@+id/ibPlayMode"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/custom_button_bg"
+            android:contentDescription="@string/set_mode"
+            android:src="@drawable/ic_repeat"
+            app:layout_constraintBottom_toTopOf="@+id/seekBar"
+            app:layout_constraintEnd_toStartOf="@+id/ibPlayPrevious"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvMusicArtist" />
+
+        <ImageButton
             android:id="@+id/ibPlayNext"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -110,8 +134,8 @@
 
         <ImageButton
             android:id="@+id/ibPlay"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@drawable/custom_button_bg"
             android:contentDescription="@string/play"
             android:src="@drawable/ic_play"

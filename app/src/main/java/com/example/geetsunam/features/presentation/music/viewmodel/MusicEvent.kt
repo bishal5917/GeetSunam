@@ -20,7 +20,10 @@ sealed class MusicEvent {
     data class PlayPreviousSong(val binding: ActivityMusicBinding, val mediaPlayer: MediaPlayer) :
         MusicEvent()
 
-    object Shuffle : MusicEvent()
+    data class Shuffle(val binding: ActivityMusicBinding, val mediaPlayer: MediaPlayer) :
+        MusicEvent()
+
+    object ChangePlayMode : MusicEvent()
 
     object Reset : MusicEvent()
 }

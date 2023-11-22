@@ -58,4 +58,6 @@
     <string name="enter_current_password">Enter your current password</string>
     <string name="enter_new_password">Enter new password</string>
     <string name="confirm_new_password">Confirm new password</string>
+    <string name="shuffle">Shuffle</string>
+    <string name="set_mode">Set Mode</string>
 </resources>
