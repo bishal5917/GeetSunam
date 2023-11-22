@@ -5,6 +5,7 @@ import com.example.geetsunam.utils.models.Song
 
 data class MusicState(
     val status: MusicStatus,
+    val playMode: PlayMode,
     val message: String? = null,
     val playlistName: String? = null,
     val currentSong: SongEntity? = null,
@@ -12,10 +13,14 @@ data class MusicState(
     val currentPlaylist: List<Song?>? = null,
 ) {
     companion object {
-        val idle = MusicState(MusicStatus.IDLE, message = "")
+        val idle = MusicState(MusicStatus.IDLE, PlayMode.Serial, message = "")
     }
 
     enum class MusicStatus {
-        IDLE, PLAYING, PAUSED, RELEASED, RESET, EndOfPlaylist
+        IDLE, PREPARING, PLAYING, PAUSED, StartTracking
+    }
+
+    enum class PlayMode {
+        Serial, Random, LoopCurrent
     }
 }

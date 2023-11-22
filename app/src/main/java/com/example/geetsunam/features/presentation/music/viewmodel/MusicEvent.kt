@@ -1,5 +1,7 @@
 package com.example.geetsunam.features.presentation.music.viewmodel
 
+import android.media.MediaPlayer
+import com.example.geetsunam.databinding.ActivityMusicBinding
 import com.example.geetsunam.utils.models.Song
 
 sealed class MusicEvent {
@@ -8,11 +10,15 @@ sealed class MusicEvent {
     data class SetAndRetainPlaylist(val playlist: List<Song?>?, val playlistName: String) :
         MusicEvent()
 
-    data class SetCurrentSong(val songId: String) : MusicEvent()
+    data class SetAndPlayCurrent(
+        val songId: String, val binding: ActivityMusicBinding, val mediaPlayer: MediaPlayer
+    ) : MusicEvent()
 
-    object PlayNextSong : MusicEvent()
+    data class PlayNextSong(val binding: ActivityMusicBinding, val mediaPlayer: MediaPlayer) :
+        MusicEvent()
 
-    object PlayPreviousSong : MusicEvent()
+    data class PlayPreviousSong(val binding: ActivityMusicBinding, val mediaPlayer: MediaPlayer) :
+        MusicEvent()
 
     object Shuffle : MusicEvent()
 

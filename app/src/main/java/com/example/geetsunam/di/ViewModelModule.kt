@@ -113,8 +113,7 @@ object ViewModelModule {
 
     @Provides
     @Singleton
-    fun providesMusicViewModel(
-    ): MusicViewModel {
+    fun providesMusicViewModel(): MusicViewModel {
         return MusicViewModel()
     }
 
