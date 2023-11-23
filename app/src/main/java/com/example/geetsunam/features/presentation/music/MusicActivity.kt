@@ -70,7 +70,7 @@ class MusicActivity : AppCompatActivity() {
             musicViewModel.onEvent(MusicEvent.PlayPreviousSong(binding, mediaPlayer))
         }
         mediaPlayer.setOnCompletionListener {
-            musicViewModel.onEvent(MusicEvent.PlayNextSong(binding, mediaPlayer))
+            musicViewModel.onEvent(MusicEvent.PlayAnother(binding, mediaPlayer))
         }
         binding.ibShuffle.setOnClickListener {
             musicViewModel.onEvent(MusicEvent.Shuffle(binding, mediaPlayer))

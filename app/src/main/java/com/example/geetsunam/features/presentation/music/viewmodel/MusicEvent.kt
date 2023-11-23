@@ -17,6 +17,9 @@ sealed class MusicEvent {
     data class PlayNextSong(val binding: ActivityMusicBinding, val mediaPlayer: MediaPlayer) :
         MusicEvent()
 
+    data class PlayAnother(val binding: ActivityMusicBinding, val mediaPlayer: MediaPlayer) :
+        MusicEvent()
+
     data class PlayPreviousSong(val binding: ActivityMusicBinding, val mediaPlayer: MediaPlayer) :
         MusicEvent()
 

@@ -50,11 +50,11 @@ class MusicViewModel : ViewModel() {
             }
 
             is MusicEvent.PlayNextSong -> {
-                setNextSong(isNext = true, event.binding, event.mediaPlayer)
+                playNextSong(isNext = true, event.binding, event.mediaPlayer)
             }
 
             is MusicEvent.PlayPreviousSong -> {
-                setNextSong(isNext = false, event.binding, event.mediaPlayer)
+                playNextSong(isNext = false, event.binding, event.mediaPlayer)
             }
 
             is MusicEvent.ChangePlayMode -> {
@@ -75,11 +75,26 @@ class MusicViewModel : ViewModel() {
                 }
             }
 
+            is MusicEvent.PlayAnother -> {
+                if (_musicState.value?.playMode == MusicState.PlayMode.Serial) {
+                    setNextSong()
+                    resetMedia(event.binding, event.mediaPlayer)
+                    playSong(event.binding, event.mediaPlayer)
+                }
+                if (_musicState.value?.playMode == MusicState.PlayMode.LoopCurrent) {
+                    event.mediaPlayer.seekTo(0)
+                    event.mediaPlayer.start()
+                }
+                if (_musicState.value?.playMode == MusicState.PlayMode.Random) {
+                    setRandomSong()
+                    resetMedia(event.binding, event.mediaPlayer)
+                    playSong(event.binding, event.mediaPlayer)
+                }
+            }
+
             is MusicEvent.Shuffle -> {
-                findRandomSong()
-                event.mediaPlayer.reset()
-                event.binding.seekBar.progress = 0
-                event.binding.ibPlay.setImageResource(R.drawable.ic_play)
+                setRandomSong()
+                resetMedia(event.binding, event.mediaPlayer)
                 playSong(event.binding, event.mediaPlayer)
             }
 
@@ -116,7 +131,6 @@ class MusicViewModel : ViewModel() {
 
     private fun playSong(binding: ActivityMusicBinding, mediaPlayer: MediaPlayer) {
         val songEntity = _musicState.value?.currentSong
-        Log.d(LogTag.PLAYER, "$songEntity")
         binding.result = songEntity
         mediaPlayer.setDataSource(songEntity?.source)
         mediaPlayer.prepareAsync() // Asynchronous preparation
@@ -177,7 +191,7 @@ class MusicViewModel : ViewModel() {
         }
     }
 
-    private fun setNextSong(
+    private fun playNextSong(
         isNext: Boolean, binding: ActivityMusicBinding, mediaPlayer: MediaPlayer
     ) {
         var canPlayNext = false
@@ -215,20 +229,41 @@ class MusicViewModel : ViewModel() {
             )
         )
         if (canPlayNext) {
-            mediaPlayer.reset()
-            binding.seekBar.progress = 0
-            binding.ibPlay.setImageResource(R.drawable.ic_play)
+            resetMedia(binding, mediaPlayer)
             playSong(binding, mediaPlayer)
         }
         if (canPlayPrevious) {
-            mediaPlayer.reset()
-            binding.seekBar.progress = 0
-            binding.ibPlay.setImageResource(R.drawable.ic_play)
+            resetMedia(binding, mediaPlayer)
             playSong(binding, mediaPlayer)
         }
     }
 
-    private fun findRandomSong() {
+    private fun setNextSong() {
+        //find current song index
+        val currSong = _musicState.value?.currentPlaylist?.find { song ->
+            song?.id == _musicState.value?.currentSong?.id
+        }
+        val currIdx = _musicState.value?.currentPlaylist?.indexOf(currSong)
+        val song = if (currIdx == _musicState.value?.totalSongs!! - 1) {
+            return
+        } else {
+            _musicState.value?.currentPlaylist?.elementAt(currIdx!! + 1)
+        }
+        _musicState.value = _musicState.value?.copy(
+            currentSong = SongEntity(
+                id = song?.id,
+                coverArt = song?.coverArt,
+                artistName = song?.artists?.fullname,
+                songName = song?.title,
+                duration = song?.duration,
+                source = song?.source,
+                stream = song?.stream,
+                isFavourite = song?.isFavourite,
+            )
+        )
+    }
+
+    private fun setRandomSong() {
         //find random index between 0 and size of playlist-1(BOTH INCLUDED)
         val randomIdx = Random.nextInt(0, _musicState.value?.currentPlaylist?.size!! - 1)
         val song = _musicState.value?.currentPlaylist?.elementAt(randomIdx)
@@ -244,5 +279,11 @@ class MusicViewModel : ViewModel() {
                 isFavourite = song?.isFavourite,
             )
         )
+    }
+
+    private fun resetMedia(binding: ActivityMusicBinding, mediaPlayer: MediaPlayer) {
+        mediaPlayer.reset()
+        binding.seekBar.progress = 0
+        binding.ibPlay.setImageResource(R.drawable.ic_play)
     }
 }
