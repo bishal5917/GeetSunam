@@ -38,7 +38,6 @@
     <string name="enter_password">Enter password</string>
     <string name="goto_menu">Goto Menu</string>
     <string name="change_password">Change Password</string>
-    <string name="logout">Logout</string>
     <string name="playlist">PLAYLIST</string>
     <string name="liked_songs">Liked Songs</string>
     <string name="genre">GENRE</string>
@@ -48,6 +47,12 @@
     <string name="songs">Songs</string>
     <string name="submit">Submit</string>
     <string name="provide_email">Just provide your email and we can do the rest.</string>
+
+    //logout dialog
+    <string name="logout">Logout</string>
+    <string name="sure_logout">Are you sure that you want to log out?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     //Error message during api calls
     <string name="some_error">Some error occured.</string>
@@ -60,4 +65,5 @@
     <string name="confirm_new_password">Confirm new password</string>
     <string name="shuffle">Shuffle</string>
     <string name="set_mode">Set Mode</string>
+    <string name="google_auth_error">Authentication error,Please try again later!</string>
 </resources>

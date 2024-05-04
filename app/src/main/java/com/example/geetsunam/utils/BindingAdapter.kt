@@ -10,16 +10,14 @@ import androidx.databinding.BindingAdapter
 import androidx.navigation.findNavController
 import coil.load
 import com.example.geetsunam.R
-import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
 import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.domain.entities.SongEntity
 import com.example.geetsunam.features.presentation.for_you.ForYouFragmentDirections
 import com.example.geetsunam.features.presentation.home.HomeFragmentDirections
 import com.example.geetsunam.features.presentation.liked_song.LikedSongFragmentDirections
-import com.example.geetsunam.features.presentation.music.MusicActivity
+import com.example.geetsunam.features.presentation.music.MusicPlayerActivity
 import com.example.geetsunam.features.presentation.new_song.NewSongFragmentDirections
 import com.example.geetsunam.features.presentation.single_artist.ArtistActivity
-import com.example.geetsunam.features.presentation.single_genre.GenreActivity
 import com.example.geetsunam.features.presentation.trending.TrendingFragmentDirections
 import com.example.geetsunam.utils.models.Artist
 import com.example.geetsunam.utils.models.Song
@@ -72,7 +70,7 @@ class BindingAdapter {
                         )
                         songCard.findNavController().navigate(action)
                     } else if (from == "genre_songs" || from == "artist_songs" || from == "search") {
-                        val intent = Intent(songCard.context, MusicActivity::class.java)
+                        val intent = Intent(songCard.context, MusicPlayerActivity::class.java)
                         intent.putExtra("song", songEntity)
                         songCard.context.startActivity(intent)
                     }

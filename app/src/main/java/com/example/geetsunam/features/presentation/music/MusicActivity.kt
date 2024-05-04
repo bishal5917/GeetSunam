@@ -23,6 +23,7 @@ import com.example.geetsunam.utils.models.CommonRequestModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+// THIS ACTIVITY PLAYS MUSIC FILE USING MEDIAPLAYER CLASS OF ANDROID
 @AndroidEntryPoint
 class MusicActivity : AppCompatActivity() {
 
@@ -42,7 +43,7 @@ class MusicActivity : AppCompatActivity() {
     lateinit var musicViewModel: MusicViewModel
 
     //getting argument (song)
-    private val args by navArgs<MusicActivityArgs>()
+//    private val args by navArgs<MusicActivityArgs>()
 
     private lateinit var binding: ActivityMusicBinding
 
@@ -51,11 +52,11 @@ class MusicActivity : AppCompatActivity() {
         binding = ActivityMusicBinding.inflate(layoutInflater)
         setContentView(binding.root)
         //set current song and play it
-        musicViewModel.onEvent(
-            MusicEvent.SetAndPlayCurrent(
-                args.song.id!!, binding, mediaPlayer
-            )
-        )
+//        musicViewModel.onEvent(
+//            MusicEvent.SetAndPlayCurrent(
+//                args.song.id!!, binding, mediaPlayer
+//            )
+//        )
         setPlayModeDrawables()
         addToFavourite()
         trackSong()
@@ -93,11 +94,11 @@ class MusicActivity : AppCompatActivity() {
 
     private fun addToFavourite() {
         binding.ibLike.setOnClickListener {
-            toggleFavViewModel.onEvent(
-                ToggleFavEvent.AddFavourite(
-                    CommonRequestModel(splashViewModel.userFlow.value?.token, args.song.id)
-                )
-            )
+//            toggleFavViewModel.onEvent(
+//                ToggleFavEvent.AddFavourite(
+//                    CommonRequestModel(splashViewModel.userFlow.value?.token, args.song.id)
+//                )
+//            )
         }
         //observing
         val dialog = Dialog(this)

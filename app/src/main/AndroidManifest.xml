@@ -39,6 +39,9 @@
             android:name=".features.presentation.music.MusicActivity"
             android:exported="false" />
         <activity
+            android:name=".features.presentation.music.MusicPlayerActivity"
+            android:exported="false" />
+        <activity
             android:name=".features.presentation.splash.SplashActivity"
             android:exported="true">
             <intent-filter>

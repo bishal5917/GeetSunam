@@ -201,7 +201,7 @@ class LoginActivity : AppCompatActivity() {
                         Log.d(LogTag.GOOGLE, "No ID token!")
                         googleLoginViewModel.onEvent(
                             GoogleLoginEvent.HandleError(
-                                "Authentication failed,Try Again"
+                                getString(R.string.google_auth_error)
                             )
                         )
                     }
@@ -211,7 +211,7 @@ class LoginActivity : AppCompatActivity() {
                     CommonStatusCodes.CANCELED -> {
                         Log.d(LogTag.GOOGLE, "One-tap dialog was closed.")
                         googleLoginViewModel.onEvent(
-                            GoogleLoginEvent.HandleError("Login Cancelled")
+                            GoogleLoginEvent.HandleError("Login cancelled")
                         )
                     }
 
@@ -231,7 +231,7 @@ class LoginActivity : AppCompatActivity() {
                         )
                         googleLoginViewModel.onEvent(
                             GoogleLoginEvent.HandleError(
-                                "Authentication failed,Try Again"
+                                getString(R.string.google_auth_error)
                             )
                         )
                     }
@@ -248,7 +248,7 @@ class LoginActivity : AppCompatActivity() {
                 Log.e(LogTag.GOOGLE, "Couldn't start One Tap UI: ${e.localizedMessage}")
                 googleLoginViewModel.onEvent(
                     GoogleLoginEvent.HandleError(
-                        e.localizedMessage ?: "Authentication failed,Try Again"
+                        getString(R.string.google_auth_error)
                     )
                 )
             }
@@ -257,7 +257,7 @@ class LoginActivity : AppCompatActivity() {
             Log.d(LogTag.GOOGLE, e.localizedMessage!!)
             googleLoginViewModel.onEvent(
                 GoogleLoginEvent.HandleError(
-                    e.localizedMessage ?: "Authentication failed,Try Again"
+                    getString(R.string.google_auth_error)
                 )
             )
         }

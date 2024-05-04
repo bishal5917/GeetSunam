@@ -104,4 +104,8 @@ dependencies {
 
     //google onetap login
     implementation("com.google.android.gms:play-services-auth:20.7.0")
+
+    //exoplayer
+    implementation("com.google.android.exoplayer:exoplayer-core:2.19.1")
+    implementation("com.google.android.exoplayer:exoplayer-ui:2.19.1")
 }

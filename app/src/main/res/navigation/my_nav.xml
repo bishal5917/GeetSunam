@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_musicActivity"
-            app:destination="@id/musicActivity" />
+            app:destination="@id/musicPlayerActivity" />
         <action
             android:id="@+id/action_homeFragment_to_genreActivity"
             app:destination="@id/genreActivity" />
@@ -27,7 +27,7 @@
         tools:layout="@layout/fragment_trending">
         <action
             android:id="@+id/action_trendingFragment_to_musicActivity"
-            app:destination="@id/musicActivity" />
+            app:destination="@id/musicPlayerActivity" />
 
     </fragment>
     <fragment
@@ -37,7 +37,7 @@
         tools:layout="@layout/fragment_for_you">
         <action
             android:id="@+id/action_forYouFragment_to_musicActivity"
-            app:destination="@id/musicActivity" />
+            app:destination="@id/musicPlayerActivity" />
     </fragment>
     <fragment
         android:id="@+id/newSongFragment"
@@ -46,7 +46,7 @@
         tools:layout="@layout/fragment_new_song" >
         <action
             android:id="@+id/action_newSongFragment_to_musicActivity"
-            app:destination="@id/musicActivity" />
+            app:destination="@id/musicPlayerActivity" />
     </fragment>
     <fragment
         android:id="@+id/likedSongFragment"
@@ -55,13 +55,13 @@
         tools:layout="@layout/fragment_liked_song" >
         <action
             android:id="@+id/action_likedSongFragment_to_musicActivity"
-            app:destination="@id/musicActivity" />
+            app:destination="@id/musicPlayerActivity" />
     </fragment>
     <activity
-        android:id="@+id/musicActivity"
-        android:name="com.example.geetsunam.features.presentation.music.MusicActivity"
-        android:label="activity_music"
-        tools:layout="@layout/activity_music">
+        android:id="@+id/musicPlayerActivity"
+        android:name="com.example.geetsunam.features.presentation.music.MusicPlayerActivity"
+        android:label="activity_music_player"
+        tools:layout="@layout/activity_music_player">
         <argument
             android:name="song"
             app:argType="com.example.geetsunam.features.domain.entities.SongEntity" />

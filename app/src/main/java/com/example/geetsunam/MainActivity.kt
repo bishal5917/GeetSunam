@@ -98,7 +98,9 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_logout -> {
                     binding.dlAppDrawer.closeDrawer(navigationView)
-                    loginViewModel.onEvent(LoginEvent.LogoutUser)
+                    CustomDialog().showSureLogoutDialog(this) {
+                        loginViewModel.onEvent(LoginEvent.LogoutUser)
+                    }
                 }
             }
             val handled = NavigationUI.onNavDestinationSelected(item, navController)
