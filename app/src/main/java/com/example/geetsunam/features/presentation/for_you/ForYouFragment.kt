@@ -93,7 +93,7 @@ class ForYouFragment : Fragment() {
                 recyclerView.visibility = View.VISIBLE
                 shimmerView.visibility = View.GONE
                 musicViewModel.onEvent(
-                    MusicEvent.SetPlaylist(
+                    MusicEvent.SetMediaItems(
                         response.songs, "recommended"
                     )
                 )

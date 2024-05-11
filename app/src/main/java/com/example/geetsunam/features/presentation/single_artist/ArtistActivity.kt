@@ -82,7 +82,7 @@ class ArtistActivity : AppCompatActivity() {
                 binding.rvArtistSongs.visibility = View.VISIBLE
                 binding.shlArtistSongs.visibility = View.GONE
                 binding.tvArtistSongsQty.text = "${response.songs?.songs?.size.toString()} Songs"
-                musicViewModel.onEvent(MusicEvent.SetAndRetainPlaylist(response.songs?.songs!!, "artists"))
+                musicViewModel.onEvent(MusicEvent.SetMediaItems(response.songs?.songs!!, "artists"))
             }
             if (response.status == ArtistSongState.ArtistSongStatus.FAILED) {
                 binding.rvArtistSongs.visibility = View.GONE

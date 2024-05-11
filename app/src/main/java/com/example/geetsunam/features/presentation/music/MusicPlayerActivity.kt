@@ -1,17 +1,23 @@
 package com.example.geetsunam.features.presentation.music
 
+import android.app.Dialog
 import android.os.Bundle
+import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
+import androidx.media3.common.util.UnstableApi
 import androidx.navigation.navArgs
-import com.example.geetsunam.R
 import com.example.geetsunam.databinding.ActivityMusicPlayerBinding
+import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavEvent
+import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavState
+import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavViewModel
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.ui.PlayerControlView
+import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
+import com.example.geetsunam.utils.CustomDialog
+import com.example.geetsunam.utils.CustomToast
+import com.example.geetsunam.utils.models.CommonRequestModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-
 
 // THIS ACTIVITY PLAYS MUSIC FILE USING EXOPLAYER
 @AndroidEntryPoint
@@ -22,44 +28,74 @@ class MusicPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMusicPlayerBinding
 
-    private lateinit var player: ExoPlayer
-
-    private lateinit var playerControlView: PlayerControlView
-
     @Inject
     lateinit var musicViewModel: MusicViewModel
 
+    @Inject
+    lateinit var splashViewModel: SplashViewModel
+
+    @Inject
+    lateinit var toggleFavViewModel: ToggleFavViewModel
+
+    @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMusicPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.result = args.song
-        initPlayer()
-
-        binding.pvSong.player = player
-        val mediaItem = MediaItem.fromUri(args.song.source!!)
-        playerControlView = findViewById<PlayerControlView>(R.id.player_control_view)
-        playerControlView.player = player
-        player.setMediaItem(mediaItem)
-        player.prepare()
-        player.play()
+        addToFavourite()
+        setShuffleAndLooping()
+        //set current song and play it
+        musicViewModel.onEvent(
+            MusicEvent.SetAndPlayCurrent(
+                args.song.id!!, binding
+            )
+        )
+        //Now gotta know which song is playing and update UI based on that
     }
 
-    private fun initPlayer() {
+    private fun setShuffleAndLooping() {
+//        player.shuffleModeEnabled = true
+//        player.repeatMode = Player.REPEAT_MODE_ONE
     }
 
-    override fun onStart() {
-        super.onStart()
-        player.playWhenReady = true
-    }
-
-    override fun onStop() {
-        super.onStop()
-        player.playWhenReady = false
+    private fun addToFavourite() {
+        binding.ibLike.setOnClickListener {
+            toggleFavViewModel.onEvent(
+                ToggleFavEvent.AddFavourite(
+                    CommonRequestModel(splashViewModel.userFlow.value?.token, args.song.id)
+                )
+            )
+        }
+        //observing
+        val dialog = Dialog(this)
+        toggleFavViewModel.toggleFavState.observe(this) { response ->
+            if (response.status == ToggleFavState.ToggleFavStatus.LOADING) {
+                //show loading dialog
+                CustomDialog().showLoadingDialog(dialog)
+            }
+            if (response.status == ToggleFavState.ToggleFavStatus.SUCCESS) {
+                CustomDialog().hideLoadingDialog(dialog)
+                binding.ibLike.setImageResource(response.drawableId!!)
+                CustomToast.showToast(
+                    context = this, "${
+                        response.message
+                    }"
+                )
+            }
+            if (response.status == ToggleFavState.ToggleFavStatus.FAILED) {
+                CustomDialog().hideLoadingDialog(dialog)
+                CustomToast.showToast(
+                    context = this, "${
+                        response.message
+                    }"
+                )
+            }
+        }
     }
 
     override fun onDestroy() {
+        musicViewModel.onEvent(MusicEvent.Reset)
         super.onDestroy()
-        player.release()
     }
 }

@@ -1,61 +1,66 @@
 package com.example.geetsunam.features.presentation.music.viewmodel
 
 import android.media.MediaPlayer
-import android.os.Handler
-import android.os.Message
 import android.util.Log
+import androidx.annotation.OptIn
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
 import com.example.geetsunam.R
 import com.example.geetsunam.databinding.ActivityMusicBinding
+import com.example.geetsunam.databinding.ActivityMusicPlayerBinding
 import com.example.geetsunam.features.domain.entities.SongEntity
 import com.example.geetsunam.utils.LogTag
-import com.example.geetsunam.utils.PlayerUtil
 import com.example.geetsunam.utils.models.Song
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlin.random.Random
 
-class MusicViewModel : ViewModel() {
+@HiltViewModel
+class MusicViewModel @Inject constructor(private val player: ExoPlayer) : ViewModel() {
     private val _musicState = MutableLiveData(MusicState.idle)
     val musicState: LiveData<MusicState> = _musicState
 
     fun onEvent(event: MusicEvent) {
         when (event) {
-            is MusicEvent.SetPlaylist -> {
-                _musicState.postValue(
-                    _musicState.value?.copy(
-                        playlistName = event.playlistName,
-                        currentPlaylist = event.playlist,
-                        totalSongs = event.playlist?.size
-                    )
-                )
+//            is MusicEvent.InitPlayer -> {
+//                player.playWhenReady = true
+//            }
+
+            is MusicEvent.SetMediaItems -> {
+                //time to set mediaItems
+                setMediaItems(event.playlist, event.playlistName)
             }
 
-            is MusicEvent.SetAndRetainPlaylist -> {
-                val newPlaylist = ArrayList<Song>()
-                newPlaylist.addAll(_musicState.value?.currentPlaylist as ArrayList<Song>)
-                newPlaylist.addAll(event.playlist as ArrayList<Song>)
-                _musicState.postValue(
-                    _musicState.value?.copy(
-                        playlistName = event.playlistName,
-                        currentPlaylist = newPlaylist,
-                        totalSongs = newPlaylist.size
-                    )
-                )
-            }
+//            is MusicEvent.SetAndRetainPlaylist -> {
+//                val newPlaylist = ArrayList<Song>()
+//                newPlaylist.addAll(_musicState.value?.currentPlaylist as ArrayList<Song>)
+//                newPlaylist.addAll(event.playlist as ArrayList<Song>)
+//                _musicState.postValue(
+//                    _musicState.value?.copy(
+//                        playlistName = event.playlistName,
+//                        currentPlaylist = newPlaylist,
+//                        totalSongs = newPlaylist.size
+//                    )
+//                )
+//            }
 
             is MusicEvent.SetAndPlayCurrent -> {
-                setCurrentSong(event.songId)
-                playSong(event.binding, event.mediaPlayer)
+                setCurrentSongById(event.songId)
+                playSong(event.binding)
             }
 
-            is MusicEvent.PlayNextSong -> {
-                playNextSong(isNext = true, event.binding, event.mediaPlayer)
-            }
-
-            is MusicEvent.PlayPreviousSong -> {
-                playNextSong(isNext = false, event.binding, event.mediaPlayer)
-            }
+//            is MusicEvent.PlayNextSong -> {
+//                playNextSong(isNext = true, event.binding, event.mediaPlayer)
+//            }
+//
+//            is MusicEvent.PlayPreviousSong -> {
+//                playNextSong(isNext = false, event.binding, event.mediaPlayer)
+//            }
 
             is MusicEvent.ChangePlayMode -> {
                 if (_musicState.value?.playMode == MusicState.PlayMode.Serial) {
@@ -75,30 +80,31 @@ class MusicViewModel : ViewModel() {
                 }
             }
 
-            is MusicEvent.PlayAnother -> {
-                if (_musicState.value?.playMode == MusicState.PlayMode.Serial) {
-                    setNextSong()
-                    resetMedia(event.binding, event.mediaPlayer)
-                    playSong(event.binding, event.mediaPlayer)
-                }
-                if (_musicState.value?.playMode == MusicState.PlayMode.LoopCurrent) {
-                    event.mediaPlayer.seekTo(0)
-                    event.mediaPlayer.start()
-                }
-                if (_musicState.value?.playMode == MusicState.PlayMode.Random) {
-                    setRandomSong()
-                    resetMedia(event.binding, event.mediaPlayer)
-                    playSong(event.binding, event.mediaPlayer)
-                }
-            }
+//            is MusicEvent.PlayAnother -> {
+//                if (_musicState.value?.playMode == MusicState.PlayMode.Serial) {
+//                    setNextSong()
+//                    resetMedia(event.binding, event.mediaPlayer)
+//                    playSong(event.binding, event.mediaPlayer)
+//                }
+//                if (_musicState.value?.playMode == MusicState.PlayMode.LoopCurrent) {
+//                    event.mediaPlayer.seekTo(0)
+//                    event.mediaPlayer.start()
+//                }
+//                if (_musicState.value?.playMode == MusicState.PlayMode.Random) {
+//                    setRandomSong()
+//                    resetMedia(event.binding, event.mediaPlayer)
+//                    playSong(event.binding, event.mediaPlayer)
+//                }
+//            }
 
-            is MusicEvent.Shuffle -> {
-                setRandomSong()
-                resetMedia(event.binding, event.mediaPlayer)
-                playSong(event.binding, event.mediaPlayer)
-            }
+//            is MusicEvent.Shuffle -> {
+//                setRandomSong()
+//                resetMedia(event.binding, event.mediaPlayer)
+//                playSong(event.binding, event.mediaPlayer)
+//            }
 
             is MusicEvent.Reset -> {
+                releasePlayer()
                 _musicState.postValue(
                     _musicState.value?.copy(
                         status = MusicState.MusicStatus.IDLE
@@ -110,7 +116,27 @@ class MusicViewModel : ViewModel() {
         }
     }
 
-    private fun setCurrentSong(songId: String) {
+    private fun setMediaItems(playlist: List<Song?>?, playlistName: String) {
+        val items: ArrayList<MediaItem> = ArrayList()
+        //Now loop through songs and add all
+        if (playlist != null) {
+            for (song: Song? in playlist) {
+                items.add(MediaItem.fromUri(song?.source!!))
+            }
+        }
+        //Now setting the mediaItems
+        player.setMediaItems(items, false)
+        _musicState.postValue(
+            _musicState.value?.copy(
+                playlistName = playlistName,
+                currentPlaylist = playlist,
+                totalSongs = playlist?.size,
+                medias = items
+            )
+        )
+    }
+
+    private fun setCurrentSongById(songId: String) {
         val song = _musicState.value?.currentPlaylist?.find { song ->
             song?.id == songId
         }
@@ -129,66 +155,119 @@ class MusicViewModel : ViewModel() {
         )
     }
 
-    private fun playSong(binding: ActivityMusicBinding, mediaPlayer: MediaPlayer) {
-        val songEntity = _musicState.value?.currentSong
-        binding.result = songEntity
-        mediaPlayer.setDataSource(songEntity?.source)
-        mediaPlayer.prepareAsync() // Asynchronous preparation
-        _musicState.value = _musicState.value?.copy(status = MusicState.MusicStatus.PREPARING)
-        mediaPlayer.setOnPreparedListener { player ->
-            // Start playing when the media is prepared
-            player.start()
-            _musicState.value = _musicState.value?.copy(status = MusicState.MusicStatus.PLAYING)
-            binding.seekBar.progress = 0
-            binding.seekBar.max = mediaPlayer.duration
-            binding.ibPlay.setImageResource(R.drawable.ic_pause)
-            PlayerUtil().setSeekbar(binding.seekBar, mediaPlayer)
-            binding.ibPlay.setOnClickListener {
-                if (_musicState.value?.status != MusicState.MusicStatus.PREPARING) {
-                    if (mediaPlayer.isPlaying) {
-                        mediaPlayer.pause()
-                        _musicState.value =
-                            _musicState.value?.copy(status = MusicState.MusicStatus.PAUSED)
-                        binding.ibPlay.setImageResource(R.drawable.ic_play)
-                    } else if (!mediaPlayer.isPlaying) {
-                        mediaPlayer.start()
-                        _musicState.value =
-                            _musicState.value?.copy(status = MusicState.MusicStatus.PLAYING)
-                        binding.ibPlay.setImageResource(R.drawable.ic_pause)
-                    }
-                }
-            }
-            //setting handlers
-            val handler = object : Handler() {
-                override fun handleMessage(msg: Message) {
-                    val currentPos = msg.what
-                    binding.seekBar.progress = currentPos
-                    val elapsedTime = PlayerUtil().calculateTime(currentPos)
-                    binding.tvDurationStart.text = elapsedTime
-                    if (elapsedTime == "0:30") {
-                        _musicState.postValue(
-                            _musicState.value?.copy(
-                                status = MusicState.MusicStatus.StartTracking
-                            )
-                        )
-                    }
-                    super.handleMessage(msg)
-                }
-            }
-            Thread(Runnable {
-                while (true) {
-                    try {
-                        val msg = Message()
-                        msg.what = mediaPlayer.currentPosition
-                        handler.sendMessage(msg)
-                        Thread.sleep(1000)
-                    } catch (ex: Exception) {
-                        Log.d(LogTag.PLAYER, "$ex")
-                    }
-                }
-            }).start()
+    private fun setSongByIdx(idx: Int) {
+        val song = _musicState.value?.currentPlaylist?.get(idx)
+        _musicState.value = _musicState.value?.copy(
+            status = MusicState.MusicStatus.IDLE, currentSong = SongEntity(
+                id = song?.id,
+                coverArt = song?.coverArt,
+                artistName = song?.artists?.fullname,
+                songName = song?.title,
+                duration = song?.duration,
+                source = song?.source,
+                stream = song?.stream,
+                isFavourite = song?.isFavourite,
+            )
+        )
+    }
 
+    @OptIn(UnstableApi::class)
+    private fun playSong(binding: ActivityMusicPlayerBinding) {
+        //find current song index
+        val currSong = _musicState.value?.currentPlaylist?.find { song ->
+            song?.id == _musicState.value?.currentSong?.id
         }
+        val currIdx = _musicState.value?.currentPlaylist?.indexOf(currSong)
+        binding.pvSong.player = player
+        player.prepare()
+        player.seekTo(currIdx!!, 0)
+        player.addListener(object : Player.Listener {
+            override fun onPlaybackStateChanged(@Player.State state: Int) {
+                when (state) {
+                    Player.STATE_IDLE -> {
+                        // The player is idle, meaning it holds only limited resources.The player must be prepared before it will play the media.
+                    }
+
+                    Player.STATE_READY -> {
+                        player.play()
+                        // The player is able to immediately play from its current position. The player will be playing if getPlayWhenReady() is true, and paused otherwise.
+                    }
+
+                    Player.STATE_BUFFERING -> {
+                        val currentPosition = player.currentMediaItemIndex
+                        setSongByIdx(currentPosition)
+                        binding.result = _musicState.value?.currentSong
+                        // The player is not able to immediately play the media, but is doing work toward being able to do so. This state typically occurs when the player needs to buffer more data before playback can start.
+                    }
+
+                    Player.STATE_ENDED -> {
+                        // The player has finished playing the media.
+                    }
+
+                    else -> {
+                        // Other things
+                    }
+                }
+            }
+        })
+//        binding.result = songEntity
+//        mediaPlayer.setDataSource(songEntity?.source)
+//        mediaPlayer.prepareAsync() // Asynchronous preparation
+//        _musicState.value = _musicState.value?.copy(status = MusicState.MusicStatus.PREPARING)
+//        mediaPlayer.setOnPreparedListener { player ->
+//            // Start playing when the media is prepared
+//            player.start()
+//            _musicState.value = _musicState.value?.copy(status = MusicState.MusicStatus.PLAYING)
+//            binding.seekBar.progress = 0
+//            binding.seekBar.max = mediaPlayer.duration
+//            binding.ibPlay.setImageResource(R.drawable.ic_pause)
+//            PlayerUtil().setSeekbar(binding.seekBar, mediaPlayer)
+//            binding.ibPlay.setOnClickListener {
+//                if (_musicState.value?.status != MusicState.MusicStatus.PREPARING) {
+//                    if (mediaPlayer.isPlaying) {
+//                        mediaPlayer.pause()
+//                        _musicState.value =
+//                            _musicState.value?.copy(status = MusicState.MusicStatus.PAUSED)
+//                        binding.ibPlay.setImageResource(R.drawable.ic_play)
+//                    } else if (!mediaPlayer.isPlaying) {
+//                        mediaPlayer.start()
+//                        _musicState.value =
+//                            _musicState.value?.copy(status = MusicState.MusicStatus.PLAYING)
+//                        binding.ibPlay.setImageResource(R.drawable.ic_pause)
+//                    }
+//                }
+//            }
+//            //setting handlers
+//            val handler = object : Handler() {
+//                override fun handleMessage(msg: Message) {
+//                    val currentPos = msg.what
+//                    binding.seekBar.progress = currentPos
+//                    val elapsedTime = PlayerUtil().calculateTime(currentPos)
+//                    binding.tvDurationStart.text = elapsedTime
+//                    if (elapsedTime == "0:30") {
+//                        _musicState.postValue(
+//                            _musicState.value?.copy(
+//                                status = MusicState.MusicStatus.StartTracking
+//                            )
+//                        )
+//                    }
+//                    super.handleMessage(msg)
+//                }
+//            }
+//            Thread(Runnable {
+//                while (true) {
+//                    try {
+//                        val msg = Message()
+//                        msg.what = mediaPlayer.currentPosition
+//                        handler.sendMessage(msg)
+//                        Thread.sleep(1000)
+//                    } catch (ex: Exception) {
+//                        Log.d(LogTag.PLAYER, "$ex")
+//                    }
+//                }
+//            }).start()
+//
+//        }
     }
 
     private fun playNextSong(
@@ -230,11 +309,11 @@ class MusicViewModel : ViewModel() {
         )
         if (canPlayNext) {
             resetMedia(binding, mediaPlayer)
-            playSong(binding, mediaPlayer)
+//            playSong(binding, mediaPlayer)
         }
         if (canPlayPrevious) {
             resetMedia(binding, mediaPlayer)
-            playSong(binding, mediaPlayer)
+//            playSong(binding, mediaPlayer)
         }
     }
 
@@ -285,5 +364,14 @@ class MusicViewModel : ViewModel() {
         mediaPlayer.reset()
         binding.seekBar.progress = 0
         binding.ibPlay.setImageResource(R.drawable.ic_play)
+    }
+
+    private fun releasePlayer() {
+        player.stop()
+    }
+
+    override fun onCleared() {
+        player.release()
+        super.onCleared()
     }
 }

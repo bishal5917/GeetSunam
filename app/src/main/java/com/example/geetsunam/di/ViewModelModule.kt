@@ -1,5 +1,6 @@
 package com.example.geetsunam.di
 
+import androidx.media3.exoplayer.ExoPlayer
 import com.example.geetsunam.features.domain.usecases.ChangePasswordUsecase
 import com.example.geetsunam.features.domain.usecases.ForgotPasswordUsecase
 import com.example.geetsunam.features.domain.usecases.GetArtistSongsUsecase
@@ -113,8 +114,8 @@ object ViewModelModule {
 
     @Provides
     @Singleton
-    fun providesMusicViewModel(): MusicViewModel {
-        return MusicViewModel()
+    fun providesMusicViewModel(exoPlayer: ExoPlayer): MusicViewModel {
+        return MusicViewModel(exoPlayer)
     }
 
     @Provides

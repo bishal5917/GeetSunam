@@ -80,7 +80,7 @@ class NewSongFragment : Fragment() {
                 }
                 recyclerView.visibility = View.VISIBLE
                 shimmerView.visibility = View.GONE
-                musicViewModel.onEvent(MusicEvent.SetPlaylist(response.songs?.songs!!, "new"))
+                musicViewModel.onEvent(MusicEvent.SetMediaItems(response.songs?.songs!!, "new"))
             }
             if (response.status == NewSongState.NewSongStatus.FAILED) {
                 recyclerView.visibility = View.GONE

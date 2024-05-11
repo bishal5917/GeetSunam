@@ -71,6 +71,19 @@ class HomeFragment : Fragment() {
         return gview
     }
 
+    override fun onResume() {
+        val songs: List<Song?>? = featuredSongsViewModel.featuredSongState.value?.songs?.songs;
+        if (songs != null) {
+            musicViewModel.onEvent(
+                MusicEvent.SetMediaItems(
+                    featuredSongsViewModel.featuredSongState.value?.songs?.songs, "featured"
+                )
+            )
+//            CustomToast.showToast(context = requireContext(), "OnResumed")
+        }
+        super.onResume()
+    }
+
     private fun pullToRefresh() {
         val swipeToRefresh = gview.findViewById<SwipeRefreshLayout>(R.id.srlHome)
         swipeToRefresh.setOnRefreshListener {
@@ -190,7 +203,7 @@ class HomeFragment : Fragment() {
                 }
                 recyclerView.visibility = View.VISIBLE
                 shimmerView.visibility = View.GONE
-                musicViewModel.onEvent(MusicEvent.SetPlaylist(response.songs?.songs!!, "featured"))
+                musicViewModel.onEvent(MusicEvent.SetMediaItems(response.songs?.songs!!, "featured"))
             }
             if (response.status == FeaturedSongsState.SongStatus.FAILED) {
                 recyclerView.visibility = View.GONE

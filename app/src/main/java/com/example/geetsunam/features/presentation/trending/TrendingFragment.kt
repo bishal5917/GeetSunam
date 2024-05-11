@@ -93,7 +93,7 @@ class TrendingFragment : Fragment() {
                 }
                 recyclerView.visibility = View.VISIBLE
                 shimmerView.visibility = View.GONE
-                musicViewModel.onEvent(MusicEvent.SetPlaylist(response.songs?.songs!!, "trending"))
+                musicViewModel.onEvent(MusicEvent.SetMediaItems(response.songs?.songs!!, "trending"))
             }
             if (response.status == TrendingState.TrendingStatus.FAILED) {
                 recyclerView.visibility = View.GONE

@@ -112,7 +112,7 @@ class SearchActivity : AppCompatActivity() {
                     binding.tvSearchSongs.visibility = View.VISIBLE
                     binding.rvSearchSongs.visibility = View.VISIBLE
                     musicViewModel.onEvent(
-                        MusicEvent.SetAndRetainPlaylist(
+                        MusicEvent.SetMediaItems(
                             response.searchData?.songs!!, "search"
                         )
                     )

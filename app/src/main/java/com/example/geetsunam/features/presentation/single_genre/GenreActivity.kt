@@ -83,7 +83,7 @@ class GenreActivity : AppCompatActivity() {
                 binding.rvGenreSongs.visibility = View.VISIBLE
                 binding.shlGenreSongs.visibility = View.GONE
                 binding.tvGenreSongsQty.text = "${response.songs?.songs?.size.toString()} Songs"
-                musicViewModel.onEvent(MusicEvent.SetAndRetainPlaylist(response.songs?.songs!!, "genres"))
+                musicViewModel.onEvent(MusicEvent.SetMediaItems(response.songs?.songs!!, "genres"))
             }
             if (response.status == GenreSongState.GenreSongStatus.FAILED) {
                 binding.rvGenreSongs.visibility = View.GONE
