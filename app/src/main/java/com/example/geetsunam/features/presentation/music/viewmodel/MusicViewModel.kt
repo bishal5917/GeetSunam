@@ -27,40 +27,36 @@ class MusicViewModel @Inject constructor(private val player: ExoPlayer) : ViewMo
 
     fun onEvent(event: MusicEvent) {
         when (event) {
-//            is MusicEvent.InitPlayer -> {
-//                player.playWhenReady = true
-//            }
-
             is MusicEvent.SetMediaItems -> {
                 //time to set mediaItems
                 setMediaItems(event.playlist, event.playlistName)
             }
 
-//            is MusicEvent.SetAndRetainPlaylist -> {
-//                val newPlaylist = ArrayList<Song>()
-//                newPlaylist.addAll(_musicState.value?.currentPlaylist as ArrayList<Song>)
-//                newPlaylist.addAll(event.playlist as ArrayList<Song>)
-//                _musicState.postValue(
-//                    _musicState.value?.copy(
-//                        playlistName = event.playlistName,
-//                        currentPlaylist = newPlaylist,
-//                        totalSongs = newPlaylist.size
-//                    )
-//                )
-//            }
-
             is MusicEvent.SetAndPlayCurrent -> {
+                setPlayModeDrawables(event.binding)
                 setCurrentSongById(event.songId)
                 playSong(event.binding)
             }
 
-//            is MusicEvent.PlayNextSong -> {
-//                playNextSong(isNext = true, event.binding, event.mediaPlayer)
-//            }
-//
-//            is MusicEvent.PlayPreviousSong -> {
-//                playNextSong(isNext = false, event.binding, event.mediaPlayer)
-//            }
+            is MusicEvent.ChangeRepeatMode -> {
+                if (player.repeatMode == Player.REPEAT_MODE_OFF) {
+                    player.repeatMode = Player.REPEAT_MODE_ONE
+                    event.binding.ibRepeatMode.setImageResource(R.drawable.ic_repeat_one)
+                } else if (player.repeatMode == Player.REPEAT_MODE_ONE) {
+                    player.repeatMode = Player.REPEAT_MODE_OFF
+                    event.binding.ibRepeatMode.setImageResource(R.drawable.ic_repeat)
+                }
+            }
+
+            is MusicEvent.ChangeShuffleMode -> {
+                if (player.shuffleModeEnabled) {
+                    player.shuffleModeEnabled = false
+                    event.binding.ibShuffle.setImageResource(R.drawable.ic_shuffle_off)
+                } else {
+                    player.shuffleModeEnabled = true
+                    event.binding.ibShuffle.setImageResource(R.drawable.ic_shuffle)
+                }
+            }
 
             is MusicEvent.ChangePlayMode -> {
                 if (_musicState.value?.playMode == MusicState.PlayMode.Serial) {
@@ -79,29 +75,6 @@ class MusicViewModel @Inject constructor(private val player: ExoPlayer) : ViewMo
                     )
                 }
             }
-
-//            is MusicEvent.PlayAnother -> {
-//                if (_musicState.value?.playMode == MusicState.PlayMode.Serial) {
-//                    setNextSong()
-//                    resetMedia(event.binding, event.mediaPlayer)
-//                    playSong(event.binding, event.mediaPlayer)
-//                }
-//                if (_musicState.value?.playMode == MusicState.PlayMode.LoopCurrent) {
-//                    event.mediaPlayer.seekTo(0)
-//                    event.mediaPlayer.start()
-//                }
-//                if (_musicState.value?.playMode == MusicState.PlayMode.Random) {
-//                    setRandomSong()
-//                    resetMedia(event.binding, event.mediaPlayer)
-//                    playSong(event.binding, event.mediaPlayer)
-//                }
-//            }
-
-//            is MusicEvent.Shuffle -> {
-//                setRandomSong()
-//                resetMedia(event.binding, event.mediaPlayer)
-//                playSong(event.binding, event.mediaPlayer)
-//            }
 
             is MusicEvent.Reset -> {
                 releasePlayer()
@@ -140,7 +113,6 @@ class MusicViewModel @Inject constructor(private val player: ExoPlayer) : ViewMo
         val song = _musicState.value?.currentPlaylist?.find { song ->
             song?.id == songId
         }
-        Log.d(LogTag.PLAYER, "$song")
         _musicState.value = _musicState.value?.copy(
             status = MusicState.MusicStatus.IDLE, currentSong = SongEntity(
                 id = song?.id,
@@ -171,6 +143,21 @@ class MusicViewModel @Inject constructor(private val player: ExoPlayer) : ViewMo
         )
     }
 
+    private fun setPlayModeDrawables(binding: ActivityMusicPlayerBinding) {
+        //Checking for shuffle
+        if (player.shuffleModeEnabled) {
+            binding.ibShuffle.setImageResource(R.drawable.ic_shuffle)
+        } else {
+            binding.ibShuffle.setImageResource(R.drawable.ic_shuffle_off)
+        }
+        //Checking for repeat mode
+        if (player.repeatMode == Player.REPEAT_MODE_OFF) {
+            binding.ibRepeatMode.setImageResource(R.drawable.ic_repeat)
+        } else if (player.repeatMode == Player.REPEAT_MODE_ONE) {
+            binding.ibRepeatMode.setImageResource(R.drawable.ic_repeat_one)
+        }
+    }
+
     @OptIn(UnstableApi::class)
     private fun playSong(binding: ActivityMusicPlayerBinding) {
         //find current song index
@@ -190,6 +177,9 @@ class MusicViewModel @Inject constructor(private val player: ExoPlayer) : ViewMo
 
                     Player.STATE_READY -> {
                         player.play()
+                        val currentPosition = player.currentMediaItemIndex
+                        setSongByIdx(currentPosition)
+                        binding.result = _musicState.value?.currentSong
                         // The player is able to immediately play from its current position. The player will be playing if getPlayWhenReady() is true, and paused otherwise.
                     }
 
@@ -202,6 +192,9 @@ class MusicViewModel @Inject constructor(private val player: ExoPlayer) : ViewMo
 
                     Player.STATE_ENDED -> {
                         // The player has finished playing the media.
+                        val nextMediaIdx = player.nextMediaItemIndex
+                        setSongByIdx(nextMediaIdx)
+                        binding.result = _musicState.value?.currentSong
                     }
 
                     else -> {

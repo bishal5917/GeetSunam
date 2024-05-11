@@ -27,5 +27,9 @@ sealed class MusicEvent {
 
     object ChangePlayMode : MusicEvent()
 
+    data class ChangeRepeatMode(val binding: ActivityMusicPlayerBinding) : MusicEvent()
+
+    data class ChangeShuffleMode(val binding: ActivityMusicPlayerBinding) : MusicEvent()
+
     object Reset : MusicEvent()
 }

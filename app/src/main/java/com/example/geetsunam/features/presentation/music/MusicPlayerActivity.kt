@@ -44,19 +44,22 @@ class MusicPlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.result = args.song
         addToFavourite()
-        setShuffleAndLooping()
+        setShuffleAndLoopMode()
         //set current song and play it
         musicViewModel.onEvent(
             MusicEvent.SetAndPlayCurrent(
                 args.song.id!!, binding
             )
         )
-        //Now gotta know which song is playing and update UI based on that
     }
 
-    private fun setShuffleAndLooping() {
-//        player.shuffleModeEnabled = true
-//        player.repeatMode = Player.REPEAT_MODE_ONE
+    private fun setShuffleAndLoopMode() {
+        binding.ibShuffle.setOnClickListener {
+            musicViewModel.onEvent(MusicEvent.ChangeShuffleMode(binding))
+        }
+        binding.ibRepeatMode.setOnClickListener {
+            musicViewModel.onEvent(MusicEvent.ChangeRepeatMode(binding))
+        }
     }
 
     private fun addToFavourite() {
