@@ -1,11 +1,11 @@
 package com.example.geetsunam.features.presentation.trending.viewmodel
 
-import com.example.geetsunam.features.data.models.songs.SongResponseModel
+import com.example.geetsunam.utils.models.Song
 
 data class TrendingState(
     val status: TrendingStatus,
     val message: String? = null,
-    val songs: SongResponseModel.Data? = null
+    val songs: List<Song?>? = null
 ) {
     companion object {
         val idle = TrendingState(TrendingStatus.IDLE, message = "")

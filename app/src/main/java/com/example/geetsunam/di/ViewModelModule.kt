@@ -14,6 +14,7 @@ import com.example.geetsunam.features.domain.usecases.GetRecommendedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GoogleLoginUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
+import com.example.geetsunam.features.domain.usecases.SaveTrendingUsecase
 import com.example.geetsunam.features.domain.usecases.SearchUsecase
 import com.example.geetsunam.features.domain.usecases.SignupUsecase
 import com.example.geetsunam.features.domain.usecases.ToggleFavouriteUsecase
@@ -107,9 +108,9 @@ object ViewModelModule {
     @Provides
     @Singleton
     fun provideTrendingSongsViewModel(
-        getTrendingSongsUsecase: GetTrendingSongsUsecase
+        getTrendingSongsUsecase: GetTrendingSongsUsecase, saveTrendingUsecase: SaveTrendingUsecase
     ): TrendingViewModel {
-        return TrendingViewModel(getTrendingSongsUsecase)
+        return TrendingViewModel(getTrendingSongsUsecase, saveTrendingUsecase)
     }
 
     @Provides

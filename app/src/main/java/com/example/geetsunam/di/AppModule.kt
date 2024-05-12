@@ -9,6 +9,9 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
+import com.example.geetsunam.database.AppDao
+import com.example.geetsunam.features.data.datasource.UserLocalDatasource
+import com.example.geetsunam.features.data.datasource.UserLocalDatasourceImpl
 import com.example.geetsunam.features.data.datasource.UserRemoteDatasource
 import com.example.geetsunam.features.data.datasource.UserRemoteDatasourceImpl
 import com.example.geetsunam.features.data.repositories.UserRepositoryImpl
@@ -50,8 +53,13 @@ object AppModule {
         LocalDatastoreImpl(datastore)
 
     @Provides
-    fun provideRemoteDataSource(apiService: ApiService): UserRemoteDatasource {
+    fun providesRemoteDataSource(apiService: ApiService): UserRemoteDatasource {
         return UserRemoteDatasourceImpl(apiService)
+    }
+
+    @Provides
+    fun providesLocalDataSource(appDao: AppDao): UserLocalDatasource {
+        return UserLocalDatasourceImpl(appDao)
     }
 
     @Provides

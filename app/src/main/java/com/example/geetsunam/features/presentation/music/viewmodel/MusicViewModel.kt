@@ -172,6 +172,7 @@ class MusicViewModel @Inject constructor(private val player: ExoPlayer) : ViewMo
             override fun onPlaybackStateChanged(@Player.State state: Int) {
                 when (state) {
                     Player.STATE_IDLE -> {
+                        Log.d(LogTag.PLAYER, "IDLE")
                         // The player is idle, meaning it holds only limited resources.The player must be prepared before it will play the media.
                     }
 
@@ -180,6 +181,7 @@ class MusicViewModel @Inject constructor(private val player: ExoPlayer) : ViewMo
                         val currentPosition = player.currentMediaItemIndex
                         setSongByIdx(currentPosition)
                         binding.result = _musicState.value?.currentSong
+                        Log.d(LogTag.PLAYER, "READY")
                         // The player is able to immediately play from its current position. The player will be playing if getPlayWhenReady() is true, and paused otherwise.
                     }
 
@@ -187,14 +189,13 @@ class MusicViewModel @Inject constructor(private val player: ExoPlayer) : ViewMo
                         val currentPosition = player.currentMediaItemIndex
                         setSongByIdx(currentPosition)
                         binding.result = _musicState.value?.currentSong
+                        Log.d(LogTag.PLAYER, "BUFFERING")
                         // The player is not able to immediately play the media, but is doing work toward being able to do so. This state typically occurs when the player needs to buffer more data before playback can start.
                     }
 
                     Player.STATE_ENDED -> {
+                        Log.d(LogTag.PLAYER, "ENDED")
                         // The player has finished playing the media.
-                        val nextMediaIdx = player.nextMediaItemIndex
-                        setSongByIdx(nextMediaIdx)
-                        binding.result = _musicState.value?.currentSong
                     }
 
                     else -> {

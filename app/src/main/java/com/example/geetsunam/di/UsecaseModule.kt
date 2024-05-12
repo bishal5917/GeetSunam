@@ -1,5 +1,6 @@
 package com.example.geetsunam.di
 
+import com.example.geetsunam.features.data.datasource.UserLocalDatasource
 import com.example.geetsunam.features.domain.repositories.UserRepository
 import com.example.geetsunam.features.domain.usecases.ChangePasswordUsecase
 import com.example.geetsunam.features.domain.usecases.ForgotPasswordUsecase
@@ -15,6 +16,7 @@ import com.example.geetsunam.features.domain.usecases.GetSingleSongUsecase
 import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GoogleLoginUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
+import com.example.geetsunam.features.domain.usecases.SaveTrendingUsecase
 import com.example.geetsunam.features.domain.usecases.SearchUsecase
 import com.example.geetsunam.features.domain.usecases.SignupUsecase
 import com.example.geetsunam.features.domain.usecases.ToggleFavouriteUsecase
@@ -123,5 +125,11 @@ object UsecaseModule {
     @Provides
     fun provideChangePasswordUsecase(repo: UserRepository): ChangePasswordUsecase {
         return ChangePasswordUsecase(repo)
+    }
+
+    //USECASES FOR ROOM RELATED WORKS
+    @Provides
+    fun providesSaveTrendingUsecase(localDatasource: UserLocalDatasource): SaveTrendingUsecase {
+        return SaveTrendingUsecase(localDatasource)
     }
 }
