@@ -9,6 +9,7 @@ import com.example.geetsunam.features.domain.usecases.GetFeaturedArtistsUsecase
 import com.example.geetsunam.features.domain.usecases.GetFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenreSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenresUsecase
+import com.example.geetsunam.features.domain.usecases.GetLocalTrendingUsecase
 import com.example.geetsunam.features.domain.usecases.GetNewSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetRecommendedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
@@ -108,9 +109,15 @@ object ViewModelModule {
     @Provides
     @Singleton
     fun provideTrendingSongsViewModel(
-        getTrendingSongsUsecase: GetTrendingSongsUsecase, saveTrendingUsecase: SaveTrendingUsecase
+        getTrendingSongsUsecase: GetTrendingSongsUsecase,
+        saveTrendingUsecase: SaveTrendingUsecase,
+        getLocalTrendingUsecase: GetLocalTrendingUsecase
     ): TrendingViewModel {
-        return TrendingViewModel(getTrendingSongsUsecase, saveTrendingUsecase)
+        return TrendingViewModel(
+            getTrendingSongsUsecase,
+            saveTrendingUsecase,
+            getLocalTrendingUsecase
+        )
     }
 
     @Provides

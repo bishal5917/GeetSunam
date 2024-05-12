@@ -10,6 +10,7 @@ import com.example.geetsunam.features.domain.usecases.GetFeaturedArtistsUsecase
 import com.example.geetsunam.features.domain.usecases.GetFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenreSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenresUsecase
+import com.example.geetsunam.features.domain.usecases.GetLocalTrendingUsecase
 import com.example.geetsunam.features.domain.usecases.GetNewSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetRecommendedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetSingleSongUsecase
@@ -131,5 +132,10 @@ object UsecaseModule {
     @Provides
     fun providesSaveTrendingUsecase(localDatasource: UserLocalDatasource): SaveTrendingUsecase {
         return SaveTrendingUsecase(localDatasource)
+    }
+
+    @Provides
+    fun providesLocalTrendingUsecase(localDatasource: UserLocalDatasource): GetLocalTrendingUsecase {
+        return GetLocalTrendingUsecase(localDatasource)
     }
 }

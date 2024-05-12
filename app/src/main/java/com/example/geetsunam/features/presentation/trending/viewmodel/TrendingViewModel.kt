@@ -4,9 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.geetsunam.database.entities.Trending
+import com.example.geetsunam.features.domain.usecases.GetLocalTrendingUsecase
 import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.SaveTrendingUsecase
 import com.example.geetsunam.utils.Resource
+import com.example.geetsunam.utils.models.Artist
 import com.example.geetsunam.utils.models.CommonRequestModel
 import com.example.geetsunam.utils.models.Song
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +24,7 @@ import javax.inject.Inject
 class TrendingViewModel @Inject constructor(
     private val getTrendingSongsUsecase: GetTrendingSongsUsecase,
     private val saveTrendingUsecase: SaveTrendingUsecase,
+    private val getLocalTrendingUsecase: GetLocalTrendingUsecase
 ) : ViewModel() {
     private val _trendingSongState = MutableLiveData(TrendingState.idle)
     val trendingSongState: LiveData<TrendingState> = _trendingSongState
@@ -29,6 +33,10 @@ class TrendingViewModel @Inject constructor(
         when (event) {
             is TrendingEvent.GetTrendingSongs -> {
                 getSongs(event.token)
+            }
+
+            is TrendingEvent.RefreshTrending -> {
+                fetchSongsFromApi(event.token)
             }
 
             is TrendingEvent.SaveTrending -> {
@@ -40,6 +48,40 @@ class TrendingViewModel @Inject constructor(
     }
 
     private fun getSongs(token: String) {
+        viewModelScope.launch {
+            getLocalTrendingUsecase.call().collect() {
+                if (it.isNotEmpty()) {
+                    val songs: MutableList<Song?> = ArrayList()
+                    for (trending: Trending in it) {
+                        val song = Song(
+                            id = trending.id,
+                            isFavourite = trending.isFavourite,
+                            isFeatured = trending.isFavourite,
+                            source = trending.source,
+                            stream = trending.stream,
+                            title = trending.songName,
+                            coverArt = trending.coverArt,
+                            duration = trending.duration,
+                            artists = Artist(fullname = trending.artistName)
+                        )
+                        songs.add(song)
+                    }
+                    _trendingSongState.postValue(
+                        _trendingSongState.value?.copy(
+                            status = TrendingState.TrendingStatus.SUCCESS,
+                            message = "success",
+                            fromApi = false,
+                            songs = songs,
+                        )
+                    )
+                } else {
+                    fetchSongsFromApi(token)
+                }
+            }
+        }
+    }
+
+    private fun fetchSongsFromApi(token: String) {
         getTrendingSongsUsecase.call(CommonRequestModel(token)).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
@@ -56,6 +98,7 @@ class TrendingViewModel @Inject constructor(
                         _trendingSongState.value?.copy(
                             status = TrendingState.TrendingStatus.SUCCESS,
                             message = "success",
+                            fromApi = true,
                             songs = result.data?.data?.songs,
                         )
                     )

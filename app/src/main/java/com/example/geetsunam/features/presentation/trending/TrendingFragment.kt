@@ -53,7 +53,7 @@ class TrendingFragment : Fragment() {
         val swipeToRefresh = gview.findViewById<SwipeRefreshLayout>(R.id.srlTrending)
         swipeToRefresh.setOnRefreshListener {
             trendingViewModel.onEvent(
-                TrendingEvent.GetTrendingSongs(
+                TrendingEvent.RefreshTrending(
                     splashViewModel.userFlow.value?.token ?: ""
                 )
             )
@@ -98,7 +98,10 @@ class TrendingFragment : Fragment() {
                         response.songs!!, "trending"
                     )
                 )
-                trendingViewModel.onEvent(TrendingEvent.SaveTrending(response.songs))
+                if (response.fromApi == true) {
+                    //resave into roomdb if fetched from API
+                    trendingViewModel.onEvent(TrendingEvent.SaveTrending(response.songs))
+                }
             }
             if (response.status == TrendingState.TrendingStatus.FAILED) {
                 recyclerView.visibility = View.GONE

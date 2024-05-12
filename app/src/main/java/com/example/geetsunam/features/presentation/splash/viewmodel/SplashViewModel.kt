@@ -57,8 +57,7 @@ class SplashViewModel @Inject constructor(private val localDatastore: LocalDatas
                     _splashState.value?.copy(
                         status = SplashState.SplashStatus.LoggedIn,
                         message = "Logged In",
-
-                        )
+                    )
                 )
                 Log.d(LogTag.SPLASH, "ID: ${userFlow.value}")
             }

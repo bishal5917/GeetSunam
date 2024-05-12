@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 interface UserLocalDatasource {
     suspend fun saveTrending(trending: List<Trending>)
-    suspend fun getTrending(): Flow<List<Trending>>
+    fun getTrending(): Flow<List<Trending>>
 }
 
 class UserLocalDatasourceImpl @Inject constructor(private val appDao: AppDao) :
@@ -16,7 +16,7 @@ class UserLocalDatasourceImpl @Inject constructor(private val appDao: AppDao) :
         appDao.saveTrending(trending)
     }
 
-    override suspend fun getTrending(): Flow<List<Trending>> {
+    override fun getTrending(): Flow<List<Trending>> {
         return appDao.getTrending()
     }
 }

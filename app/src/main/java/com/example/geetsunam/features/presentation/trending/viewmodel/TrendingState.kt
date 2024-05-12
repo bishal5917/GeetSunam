@@ -5,6 +5,7 @@ import com.example.geetsunam.utils.models.Song
 data class TrendingState(
     val status: TrendingStatus,
     val message: String? = null,
+    val fromApi: Boolean? = false,
     val songs: List<Song?>? = null
 ) {
     companion object {
