@@ -10,6 +10,8 @@ import com.example.geetsunam.features.domain.usecases.GetFeaturedArtistsUsecase
 import com.example.geetsunam.features.domain.usecases.GetFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenreSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenresUsecase
+import com.example.geetsunam.features.domain.usecases.GetLocalFavouriteUsecase
+import com.example.geetsunam.features.domain.usecases.GetLocalNewUsecase
 import com.example.geetsunam.features.domain.usecases.GetLocalTrendingUsecase
 import com.example.geetsunam.features.domain.usecases.GetNewSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetRecommendedSongsUsecase
@@ -17,6 +19,8 @@ import com.example.geetsunam.features.domain.usecases.GetSingleSongUsecase
 import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GoogleLoginUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
+import com.example.geetsunam.features.domain.usecases.SaveFavouriteUsecase
+import com.example.geetsunam.features.domain.usecases.SaveNewUsecase
 import com.example.geetsunam.features.domain.usecases.SaveTrendingUsecase
 import com.example.geetsunam.features.domain.usecases.SearchUsecase
 import com.example.geetsunam.features.domain.usecases.SignupUsecase
@@ -137,5 +141,25 @@ object UsecaseModule {
     @Provides
     fun providesLocalTrendingUsecase(localDatasource: UserLocalDatasource): GetLocalTrendingUsecase {
         return GetLocalTrendingUsecase(localDatasource)
+    }
+
+    @Provides
+    fun providesSaveNewUsecase(localDatasource: UserLocalDatasource): SaveNewUsecase {
+        return SaveNewUsecase(localDatasource)
+    }
+
+    @Provides
+    fun providesLocalNewUsecase(localDatasource: UserLocalDatasource): GetLocalNewUsecase {
+        return GetLocalNewUsecase(localDatasource)
+    }
+
+    @Provides
+    fun providesSaveFavouritesUsecase(localDatasource: UserLocalDatasource): SaveFavouriteUsecase {
+        return SaveFavouriteUsecase(localDatasource)
+    }
+
+    @Provides
+    fun providesLocalFavouritesUsecase(localDatasource: UserLocalDatasource): GetLocalFavouriteUsecase {
+        return GetLocalFavouriteUsecase(localDatasource)
     }
 }

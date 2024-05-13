@@ -17,6 +17,7 @@ import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingEv
 import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingState
 import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingViewModel
 import com.example.geetsunam.utils.CustomToast
+import com.example.geetsunam.utils.Network
 import com.example.geetsunam.utils.models.Song
 import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,11 +53,15 @@ class TrendingFragment : Fragment() {
     private fun pullToRefresh() {
         val swipeToRefresh = gview.findViewById<SwipeRefreshLayout>(R.id.srlTrending)
         swipeToRefresh.setOnRefreshListener {
-            trendingViewModel.onEvent(
-                TrendingEvent.RefreshTrending(
-                    splashViewModel.userFlow.value?.token ?: ""
+            if (Network.hasInternetConnection(context)) {
+                trendingViewModel.onEvent(
+                    TrendingEvent.RefreshTrending(
+                        splashViewModel.userFlow.value?.token ?: ""
+                    )
                 )
-            )
+            } else {
+                CustomToast.showToast(context = requireContext(), "No Internet Connection")
+            }
             swipeToRefresh.isRefreshing = false
         }
     }

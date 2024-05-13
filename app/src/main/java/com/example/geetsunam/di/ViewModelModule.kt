@@ -9,12 +9,16 @@ import com.example.geetsunam.features.domain.usecases.GetFeaturedArtistsUsecase
 import com.example.geetsunam.features.domain.usecases.GetFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenreSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenresUsecase
+import com.example.geetsunam.features.domain.usecases.GetLocalFavouriteUsecase
+import com.example.geetsunam.features.domain.usecases.GetLocalNewUsecase
 import com.example.geetsunam.features.domain.usecases.GetLocalTrendingUsecase
 import com.example.geetsunam.features.domain.usecases.GetNewSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetRecommendedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GoogleLoginUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
+import com.example.geetsunam.features.domain.usecases.SaveFavouriteUsecase
+import com.example.geetsunam.features.domain.usecases.SaveNewUsecase
 import com.example.geetsunam.features.domain.usecases.SaveTrendingUsecase
 import com.example.geetsunam.features.domain.usecases.SearchUsecase
 import com.example.geetsunam.features.domain.usecases.SignupUsecase
@@ -114,9 +118,7 @@ object ViewModelModule {
         getLocalTrendingUsecase: GetLocalTrendingUsecase
     ): TrendingViewModel {
         return TrendingViewModel(
-            getTrendingSongsUsecase,
-            saveTrendingUsecase,
-            getLocalTrendingUsecase
+            getTrendingSongsUsecase, saveTrendingUsecase, getLocalTrendingUsecase
         )
     }
 
@@ -129,9 +131,11 @@ object ViewModelModule {
     @Provides
     @Singleton
     fun provideNewSongsViewModel(
-        getNewSongsUsecase: GetNewSongsUsecase
+        getNewSongsUsecase: GetNewSongsUsecase,
+        saveNewUsecase: SaveNewUsecase,
+        getLocalNewUsecase: GetLocalNewUsecase
     ): NewSongViewModel {
-        return NewSongViewModel(getNewSongsUsecase)
+        return NewSongViewModel(getNewSongsUsecase, saveNewUsecase, getLocalNewUsecase)
     }
 
     @Provides
@@ -144,9 +148,13 @@ object ViewModelModule {
     @Provides
     @Singleton
     fun provideFavouriteSongViewModel(
-        getFavouriteSongsUsecase: GetFavouriteSongsUsecase
+        getFavouriteSongsUsecase: GetFavouriteSongsUsecase,
+        saveFavouriteUsecase: SaveFavouriteUsecase,
+        getLocalFavouriteUsecase: GetLocalFavouriteUsecase
     ): FavSongViewModel {
-        return FavSongViewModel(getFavouriteSongsUsecase)
+        return FavSongViewModel(
+            getFavouriteSongsUsecase, saveFavouriteUsecase, getLocalFavouriteUsecase
+        )
     }
 
     @Provides

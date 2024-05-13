@@ -1,7 +1,10 @@
 package com.example.geetsunam.database
 
 import androidx.room.*
+import com.example.geetsunam.database.entities.Favourite
+import com.example.geetsunam.database.entities.Featured
 import com.example.geetsunam.database.entities.New
+import com.example.geetsunam.database.entities.Recommended
 import com.example.geetsunam.database.entities.Trending
 import kotlinx.coroutines.flow.Flow
 
@@ -18,4 +21,22 @@ interface AppDao {
 
     @Query("SELECT * FROM New")
     fun getNewSongs(): Flow<List<New>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveFavourites(favourites: List<Favourite>)
+
+    @Query("SELECT * FROM Favourite")
+    fun getFavourites(): Flow<List<Favourite>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveFeaturedSongs(featured: List<Featured>)
+
+    @Query("SELECT * FROM Featured")
+    fun getFeaturedSongs(): Flow<List<Featured>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveRecommended(recommended: List<Recommended>)
+
+    @Query("SELECT * FROM Featured")
+    fun getRecommended(): Flow<List<Recommended>>
 }

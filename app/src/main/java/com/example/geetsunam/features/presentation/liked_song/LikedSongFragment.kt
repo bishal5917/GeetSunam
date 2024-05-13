@@ -16,8 +16,10 @@ import com.example.geetsunam.features.presentation.liked_song.viewmodel.FavSongS
 import com.example.geetsunam.features.presentation.liked_song.viewmodel.FavSongViewModel
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
+import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongEvent
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.utils.CustomToast
+import com.example.geetsunam.utils.Network
 import com.example.geetsunam.utils.models.Song
 import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,8 +41,7 @@ class LikedSongFragment : Fragment() {
     lateinit var musicViewModel: MusicViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         gview = inflater.inflate(R.layout.fragment_liked_song, container, false)
@@ -77,14 +78,17 @@ class LikedSongFragment : Fragment() {
             if (response.status == FavSongState.FavSongStatus.SUCCESS) {
                 response.songs?.let {
                     favSongsAdapter.setData(
-                        response.songs.songs as List<Song>
+                        response.songs as List<Song>
                     )
                 }
-                likedSongsQty.text = "${response.songs?.songs?.size} Songs"
+                likedSongsQty.text = "${response.songs?.size} Songs"
                 recyclerView.visibility = View.VISIBLE
                 shimmerView.visibility = View.GONE
-                musicViewModel.onEvent(MusicEvent.SetMediaItems(response.songs?.songs!!, "liked"))
-
+                musicViewModel.onEvent(MusicEvent.SetMediaItems(response.songs, "liked"))
+                if (response.fromApi == true) {
+                    //resave into roomdb if fetched from API
+                    favSongViewModel.onEvent(FavSongEvent.SaveFavourites(response.songs))
+                }
             }
             if (response.status == FavSongState.FavSongStatus.FAILED) {
                 recyclerView.visibility = View.GONE
@@ -96,11 +100,15 @@ class LikedSongFragment : Fragment() {
     private fun pullToRefresh() {
         val swipeToRefresh = gview.findViewById<SwipeRefreshLayout>(R.id.srlLikedSong)
         swipeToRefresh.setOnRefreshListener {
-            favSongViewModel.onEvent(
-                FavSongEvent.GetFavouriteSongs(
-                    splashViewModel.userFlow.value?.token ?: ""
+            if (Network.hasInternetConnection(context)) {
+                favSongViewModel.onEvent(
+                    FavSongEvent.RefreshFavourites(
+                        splashViewModel.userFlow.value?.token ?: ""
+                    )
                 )
-            )
+            } else {
+                CustomToast.showToast(context = requireContext(), "No Internet Connection")
+            }
             swipeToRefresh.isRefreshing = false
         }
     }

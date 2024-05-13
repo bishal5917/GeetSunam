@@ -17,6 +17,7 @@ import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongSta
 import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.utils.CustomToast
+import com.example.geetsunam.utils.Network
 import com.example.geetsunam.utils.models.Song
 import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -75,12 +76,16 @@ class NewSongFragment : Fragment() {
             if (response.status == NewSongState.NewSongStatus.SUCCESS) {
                 response.songs?.let {
                     newSongAdapter.setData(
-                        response.songs.songs as List<Song>
+                        response.songs as List<Song>
                     )
                 }
                 recyclerView.visibility = View.VISIBLE
                 shimmerView.visibility = View.GONE
-                musicViewModel.onEvent(MusicEvent.SetMediaItems(response.songs?.songs!!, "new"))
+                musicViewModel.onEvent(MusicEvent.SetMediaItems(response.songs!!, "new"))
+                if (response.fromApi == true) {
+                    //resave into roomdb if fetched from API
+                    newSongViewModel.onEvent(NewSongEvent.SaveNew(response.songs))
+                }
             }
             if (response.status == NewSongState.NewSongStatus.FAILED) {
                 recyclerView.visibility = View.GONE
@@ -92,11 +97,15 @@ class NewSongFragment : Fragment() {
     private fun pullToRefresh() {
         val swipeToRefresh = gview.findViewById<SwipeRefreshLayout>(R.id.srlNewSong)
         swipeToRefresh.setOnRefreshListener {
-            newSongViewModel.onEvent(
-                NewSongEvent.GetNewSongs(
-                    splashViewModel.userFlow.value?.token ?: ""
+            if (Network.hasInternetConnection(context)) {
+                newSongViewModel.onEvent(
+                    NewSongEvent.RefreshNew(
+                        splashViewModel.userFlow.value?.token ?: ""
+                    )
                 )
-            )
+            } else {
+                CustomToast.showToast(context = requireContext(), "No Internet Connection")
+            }
             swipeToRefresh.isRefreshing = false
         }
     }
