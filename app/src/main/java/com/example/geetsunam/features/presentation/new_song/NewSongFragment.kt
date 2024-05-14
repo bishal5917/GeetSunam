@@ -16,6 +16,7 @@ import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongEve
 import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongState
 import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
+import com.example.geetsunam.utils.Constants
 import com.example.geetsunam.utils.CustomToast
 import com.example.geetsunam.utils.Network
 import com.example.geetsunam.utils.models.Song
@@ -104,9 +105,17 @@ class NewSongFragment : Fragment() {
                     )
                 )
             } else {
-                CustomToast.showToast(context = requireContext(), "No Internet Connection")
+                CustomToast.showToast(context = requireContext(), Constants.noInternet)
             }
             swipeToRefresh.isRefreshing = false
         }
+    }
+
+    override fun onResume() {
+        val songs: List<Song?>? = newSongViewModel.newSongsState.value?.songs;
+        if (songs != null) {
+            musicViewModel.onEvent(MusicEvent.SetMediaItems(songs, "new_song"))
+        }
+        super.onResume()
     }
 }

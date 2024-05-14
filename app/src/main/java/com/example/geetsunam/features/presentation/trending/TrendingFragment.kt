@@ -16,6 +16,7 @@ import com.example.geetsunam.features.presentation.trending.adapters.TrendingAda
 import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingEvent
 import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingState
 import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingViewModel
+import com.example.geetsunam.utils.Constants
 import com.example.geetsunam.utils.CustomToast
 import com.example.geetsunam.utils.Network
 import com.example.geetsunam.utils.models.Song
@@ -60,7 +61,7 @@ class TrendingFragment : Fragment() {
                     )
                 )
             } else {
-                CustomToast.showToast(context = requireContext(), "No Internet Connection")
+                CustomToast.showToast(context = requireContext(), Constants.noInternet)
             }
             swipeToRefresh.isRefreshing = false
         }
@@ -113,5 +114,13 @@ class TrendingFragment : Fragment() {
                 CustomToast.showToast(context = requireContext(), "${response.message}")
             }
         }
+    }
+
+    override fun onResume() {
+        val songs: List<Song?>? = trendingViewModel.trendingSongState.value?.songs;
+        if (songs != null) {
+            musicViewModel.onEvent(MusicEvent.SetMediaItems(songs, "trending"))
+        }
+        super.onResume()
     }
 }

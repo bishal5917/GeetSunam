@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.data.models.login.LoginResponseModel
 import com.example.geetsunam.features.domain.repositories.UserRepository
+import com.example.geetsunam.utils.Constants
 import com.example.geetsunam.utils.LogTag
 import com.example.geetsunam.utils.Resource
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +25,11 @@ class LoginUsecase(private val userRepository: UserRepository) {
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
         } catch (e: IOException) {
             Log.d(LogTag.LOGIN, e.localizedMessage!!)
-            emit(Resource.Error("Couldn't reach server. Check your internet connection."))
+            emit(
+                Resource.Error(
+                    e.localizedMessage ?: Constants.noInternet
+                )
+            )
         }
     }
 }

@@ -48,6 +48,12 @@ class TrendingViewModel @Inject constructor(
     }
 
     private fun getSongs(token: String) {
+        _trendingSongState.postValue(
+            _trendingSongState.value?.copy(
+                status = TrendingState.TrendingStatus.LOADING,
+                message = "Getting trending songs"
+            )
+        )
         viewModelScope.launch {
             getLocalTrendingUsecase.call().collect() {
                 if (it.isNotEmpty()) {

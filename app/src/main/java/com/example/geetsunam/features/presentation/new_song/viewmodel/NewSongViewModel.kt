@@ -48,6 +48,12 @@ class NewSongViewModel @Inject constructor(
     }
 
     private fun getSongs(token: String) {
+        _newSongsState.postValue(
+            _newSongsState.value?.copy(
+                status = NewSongState.NewSongStatus.LOADING,
+                message = "Getting new songs"
+            )
+        )
         viewModelScope.launch {
             getLocalNewUsecase.call().collect() {
                 if (it.isNotEmpty()) {

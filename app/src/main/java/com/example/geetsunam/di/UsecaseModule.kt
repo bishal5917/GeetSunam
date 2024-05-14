@@ -11,6 +11,7 @@ import com.example.geetsunam.features.domain.usecases.GetFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenreSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenresUsecase
 import com.example.geetsunam.features.domain.usecases.GetLocalFavouriteUsecase
+import com.example.geetsunam.features.domain.usecases.GetLocalFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetLocalNewUsecase
 import com.example.geetsunam.features.domain.usecases.GetLocalTrendingUsecase
 import com.example.geetsunam.features.domain.usecases.GetNewSongsUsecase
@@ -20,6 +21,7 @@ import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GoogleLoginUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
 import com.example.geetsunam.features.domain.usecases.SaveFavouriteUsecase
+import com.example.geetsunam.features.domain.usecases.SaveFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.SaveNewUsecase
 import com.example.geetsunam.features.domain.usecases.SaveTrendingUsecase
 import com.example.geetsunam.features.domain.usecases.SearchUsecase
@@ -161,5 +163,15 @@ object UsecaseModule {
     @Provides
     fun providesLocalFavouritesUsecase(localDatasource: UserLocalDatasource): GetLocalFavouriteUsecase {
         return GetLocalFavouriteUsecase(localDatasource)
+    }
+
+    @Provides
+    fun providesSaveFeaturedSongsUsecase(localDatasource: UserLocalDatasource): SaveFeaturedSongsUsecase {
+        return SaveFeaturedSongsUsecase(localDatasource)
+    }
+
+    @Provides
+    fun providesLocalFeaturedSongsUsecase(localDatasource: UserLocalDatasource): GetLocalFeaturedSongsUsecase {
+        return GetLocalFeaturedSongsUsecase(localDatasource)
     }
 }

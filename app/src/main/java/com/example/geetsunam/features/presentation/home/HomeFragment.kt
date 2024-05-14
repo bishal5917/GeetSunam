@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.geetsunam.R
-import com.example.geetsunam.features.data.models.artist.ArtistResponseModel
 import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.presentation.home.featured_artists.adapters.FeaturedArtistsAdapter
 import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsEvent
@@ -26,7 +25,9 @@ import com.example.geetsunam.features.presentation.home.genres.viewmodel.GenreVi
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
+import com.example.geetsunam.utils.Constants
 import com.example.geetsunam.utils.CustomToast
+import com.example.geetsunam.utils.Network
 import com.example.geetsunam.utils.models.Artist
 import com.example.geetsunam.utils.models.Song
 import com.facebook.shimmer.ShimmerFrameLayout
@@ -71,29 +72,28 @@ class HomeFragment : Fragment() {
         return gview
     }
 
-    override fun onResume() {
-        val songs: List<Song?>? = featuredSongsViewModel.featuredSongState.value?.songs?.songs;
-        if (songs != null) {
-            musicViewModel.onEvent(
-                MusicEvent.SetMediaItems(
-                    featuredSongsViewModel.featuredSongState.value?.songs?.songs, "featured"
-                )
-            )
-//            CustomToast.showToast(context = requireContext(), "OnResumed")
-        }
-        super.onResume()
-    }
-
     private fun pullToRefresh() {
         val swipeToRefresh = gview.findViewById<SwipeRefreshLayout>(R.id.srlHome)
         swipeToRefresh.setOnRefreshListener {
-            genreViewModel.onEvent(GenreEvent.GetGenre(splashViewModel.userFlow.value?.token ?: ""))
-            featuredArtistsViewModel.onEvent(
-                FeaturedArtistsEvent.GetFeaturedArtists(splashViewModel.userFlow.value?.token ?: "")
-            )
-            featuredSongsViewModel.onEvent(
-                FeaturedSongsEvent.GetFeaturedSongs(splashViewModel.userFlow.value?.token ?: "")
-            )
+            if (Network.hasInternetConnection(context)) {
+                genreViewModel.onEvent(
+                    GenreEvent.GetGenre(
+                        splashViewModel.userFlow.value?.token ?: ""
+                    )
+                )
+                featuredArtistsViewModel.onEvent(
+                    FeaturedArtistsEvent.GetFeaturedArtists(
+                        splashViewModel.userFlow.value?.token ?: ""
+                    )
+                )
+                featuredSongsViewModel.onEvent(
+                    FeaturedSongsEvent.RefreshFeaturedSongs(
+                        splashViewModel.userFlow.value?.token ?: ""
+                    )
+                )
+            } else {
+                CustomToast.showToast(context = requireContext(), Constants.noInternet)
+            }
             swipeToRefresh.isRefreshing = false
         }
     }
@@ -198,17 +198,33 @@ class HomeFragment : Fragment() {
             if (response.status == FeaturedSongsState.SongStatus.SUCCESS) {
                 response.songs?.let {
                     featuredSongsAdapter.setData(
-                        response.songs.songs as List<Song>
+                        response.songs as List<Song>
                     )
                 }
                 recyclerView.visibility = View.VISIBLE
                 shimmerView.visibility = View.GONE
-                musicViewModel.onEvent(MusicEvent.SetMediaItems(response.songs?.songs!!, "featured"))
+                musicViewModel.onEvent(
+                    MusicEvent.SetMediaItems(
+                        response.songs, "featured"
+                    )
+                )
+                if (response.fromApi == true) {
+                    //resave into roomdb if fetched from API
+                    featuredSongsViewModel.onEvent(FeaturedSongsEvent.SaveFeaturedSongs(response.songs))
+                }
             }
             if (response.status == FeaturedSongsState.SongStatus.FAILED) {
                 recyclerView.visibility = View.GONE
                 CustomToast.showToast(context = requireContext(), "${response.message}")
             }
         }
+    }
+
+    override fun onResume() {
+        val songs: List<Song?>? = featuredSongsViewModel.featuredSongState.value?.songs;
+        if (songs != null) {
+            musicViewModel.onEvent(MusicEvent.SetMediaItems(songs, "featured"))
+        }
+        super.onResume()
     }
 }

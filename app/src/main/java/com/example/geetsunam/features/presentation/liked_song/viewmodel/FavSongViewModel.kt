@@ -56,6 +56,12 @@ class FavSongViewModel @Inject constructor(
     }
 
     private fun getSongs(token: String) {
+        _liveState.postValue(
+            _liveState.value?.copy(
+                status = FavSongState.FavSongStatus.LOADING,
+                message = "Getting your favourites..."
+            )
+        )
         viewModelScope.launch {
             getLocalFavouriteUsecase.call().collect() {
                 if (it.isNotEmpty()) {

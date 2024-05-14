@@ -104,4 +104,12 @@ class ForYouFragment : Fragment() {
             }
         }
     }
+
+    override fun onResume() {
+        val songs: List<Song?>? = recommendViewModel.songState.value?.songs;
+        if (songs != null) {
+            musicViewModel.onEvent(MusicEvent.SetMediaItems(songs, "recommended"))
+        }
+        super.onResume()
+    }
 }

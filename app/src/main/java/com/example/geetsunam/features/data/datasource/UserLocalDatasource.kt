@@ -2,6 +2,7 @@ package com.example.geetsunam.features.data.datasource
 
 import com.example.geetsunam.database.AppDao
 import com.example.geetsunam.database.entities.Favourite
+import com.example.geetsunam.database.entities.Featured
 import com.example.geetsunam.database.entities.New
 import com.example.geetsunam.database.entities.Trending
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +15,8 @@ interface UserLocalDatasource {
     fun getNew(): Flow<List<New>>
     suspend fun saveFavourites(songs: List<Favourite>)
     fun getFavourites(): Flow<List<Favourite>>
+    suspend fun saveFeaturedSongs(songs: List<Featured>)
+    fun getFeaturedSongs(): Flow<List<Featured>>
 }
 
 class UserLocalDatasourceImpl @Inject constructor(private val appDao: AppDao) :
@@ -40,5 +43,13 @@ class UserLocalDatasourceImpl @Inject constructor(private val appDao: AppDao) :
 
     override fun getFavourites(): Flow<List<Favourite>> {
         return appDao.getFavourites()
+    }
+
+    override suspend fun saveFeaturedSongs(songs: List<Featured>) {
+        appDao.saveFeaturedSongs(songs)
+    }
+
+    override fun getFeaturedSongs(): Flow<List<Featured>> {
+        return appDao.getFeaturedSongs()
     }
 }

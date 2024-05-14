@@ -18,6 +18,7 @@ import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongEvent
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
+import com.example.geetsunam.utils.Constants
 import com.example.geetsunam.utils.CustomToast
 import com.example.geetsunam.utils.Network
 import com.example.geetsunam.utils.models.Song
@@ -107,9 +108,17 @@ class LikedSongFragment : Fragment() {
                     )
                 )
             } else {
-                CustomToast.showToast(context = requireContext(), "No Internet Connection")
+                CustomToast.showToast(context = requireContext(), Constants.noInternet)
             }
             swipeToRefresh.isRefreshing = false
         }
+    }
+
+    override fun onResume() {
+        val songs: List<Song?>? = favSongViewModel.favSongsState.value?.songs;
+        if (songs != null) {
+            musicViewModel.onEvent(MusicEvent.SetMediaItems(songs, "favourites"))
+        }
+        super.onResume()
     }
 }

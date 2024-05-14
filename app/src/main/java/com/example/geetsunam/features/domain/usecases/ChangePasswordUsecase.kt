@@ -2,6 +2,7 @@ package com.example.geetsunam.features.domain.usecases
 
 import android.util.Log
 import com.example.geetsunam.features.domain.repositories.UserRepository
+import com.example.geetsunam.utils.Constants
 import com.example.geetsunam.utils.LogTag
 import com.example.geetsunam.utils.Resource
 import com.example.geetsunam.utils.models.CommonRequestModel
@@ -26,7 +27,7 @@ class ChangePasswordUsecase(private val userRepository: UserRepository) {
             Log.d(LogTag.ForgotPassword, e.localizedMessage!!)
             emit(
                 Resource.Error(
-                    e.localizedMessage ?: "Couldn't reach server. Check your internet connection"
+                    e.localizedMessage ?: Constants.noInternet
                 )
             )
         }
