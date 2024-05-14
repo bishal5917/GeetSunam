@@ -16,7 +16,10 @@ import com.example.geetsunam.features.presentation.for_you.viewmodel.RecommendVi
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
+import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingEvent
+import com.example.geetsunam.utils.Constants
 import com.example.geetsunam.utils.CustomToast
+import com.example.geetsunam.utils.Network
 import com.example.geetsunam.utils.models.Song
 import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,11 +54,15 @@ class ForYouFragment : Fragment() {
     private fun pullToRefresh() {
         val swipeToRefresh = gview.findViewById<SwipeRefreshLayout>(R.id.srlForYou)
         swipeToRefresh.setOnRefreshListener {
-            recommendViewModel.onEvent(
-                RecommendEvent.GetRecommendedSongs(
-                    splashViewModel.userFlow.value?.token ?: ""
+            if (Network.hasInternetConnection(context)) {
+                recommendViewModel.onEvent(
+                    RecommendEvent.RefreshRecommended(
+                        splashViewModel.userFlow.value?.token ?: ""
+                    )
                 )
-            )
+            } else {
+                CustomToast.showToast(context = requireContext(), Constants.noInternet)
+            }
             swipeToRefresh.isRefreshing = false
         }
     }
@@ -97,6 +104,10 @@ class ForYouFragment : Fragment() {
                         response.songs, "recommended"
                     )
                 )
+                if (response.fromApi == true) {
+                    //resave into roomdb if fetched from API
+                    recommendViewModel.onEvent(RecommendEvent.SaveRecommended(response.songs))
+                }
             }
             if (response.status == RecommendState.RecommendStatus.FAILED) {
                 recyclerView.visibility = View.GONE

@@ -12,6 +12,7 @@ import com.example.geetsunam.features.domain.usecases.GetGenresUsecase
 import com.example.geetsunam.features.domain.usecases.GetLocalFavouriteUsecase
 import com.example.geetsunam.features.domain.usecases.GetLocalFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetLocalNewUsecase
+import com.example.geetsunam.features.domain.usecases.GetLocalRecommendedUsecase
 import com.example.geetsunam.features.domain.usecases.GetLocalTrendingUsecase
 import com.example.geetsunam.features.domain.usecases.GetNewSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetRecommendedSongsUsecase
@@ -21,6 +22,7 @@ import com.example.geetsunam.features.domain.usecases.LoginUsecase
 import com.example.geetsunam.features.domain.usecases.SaveFavouriteUsecase
 import com.example.geetsunam.features.domain.usecases.SaveFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.SaveNewUsecase
+import com.example.geetsunam.features.domain.usecases.SaveRecommendedUsecase
 import com.example.geetsunam.features.domain.usecases.SaveTrendingUsecase
 import com.example.geetsunam.features.domain.usecases.SearchUsecase
 import com.example.geetsunam.features.domain.usecases.SignupUsecase
@@ -187,9 +189,13 @@ object ViewModelModule {
     @Provides
     @Singleton
     fun provideRecommendedSongsViewModel(
-        getRecommendedSongsUsecase: GetRecommendedSongsUsecase
+        getRecommendedSongsUsecase: GetRecommendedSongsUsecase,
+        saveRecommendedUsecase: SaveRecommendedUsecase,
+        getLocalRecommendedUsecase: GetLocalRecommendedUsecase
     ): RecommendViewModel {
-        return RecommendViewModel(getRecommendedSongsUsecase)
+        return RecommendViewModel(
+            getRecommendedSongsUsecase, saveRecommendedUsecase, getLocalRecommendedUsecase
+        )
     }
 
     @Provides

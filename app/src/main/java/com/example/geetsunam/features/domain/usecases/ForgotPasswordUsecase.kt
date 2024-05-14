@@ -17,14 +17,10 @@ class ForgotPasswordUsecase(private val userRepository: UserRepository) {
         emit(Resource.Loading())
         try {
             val response = userRepository.forgotPassword(commonRequestModel)
-            Log.d(LogTag.ForgotPassword, "API Response, ${response.message}")
-            Log.d(LogTag.ForgotPassword, "API Response, ${response.data}")
             emit(response)
         } catch (e: HttpException) {
-            Log.d(LogTag.ForgotPassword, e.localizedMessage!!)
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
         } catch (e: IOException) {
-            Log.d(LogTag.ForgotPassword, e.localizedMessage!!)
             emit(
                 Resource.Error(
                     e.localizedMessage ?: Constants.noInternet

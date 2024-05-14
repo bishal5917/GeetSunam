@@ -8,7 +8,6 @@ class SaveTrendingUsecase(private val localDatasource: UserLocalDatasource) {
     suspend fun call(songs: List<Song?>?) {
         // Ensure songs is not null and not empty
         songs?.takeIf { it.isNotEmpty() }?.let { songList ->
-            // Convert list of Song entities to Trending entities
             val songs = songList.map { song ->
                 Trending(
                     id = song?.id!!,
@@ -21,7 +20,6 @@ class SaveTrendingUsecase(private val localDatasource: UserLocalDatasource) {
                     isFavourite = song.isFavourite,
                 )
             }
-            // Save the list of Trending entities to room
             localDatasource.saveTrending(songs)
         }
     }

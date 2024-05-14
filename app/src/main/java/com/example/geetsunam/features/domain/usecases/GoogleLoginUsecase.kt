@@ -17,14 +17,10 @@ class GoogleLoginUsecase(private val userRepository: UserRepository) {
         emit(Resource.Loading())
         try {
             val response = userRepository.loginWithGoogle(commonRequestModel)
-            Log.d(LogTag.LOGIN, "API Response, ${response.message}")
-            Log.d(LogTag.LOGIN, "API Response, ${response.data}")
             emit(response)
         } catch (e: HttpException) {
-            Log.d(LogTag.LOGIN, e.localizedMessage!!)
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
         } catch (e: IOException) {
-            Log.d(LogTag.LOGIN, e.localizedMessage!!)
             emit(
                 Resource.Error(
                     e.localizedMessage ?: Constants.noInternet

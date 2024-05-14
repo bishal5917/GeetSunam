@@ -20,14 +20,10 @@ class ToggleFavouriteUsecase(private val userRepository: UserRepository) {
             emit(Resource.Loading())
             try {
                 val response = userRepository.toggleFavourite(commonRequestModel)
-                Log.d(LogTag.TOGGLEFAV, "API Response, ${response.message}")
-                Log.d(LogTag.TOGGLEFAV, "API Response, ${response.data}")
                 emit(response)
             } catch (e: HttpException) {
-                Log.d(LogTag.TOGGLEFAV, e.localizedMessage!!)
                 emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
             } catch (e: IOException) {
-                Log.d(LogTag.TOGGLEFAV, e.localizedMessage!!)
                 emit(
                     Resource.Error(
                         e.localizedMessage ?: Constants.noInternet

@@ -18,14 +18,10 @@ class GetSingleSongUsecase(private val userRepository: UserRepository) {
             emit(Resource.Loading())
             try {
                 val response = userRepository.getSingleSong(commonRequestModel)
-                Log.d(LogTag.SINGLESONG, "API Response, ${response.message}")
-                Log.d(LogTag.SINGLESONG, "API Response, ${response.data}")
                 emit(response)
             } catch (e: HttpException) {
-                Log.d(LogTag.SINGLESONG, e.localizedMessage!!)
                 emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
             } catch (e: IOException) {
-                Log.d(LogTag.SINGLESONG, e.localizedMessage!!)
                 emit(
                     Resource.Error(
                         e.localizedMessage ?: Constants.noInternet

@@ -17,14 +17,10 @@ class TrackPlayedSongUsecase(private val userRepository: UserRepository) {
         emit(Resource.Loading())
         try {
             val response = userRepository.trackPlayedSong(commonRequestModel)
-            Log.d(LogTag.TrackPlayedSong, "API Response, ${response.message}")
-            Log.d(LogTag.TrackPlayedSong, "API Response, ${response.data}")
             emit(response)
         } catch (e: HttpException) {
-            Log.d(LogTag.TrackPlayedSong, e.localizedMessage!!)
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
         } catch (e: IOException) {
-            Log.d(LogTag.TrackPlayedSong, e.localizedMessage!!)
             emit(
                 Resource.Error(
                     e.localizedMessage ?: Constants.noInternet

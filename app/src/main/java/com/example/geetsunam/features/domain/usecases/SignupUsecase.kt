@@ -17,14 +17,10 @@ class SignupUsecase(private val userRepository: UserRepository) {
         emit(Resource.Loading())
         try {
             val response = userRepository.signUp(signupRequestModel)
-            Log.d(LogTag.SIGNUP, "API Response, ${response.message}")
-            Log.d(LogTag.SIGNUP, "API Response, ${response.data}")
             emit(response)
         } catch (e: HttpException) {
-            Log.d(LogTag.SIGNUP, e.localizedMessage!!)
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
         } catch (e: IOException) {
-            Log.d(LogTag.SIGNUP, e.localizedMessage!!)
             emit(
                 Resource.Error(
                     e.localizedMessage ?: Constants.noInternet

@@ -17,14 +17,10 @@ class GetGenresUsecase(private val userRepository: UserRepository) {
         emit(Resource.Loading())
         try {
             val response = userRepository.getGenres(commonRequestModel)
-            Log.d(LogTag.GENRE, "API Response, ${response.message}")
-            Log.d(LogTag.GENRE, "API Response, ${response.data}")
             emit(response)
         } catch (e: HttpException) {
-            Log.d(LogTag.GENRE, e.localizedMessage!!)
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
         } catch (e: IOException) {
-            Log.d(LogTag.GENRE, e.localizedMessage!!)
             emit(
                 Resource.Error(
                     e.localizedMessage ?: Constants.noInternet

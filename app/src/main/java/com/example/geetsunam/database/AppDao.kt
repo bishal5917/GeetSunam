@@ -37,6 +37,6 @@ interface AppDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveRecommended(recommended: List<Recommended>)
 
-    @Query("SELECT * FROM Featured")
+    @Query("SELECT * FROM Recommended")
     fun getRecommended(): Flow<List<Recommended>>
 }

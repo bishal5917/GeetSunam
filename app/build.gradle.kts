@@ -5,6 +5,8 @@ plugins {
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
     id("dagger.hilt.android.plugin")
+    id("com.google.firebase.crashlytics")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -13,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.geetsunam"
-        minSdk = 23
+        minSdk = 26
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -56,6 +58,8 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.8.0")
 
+    implementation("com.android.support:multidex:2.0.1")
+
     // Navigation Component
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.0")
     implementation("androidx.navigation:navigation-ui-ktx:2.3.0")
@@ -75,6 +79,7 @@ dependencies {
 
     // OkHttp
     implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.2")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     //Dagger - Hilt
     implementation("com.google.dagger:hilt-android:2.44")
@@ -115,4 +120,9 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
+
+    //firebase crashlytics
+    implementation("com.google.firebase:firebase-crashlytics:19.0.0")
+    implementation("com.google.firebase:firebase-analytics:22.0.0")
+    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
 }

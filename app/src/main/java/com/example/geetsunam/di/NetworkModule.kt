@@ -10,6 +10,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -21,12 +22,14 @@ object NetworkModule {
     @Provides
     @Singleton
     fun providesRetrofit(): Retrofit {
-//        val interceptor = HttpLoggingInterceptor().apply {
-//            this.level = HttpLoggingInterceptor.Level.BODY
-//        }
+        // Create an instance of HttpLoggingInterceptor
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY) // Set desired log level
+
         val client = OkHttpClient.Builder().apply {
             this.connectTimeout(60, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
+                .addInterceptor(loggingInterceptor)
         }.build()
 
         return Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).client(client)

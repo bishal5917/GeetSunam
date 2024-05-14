@@ -17,14 +17,10 @@ class GetFavouriteSongsUsecase(private val userRepository: UserRepository) {
         emit(Resource.Loading())
         try {
             val response = userRepository.getFavouriteSongs(commonRequestModel)
-            Log.d(LogTag.FAVSONGS, "API Response, ${response.message}")
-            Log.d(LogTag.FAVSONGS, "API Response, ${response.data}")
             emit(response)
         } catch (e: HttpException) {
-            Log.d(LogTag.FAVSONGS, e.localizedMessage!!)
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
         } catch (e: IOException) {
-            Log.d(LogTag.FAVSONGS, e.localizedMessage!!)
             emit(
                 Resource.Error(
                     e.localizedMessage ?: Constants.noInternet

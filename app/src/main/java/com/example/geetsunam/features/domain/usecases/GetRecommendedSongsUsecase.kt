@@ -18,14 +18,10 @@ class GetRecommendedSongsUsecase(private val userRepository: UserRepository) {
             emit(Resource.Loading())
             try {
                 val response = userRepository.getRecommendedSongs(commonRequestModel)
-                Log.d(LogTag.RECOMMENDED, "API Response, ${response.message}")
-                Log.d(LogTag.RECOMMENDED, "API Response, ${response.data}")
                 emit(response)
             } catch (e: HttpException) {
-                Log.d(LogTag.RECOMMENDED, e.localizedMessage!!)
                 emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
             } catch (e: IOException) {
-                Log.d(LogTag.RECOMMENDED, e.localizedMessage!!)
                 emit(
                     Resource.Error(
                         e.localizedMessage ?: Constants.noInternet

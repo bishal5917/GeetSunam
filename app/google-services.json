@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "66776180889",
+    "project_id": "geetsunam-crashlytics",
+    "storage_bucket": "geetsunam-crashlytics.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:66776180889:android:2ada7797a4f74f7a35f008",
+        "android_client_info": {
+          "package_name": "com.example.geetsunam"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBRde-45qXOTUpCcFVvhTVL0TlsYtS0m8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
