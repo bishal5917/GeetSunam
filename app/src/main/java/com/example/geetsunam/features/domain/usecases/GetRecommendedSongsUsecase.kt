@@ -22,11 +22,7 @@ class GetRecommendedSongsUsecase(private val userRepository: UserRepository) {
             } catch (e: HttpException) {
                 emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
             } catch (e: IOException) {
-                emit(
-                    Resource.Error(
-                        e.localizedMessage ?: Constants.noInternet
-                    )
-                )
+                emit(Resource.Error(Constants.noInternet))
             }
         }
 }

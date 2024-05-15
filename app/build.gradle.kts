@@ -10,6 +10,23 @@ plugins {
 }
 
 android {
+
+    fun getBuildNumber(): Int {
+        if (!buildTypes.getByName("debug").isDebuggable) {
+            val buildNumberFile = project.file("build_number.txt")
+            if (buildNumberFile.exists()) {
+                val lastBuildNumber = buildNumberFile.readText().toInt()
+                val newBuildNumber = lastBuildNumber + 1
+                buildNumberFile.writeText(newBuildNumber.toString())
+                return newBuildNumber
+            } else {
+                buildNumberFile.writeText("1")
+                return 1
+            }
+        }
+        return -1 // Handle other cases as needed
+    }
+
     namespace = "com.example.geetsunam"
     compileSdk = 34
 
@@ -18,18 +35,61 @@ android {
         minSdk = 26
         targetSdk = 33
         versionCode = 1
-        versionName = "1.0"
-
+        versionName = "Geetsunam"
+        multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
+            buildConfigField("Boolean", "ONLINE", "true")
+            buildConfigField("Boolean", "DeveloperMode", "true")
+            buildConfigField("Boolean", "enableCrashlytics", "true")
+
+//            manifestPlaceholders = mapOf("crashReporting" to "true")
+
+            isDebuggable = false
             isMinifyEnabled = false
+            isShrinkResources = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            )
+//            signingConfig = signingConfigs.getByName("release")
+        }
+
+        debug {
+            buildConfigField("Boolean", "ONLINE", "true")
+            buildConfigField("Boolean", "DeveloperMode", "true")
+            buildConfigField("Boolean", "enableCrashlytics", "true")
+
+//            manifestPlaceholders = mapOf("crashReporting" to "true")
+
+            isDebuggable = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
+    }
+
+    applicationVariants.all {
+        val variant = this
+        variant.outputs.map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+            .forEach { output ->
+                // Create build number
+                var flavor = "DEMO"
+                var versionCode = "${System.currentTimeMillis().toInt()}"
+                if (!buildTypes.getByName("debug").isDebuggable) {
+                    val newBuildNumber = getBuildNumber()
+                    versionCode = "2.$newBuildNumber"
+                    flavor = "LIVE"
+                }
+                val myapp = "Geetsunam"
+                val sep = "_"
+                val outputFileName = "$myapp$sep$flavor$sep$versionCode.apk"
+                output.outputFileName = outputFileName
+            }
     }
 
     buildFeatures {
