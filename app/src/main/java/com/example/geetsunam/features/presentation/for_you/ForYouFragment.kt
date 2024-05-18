@@ -57,7 +57,7 @@ class ForYouFragment : Fragment() {
             if (Network.hasInternetConnection(context)) {
                 recommendViewModel.onEvent(
                     RecommendEvent.RefreshRecommended(
-                        splashViewModel.userFlow.value?.token ?: ""
+                        splashViewModel.splashState.value?.userEntity?.token ?: ""
                     )
                 )
             } else {
@@ -83,7 +83,7 @@ class ForYouFragment : Fragment() {
             if (response.status == RecommendState.RecommendStatus.IDLE) {
                 recommendViewModel.onEvent(
                     RecommendEvent.GetRecommendedSongs(
-                        splashViewModel.userFlow.value?.token ?: ""
+                        splashViewModel.splashState.value?.userEntity?.token ?: ""
                     )
                 )
             }

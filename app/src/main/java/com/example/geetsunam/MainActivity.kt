@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             binding.drawerNavView,
             false
         )
-        drawerHeaderBinding.user = splashViewModel.userFlow.value
+        drawerHeaderBinding.user = splashViewModel.splashState.value?.userEntity
         drawerHeaderBinding.executePendingBindings()
         binding.drawerNavView.addHeaderView(drawerHeaderBinding.root)
 

@@ -78,17 +78,17 @@ class HomeFragment : Fragment() {
             if (Network.hasInternetConnection(context)) {
                 genreViewModel.onEvent(
                     GenreEvent.GetGenre(
-                        splashViewModel.userFlow.value?.token ?: ""
+                        splashViewModel.splashState.value?.userEntity?.token ?: ""
                     )
                 )
                 featuredArtistsViewModel.onEvent(
                     FeaturedArtistsEvent.GetFeaturedArtists(
-                        splashViewModel.userFlow.value?.token ?: ""
+                        splashViewModel.splashState.value?.userEntity?.token ?: ""
                     )
                 )
                 featuredSongsViewModel.onEvent(
                     FeaturedSongsEvent.RefreshFeaturedSongs(
-                        splashViewModel.userFlow.value?.token ?: ""
+                        splashViewModel.splashState.value?.userEntity?.token ?: ""
                     )
                 )
             } else {
@@ -127,7 +127,7 @@ class HomeFragment : Fragment() {
             if (response.status == GenreState.GenreStatus.IDLE) {
                 genreViewModel.onEvent(
                     GenreEvent.GetGenre(
-                        splashViewModel.userFlow.value?.token ?: ""
+                        splashViewModel.splashState.value?.userEntity?.token ?: ""
                     )
                 )
             }
@@ -156,7 +156,7 @@ class HomeFragment : Fragment() {
             if (response.status == FeaturedArtistsState.FeaturedArtistsStatus.IDLE) {
                 featuredArtistsViewModel.onEvent(
                     FeaturedArtistsEvent.GetFeaturedArtists(
-                        splashViewModel.userFlow.value?.token ?: ""
+                        splashViewModel.splashState.value?.userEntity?.token ?: ""
                     )
                 )
             }
@@ -188,7 +188,9 @@ class HomeFragment : Fragment() {
         featuredSongsViewModel.featuredSongState.observe(viewLifecycleOwner) { response ->
             if (response.status == FeaturedSongsState.SongStatus.IDLE) {
                 featuredSongsViewModel.onEvent(
-                    FeaturedSongsEvent.GetFeaturedSongs(splashViewModel.userFlow.value?.token ?: "")
+                    FeaturedSongsEvent.GetFeaturedSongs(
+                        splashViewModel.splashState.value?.userEntity?.token ?: ""
+                    )
                 )
             }
             if (response.status == FeaturedSongsState.SongStatus.LOADING) {

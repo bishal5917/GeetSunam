@@ -2,6 +2,8 @@ package com.example.geetsunam.di
 
 import androidx.media3.exoplayer.ExoPlayer
 import com.example.geetsunam.features.domain.usecases.ChangePasswordUsecase
+import com.example.geetsunam.features.domain.usecases.DeleteFavouriteUsecase
+import com.example.geetsunam.features.domain.usecases.DeleteRecommendedUsecase
 import com.example.geetsunam.features.domain.usecases.ForgotPasswordUsecase
 import com.example.geetsunam.features.domain.usecases.GetArtistSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetFavouriteSongsUsecase
@@ -58,15 +60,21 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ViewModelModule {
     @Provides
+    @Singleton
     fun provideSplashViewModel(datastore: LocalDatastore): SplashViewModel {
         return SplashViewModel(datastore)
     }
 
     @Provides
     fun provideLoginViewModel(
-        loginUsecase: LoginUsecase, localDatastore: LocalDatastore
+        loginUsecase: LoginUsecase,
+        localDatastore: LocalDatastore,
+        deleteFavouriteUsecase: DeleteFavouriteUsecase,
+        deleteRecommendedUsecase: DeleteRecommendedUsecase
     ): LoginViewModel {
-        return LoginViewModel(loginUsecase, localDatastore)
+        return LoginViewModel(
+            loginUsecase, localDatastore, deleteFavouriteUsecase, deleteRecommendedUsecase
+        )
     }
 
     @Provides

@@ -64,7 +64,7 @@ class GenreActivity : AppCompatActivity() {
         genreSongViewModel.onEvent(
             GenreSongEvent.GetGenreSongs(
                 CommonRequestModel(
-                    token = splashViewModel.userFlow.value?.token,
+                    token = splashViewModel.splashState.value?.userEntity?.token ?: "",
                     genreId = args.genre.id,
                 ),
             ),

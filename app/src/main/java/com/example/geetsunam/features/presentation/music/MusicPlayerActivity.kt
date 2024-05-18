@@ -66,7 +66,9 @@ class MusicPlayerActivity : AppCompatActivity() {
         binding.ibLike.setOnClickListener {
             toggleFavViewModel.onEvent(
                 ToggleFavEvent.AddFavourite(
-                    CommonRequestModel(splashViewModel.userFlow.value?.token, args.song.id)
+                    CommonRequestModel(
+                        splashViewModel.splashState.value?.userEntity?.token ?: "", args.song.id
+                    )
                 )
             )
         }

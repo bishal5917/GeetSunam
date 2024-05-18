@@ -58,6 +58,7 @@ class GoogleLoginViewModel @Inject constructor(
                         email = result.data?.data?.user?.email,
                         image = result.data?.data?.user?.profileImage,
                         isGoogleLogin = true,
+                        loggedInTimestamp = System.currentTimeMillis()
                     )
                     _loginState.postValue(
                         _loginState.value?.copy(

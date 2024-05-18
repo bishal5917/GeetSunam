@@ -57,7 +57,7 @@ class TrendingFragment : Fragment() {
             if (Network.hasInternetConnection(context)) {
                 trendingViewModel.onEvent(
                     TrendingEvent.RefreshTrending(
-                        splashViewModel.userFlow.value?.token ?: ""
+                        splashViewModel.splashState.value?.userEntity?.token ?: ""
                     )
                 )
             } else {
@@ -83,7 +83,7 @@ class TrendingFragment : Fragment() {
             if (response.status == TrendingState.TrendingStatus.IDLE) {
                 trendingViewModel.onEvent(
                     TrendingEvent.GetTrendingSongs(
-                        splashViewModel.userFlow.value?.token ?: ""
+                        splashViewModel.splashState.value?.userEntity?.token ?: ""
                     )
                 )
             }

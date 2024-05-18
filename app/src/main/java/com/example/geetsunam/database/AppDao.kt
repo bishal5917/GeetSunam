@@ -39,4 +39,10 @@ interface AppDao {
 
     @Query("SELECT * FROM Recommended")
     fun getRecommended(): Flow<List<Recommended>>
+
+    @Query("DELETE FROM Favourite")
+    suspend fun deleteFavourites()
+
+    @Query("DELETE FROM Recommended")
+    suspend fun deleteRecommended()
 }

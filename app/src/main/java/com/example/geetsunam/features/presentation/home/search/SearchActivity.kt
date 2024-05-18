@@ -62,7 +62,7 @@ class SearchActivity : AppCompatActivity() {
                 searchViewModel.onEvent(
                     SearchEvent.Search(
                         QueryRequestModel(
-                            token = splashViewModel.userFlow.value?.token,
+                            token = splashViewModel.splashState.value?.userEntity?.token ?: "",
                             query = value,
                         ),
                     ),

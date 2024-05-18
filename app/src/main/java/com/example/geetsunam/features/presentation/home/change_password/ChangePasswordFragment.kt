@@ -43,7 +43,7 @@ class ChangePasswordFragment : Fragment() {
         watchTextChange(binding.etRepeatNewPassword, 2)
         binding.btnChangePasswordSubmit.setOnClickListener {
             LocalController().unfocusKeyboard(requireActivity())
-            if (splashViewModel.userFlow.value?.isGoogleLogin == true) {
+            if (splashViewModel.splashState.value?.userEntity?.isGoogleLogin == true) {
                 CustomToast.showToast(requireContext(), "Can't perform this action.")
             } else {
                 changePasswordViewModel.onEvent(ChangePasswordEvent.CheckValidation)
@@ -96,7 +96,9 @@ class ChangePasswordFragment : Fragment() {
         changePasswordViewModel.changePasswordState.observe(viewLifecycleOwner) { response ->
             if (response.status == ChangePasswordState.ChangePasswordStatus.FormValid) {
                 changePasswordViewModel.onEvent(
-                    ChangePasswordEvent.ChangePassword(splashViewModel.userFlow.value?.token.toString())
+                    ChangePasswordEvent.ChangePassword(
+                        splashViewModel.splashState.value?.userEntity?.token ?: ""
+                    )
                 )
             }
             if (response.status == ChangePasswordState.ChangePasswordStatus.FormInvalid) {

@@ -20,6 +20,10 @@ interface UserLocalDatasource {
     fun getFeaturedSongs(): Flow<List<Featured>>
     suspend fun saveRecommended(songs: List<Recommended>)
     fun getRecommended(): Flow<List<Recommended>>
+
+    //Deleting tables
+    suspend fun deleteFavourites()
+    suspend fun deleteRecommended()
 }
 
 class UserLocalDatasourceImpl @Inject constructor(private val appDao: AppDao) :
@@ -62,5 +66,13 @@ class UserLocalDatasourceImpl @Inject constructor(private val appDao: AppDao) :
 
     override fun getRecommended(): Flow<List<Recommended>> {
         return appDao.getRecommended()
+    }
+
+    override suspend fun deleteFavourites() {
+        appDao.deleteFavourites()
+    }
+
+    override suspend fun deleteRecommended() {
+        appDao.deleteRecommended()
     }
 }

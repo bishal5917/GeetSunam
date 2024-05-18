@@ -26,12 +26,14 @@ import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewMode
 import com.example.geetsunam.features.presentation.signup.SignupActivity
 import com.example.geetsunam.features.presentation.signup.viewmodel.SignupEvent
 import com.example.geetsunam.features.presentation.signup.viewmodel.SignupState
+import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.utils.CustomDialog
 import com.example.geetsunam.utils.CustomToast
 import com.example.geetsunam.utils.LocalController
 import com.example.geetsunam.utils.LogTag
 import com.example.geetsunam.utils.Validation
 import com.example.geetsunam.utils.models.CommonRequestModel
+import com.example.heartconnect.features.presentation.screens.splash.viewmodel.SplashEvent
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -52,6 +54,9 @@ class LoginActivity : AppCompatActivity() {
 
     @Inject
     lateinit var googleLoginViewModel: GoogleLoginViewModel
+
+    @Inject
+    lateinit var splashViewModel: SplashViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,6 +135,7 @@ class LoginActivity : AppCompatActivity() {
                 CustomDialog().showLoadingDialog(dialog)
             }
             if (response.status == LoginState.LoginStatus.SUCCESS) {
+                splashViewModel.onEvent(SplashEvent.SetUser(response.user!!))
                 CustomDialog().hideLoadingDialog(dialog)
                 CustomToast.showToast(
                     context = this, "${
@@ -159,6 +165,7 @@ class LoginActivity : AppCompatActivity() {
                 CustomDialog().showLoadingDialog(dialog)
             }
             if (response.status == GoogleLoginState.GoogleLoginStatus.SUCCESS) {
+                splashViewModel.onEvent(SplashEvent.SetUser(response.user!!))
                 CustomDialog().hideLoadingDialog(dialog)
                 CustomToast.showToast(
                     context = this, "${

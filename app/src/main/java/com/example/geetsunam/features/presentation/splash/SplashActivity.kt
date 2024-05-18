@@ -6,7 +6,13 @@ import android.os.Bundle
 import com.example.geetsunam.MainActivity
 import com.example.geetsunam.R
 import com.example.geetsunam.features.presentation.login.LoginActivity
+import com.example.geetsunam.features.presentation.login.viewmodel.LoginEvent
+import com.example.geetsunam.features.presentation.login.viewmodel.LoginState
+import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewModel
+import com.example.geetsunam.features.presentation.splash.viewmodel.SplashState
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
+import com.example.geetsunam.utils.CustomDialog
+import com.example.geetsunam.utils.CustomToast
 import com.example.heartconnect.features.presentation.screens.splash.viewmodel.SplashEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -21,31 +27,34 @@ class SplashActivity : AppCompatActivity() {
     @Inject
     lateinit var splashViewModel: SplashViewModel
 
+    @Inject
+    lateinit var loginViewModel: LoginViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         splashViewModel.onEvent(SplashEvent.CheckStatus)
-        delayAndNavigate()
+        observe()
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
-    private fun delayAndNavigate() {
-        GlobalScope.launch {
-            // Delay for 1 second
-            delay(2000)
-            checkTokenAndNavigate()
-        }
-    }
-
-    private fun checkTokenAndNavigate() {
+    private fun observe() {
         val loginIntent = Intent(this, LoginActivity::class.java)
         val mainIntent = Intent(this, MainActivity::class.java)
-        if (splashViewModel.userFlow.value?.token == null) {
-            startActivity(loginIntent)
-            finish()
-        } else {
-            startActivity(mainIntent)
-            finish()
+        splashViewModel.splashState.observe(this) { response ->
+            if (response.status == SplashState.SplashStatus.LoggedIn) {
+                startActivity(mainIntent)
+                finish()
+            }
+            if (response.status == SplashState.SplashStatus.LoggedOut) {
+                startActivity(loginIntent)
+                finish()
+            }
+            if (response.status == SplashState.SplashStatus.SessionExpired) {
+                loginViewModel.onEvent(LoginEvent.LogoutUser)
+                CustomToast.showToast(this, response.message ?: "")
+                startActivity(loginIntent)
+                finish()
+            }
         }
     }
 }

@@ -66,7 +66,7 @@ class NewSongFragment : Fragment() {
             if (response.status == NewSongState.NewSongStatus.IDLE) {
                 newSongViewModel.onEvent(
                     NewSongEvent.GetNewSongs(
-                        splashViewModel.userFlow.value?.token ?: ""
+                        splashViewModel.splashState.value?.userEntity?.token ?: ""
                     )
                 )
             }
@@ -101,7 +101,7 @@ class NewSongFragment : Fragment() {
             if (Network.hasInternetConnection(context)) {
                 newSongViewModel.onEvent(
                     NewSongEvent.RefreshNew(
-                        splashViewModel.userFlow.value?.token ?: ""
+                        splashViewModel.splashState.value?.userEntity?.token ?: ""
                     )
                 )
             } else {

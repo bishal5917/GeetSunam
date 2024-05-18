@@ -5,5 +5,6 @@ data class UserEntity(
     val name: String? = null,
     val email: String? = null,
     val image: String? = null,
+    val loggedInTimestamp: Long? = null,
     val isGoogleLogin: Boolean? = false
 )

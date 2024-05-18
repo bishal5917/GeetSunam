@@ -6,10 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.geetsunam.features.data.models.login.LoginRequestModel
 import com.example.geetsunam.features.domain.entities.UserEntity
+import com.example.geetsunam.features.domain.usecases.DeleteFavouriteUsecase
+import com.example.geetsunam.features.domain.usecases.DeleteRecommendedUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
 import com.example.geetsunam.services.local.LocalDatastore
 import com.example.geetsunam.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -17,7 +21,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUsecase: LoginUsecase, private val localDatastore: LocalDatastore
+    private val loginUsecase: LoginUsecase,
+    private val localDatastore: LocalDatastore,
+    private val deleteFavouriteUsecase: DeleteFavouriteUsecase,
+    private val deleteRecommendedUsecase: DeleteRecommendedUsecase
 ) : ViewModel() {
     private val _liveState = MutableLiveData(LoginState.idle)
     val loginState: LiveData<LoginState> = _liveState
@@ -80,46 +87,45 @@ class LoginViewModel @Inject constructor(
     private fun login() {
         loginUsecase.call(
             LoginRequestModel(
-                _liveState.value?.email.toString(), _liveState.value
-                    ?.password.toString()
+                _liveState.value?.email.toString(), _liveState.value?.password.toString()
             )
-        )
-            .onEach { result ->
-                when (result) {
-                    is Resource.Loading -> {
-                        _liveState.postValue(
-                            _liveState.value?.copy(
-                                status = LoginState.LoginStatus.LOADING, message = "Logging in ..."
-                            )
+        ).onEach { result ->
+            when (result) {
+                is Resource.Loading -> {
+                    _liveState.postValue(
+                        _liveState.value?.copy(
+                            status = LoginState.LoginStatus.LOADING, message = "Logging in ..."
                         )
-                    }
-
-                    is Resource.Success -> {
-                        val user = UserEntity(
-                            token = result.data?.token,
-                            name = result.data?.data?.user?.fullname,
-                            email = result.data?.data?.user?.email,
-                            image = result.data?.data?.user?.profileImage
-                        )
-                        _liveState.postValue(
-                            _liveState.value?.copy(
-                                status = LoginState.LoginStatus.SUCCESS,
-                                message = "Logged in successfully",
-                                user = user,
-                            )
-                        )
-                        localDatastore.saveUser(user)
-                    }
-
-                    is Resource.Error -> {
-                        _liveState.postValue(
-                            _liveState.value?.copy(
-                                status = LoginState.LoginStatus.FAILED, message = result.message
-                            )
-                        )
-                    }
+                    )
                 }
-            }.launchIn(viewModelScope)
+
+                is Resource.Success -> {
+                    val user = UserEntity(
+                        token = result.data?.token,
+                        name = result.data?.data?.user?.fullname,
+                        email = result.data?.data?.user?.email,
+                        image = result.data?.data?.user?.profileImage,
+                        loggedInTimestamp = System.currentTimeMillis()
+                    )
+                    _liveState.postValue(
+                        _liveState.value?.copy(
+                            status = LoginState.LoginStatus.SUCCESS,
+                            message = "Logged in successfully",
+                            user = user,
+                        )
+                    )
+                    localDatastore.saveUser(user)
+                }
+
+                is Resource.Error -> {
+                    _liveState.postValue(
+                        _liveState.value?.copy(
+                            status = LoginState.LoginStatus.FAILED, message = result.message
+                        )
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 
     private fun logout() {
@@ -129,6 +135,7 @@ class LoginViewModel @Inject constructor(
                     status = LoginState.LoginStatus.LogoutLoading, message = "Logging out"
                 )
             )
+            deleteRecommendedAndFavs()
             localDatastore.removeUser()
             _liveState.postValue(
                 _liveState.value?.copy(
@@ -137,6 +144,18 @@ class LoginViewModel @Inject constructor(
                     user = null
                 )
             )
+        }
+    }
+
+    private fun deleteRecommendedAndFavs() {
+        // Create a coroutine scope with IO dispatcher for background tasks
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                deleteFavouriteUsecase.call()
+                deleteRecommendedUsecase.call()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 }

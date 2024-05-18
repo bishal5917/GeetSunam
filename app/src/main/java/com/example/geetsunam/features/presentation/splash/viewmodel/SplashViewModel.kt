@@ -5,12 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.geetsunam.features.domain.entities.UserEntity
 import com.example.geetsunam.services.local.LocalDatastore
+import com.example.geetsunam.utils.DateUtil
 import com.example.geetsunam.utils.LogTag
 import com.example.heartconnect.features.presentation.screens.splash.viewmodel.SplashEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 import javax.inject.Inject
@@ -22,44 +21,62 @@ class SplashViewModel @Inject constructor(private val localDatastore: LocalDatas
     private val _splashState = MutableLiveData(SplashState.IDLE)
     val splashState: LiveData<SplashState> = _splashState
 
-    val userFlow = localDatastore.getUser().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = UserEntity()
-    );
-
-    init {
-        viewModelScope.launch {
-            userFlow.collect()
-        }
-    }
-
     fun onEvent(event: SplashEvent) {
         when (event) {
             is SplashEvent.CheckStatus -> {
                 checkStatus()
             }
-        }
-    }
 
-    private fun checkStatus() = viewModelScope.launch {
-        try {
-            if (userFlow.value?.token?.isEmpty() == true) {
-                _splashState.postValue(
-                    _splashState.value?.copy(
-                        status = SplashState.SplashStatus.LoggedOut,
-                        message = "Logged Out",
-                    )
-                )
-                Log.d(LogTag.SPLASH, "ID: ${userFlow.value}")
-            } else {
+            is SplashEvent.SetUser -> {
                 _splashState.postValue(
                     _splashState.value?.copy(
                         status = SplashState.SplashStatus.LoggedIn,
                         message = "Logged In",
+                        userEntity = event.user,
                     )
                 )
-                Log.d(LogTag.SPLASH, "ID: ${userFlow.value}")
+            }
+        }
+    }
+
+    private fun checkStatus() {
+        _splashState.postValue(
+            _splashState.value?.copy(
+                status = SplashState.SplashStatus.LOADING,
+                message = "Loading",
+            )
+        )
+        try {
+            viewModelScope.launch {
+                localDatastore.getUser().collect() {
+                    if (it?.token.isNullOrEmpty()) {
+                        _splashState.postValue(
+                            _splashState.value?.copy(
+                                status = SplashState.SplashStatus.LoggedOut,
+                                message = "Logged Out",
+                                userEntity = it
+                            )
+                        )
+                    } else {
+                        if (DateUtil().hasBeenOver5Days(it?.loggedInTimestamp!!)) {
+                            _splashState.postValue(
+                                _splashState.value?.copy(
+                                    status = SplashState.SplashStatus.SessionExpired,
+                                    message = "Your session has expired.",
+                                    userEntity = it
+                                )
+                            )
+                        } else {
+                            _splashState.postValue(
+                                _splashState.value?.copy(
+                                    status = SplashState.SplashStatus.LoggedIn,
+                                    message = "Logged In",
+                                    userEntity = it
+                                )
+                            )
+                        }
+                    }
+                }
             }
         } catch (ex: Exception) {
             _splashState.postValue(

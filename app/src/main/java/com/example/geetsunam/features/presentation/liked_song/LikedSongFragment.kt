@@ -68,7 +68,7 @@ class LikedSongFragment : Fragment() {
             if (response.status == FavSongState.FavSongStatus.IDLE) {
                 favSongViewModel.onEvent(
                     FavSongEvent.GetFavouriteSongs(
-                        splashViewModel.userFlow.value?.token ?: ""
+                        splashViewModel.splashState.value?.userEntity?.token ?: ""
                     )
                 )
             }
@@ -104,7 +104,7 @@ class LikedSongFragment : Fragment() {
             if (Network.hasInternetConnection(context)) {
                 favSongViewModel.onEvent(
                     FavSongEvent.RefreshFavourites(
-                        splashViewModel.userFlow.value?.token ?: ""
+                        splashViewModel.splashState.value?.userEntity?.token ?: ""
                     )
                 )
             } else {

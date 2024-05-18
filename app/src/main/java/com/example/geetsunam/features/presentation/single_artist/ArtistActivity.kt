@@ -63,7 +63,7 @@ class ArtistActivity : AppCompatActivity() {
         artistSongViewModel.onEvent(
             ArtistSongEvent.GetArtistSongs(
                 CommonRequestModel(
-                    token = splashViewModel.userFlow.value?.token,
+                    token = splashViewModel.splashState.value?.userEntity?.token ?: "",
                     artistId = args.artist.id,
                 ),
             ),
