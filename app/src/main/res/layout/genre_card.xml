@@ -7,7 +7,7 @@
 
         <variable
             name="result"
-            type="com.example.geetsunam.features.data.models.genres.GenreResponseModel.Data.Genre" />
+            type="com.example.geetsunam.utils.models.Genre" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

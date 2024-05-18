@@ -1,11 +1,11 @@
 package com.example.geetsunam.features.presentation.home.genres.adapters
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.geetsunam.features.data.models.genres.GenreResponseModel
+import com.example.geetsunam.utils.models.Genre
 
 class GenreDiffUtil(
-    private val oldList: List<GenreResponseModel.Data.Genre>,
-    private val newList: List<GenreResponseModel.Data.Genre>
+    private val oldList: List<Genre>,
+    private val newList: List<Genre>
 ) : DiffUtil.Callback() {
     override fun getOldListSize(): Int {
         return oldList.size

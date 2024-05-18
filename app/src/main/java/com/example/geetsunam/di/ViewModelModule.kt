@@ -12,6 +12,7 @@ import com.example.geetsunam.features.domain.usecases.GetFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenreSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetGenresUsecase
 import com.example.geetsunam.features.domain.usecases.GetLocalFavouriteUsecase
+import com.example.geetsunam.features.domain.usecases.GetLocalFeaturedGenresUsecase
 import com.example.geetsunam.features.domain.usecases.GetLocalFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetLocalNewUsecase
 import com.example.geetsunam.features.domain.usecases.GetLocalRecommendedUsecase
@@ -22,6 +23,7 @@ import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GoogleLoginUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
 import com.example.geetsunam.features.domain.usecases.SaveFavouriteUsecase
+import com.example.geetsunam.features.domain.usecases.SaveFeaturedGenreUsecase
 import com.example.geetsunam.features.domain.usecases.SaveFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.SaveNewUsecase
 import com.example.geetsunam.features.domain.usecases.SaveRecommendedUsecase
@@ -101,9 +103,13 @@ object ViewModelModule {
     @Provides
     @Singleton
     fun provideGenreViewModel(
-        getGenresUsecase: GetGenresUsecase
+        getGenresUsecase: GetGenresUsecase,
+        saveFeaturedGenreUsecase: SaveFeaturedGenreUsecase,
+        getLocalFeaturedGenresUsecase: GetLocalFeaturedGenresUsecase
     ): GenreViewModel {
-        return GenreViewModel(getGenresUsecase)
+        return GenreViewModel(
+            getGenresUsecase, saveFeaturedGenreUsecase, getLocalFeaturedGenresUsecase
+        )
     }
 
     @Provides

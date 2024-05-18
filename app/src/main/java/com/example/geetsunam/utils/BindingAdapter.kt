@@ -10,7 +10,6 @@ import androidx.databinding.BindingAdapter
 import androidx.navigation.findNavController
 import coil.load
 import com.example.geetsunam.R
-import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.domain.entities.SongEntity
 import com.example.geetsunam.features.presentation.for_you.ForYouFragmentDirections
 import com.example.geetsunam.features.presentation.home.HomeFragmentDirections
@@ -20,6 +19,7 @@ import com.example.geetsunam.features.presentation.new_song.NewSongFragmentDirec
 import com.example.geetsunam.features.presentation.single_artist.ArtistActivity
 import com.example.geetsunam.features.presentation.trending.TrendingFragmentDirections
 import com.example.geetsunam.utils.models.Artist
+import com.example.geetsunam.utils.models.Genre
 import com.example.geetsunam.utils.models.Song
 
 class BindingAdapter {
@@ -82,7 +82,7 @@ class BindingAdapter {
 
         @BindingAdapter("onGenreClicked")
         @JvmStatic
-        fun onGenreClicked(imageView: ImageView, genre: GenreResponseModel.Data.Genre) {
+        fun onGenreClicked(imageView: ImageView, genre: Genre) {
             imageView.setOnClickListener {
                 val action = HomeFragmentDirections.actionHomeFragmentToGenreActivity(genre)
                 imageView.findNavController().navigate(action)

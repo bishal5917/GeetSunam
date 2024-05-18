@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.geetsunam.R
-import com.example.geetsunam.features.data.models.genres.GenreResponseModel
 import com.example.geetsunam.features.presentation.home.featured_artists.adapters.FeaturedArtistsAdapter
 import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsEvent
 import com.example.geetsunam.features.presentation.home.featured_artists.viewmodel.FeaturedArtistsState
@@ -29,6 +28,7 @@ import com.example.geetsunam.utils.Constants
 import com.example.geetsunam.utils.CustomToast
 import com.example.geetsunam.utils.Network
 import com.example.geetsunam.utils.models.Artist
+import com.example.geetsunam.utils.models.Genre
 import com.example.geetsunam.utils.models.Song
 import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,7 +77,7 @@ class HomeFragment : Fragment() {
         swipeToRefresh.setOnRefreshListener {
             if (Network.hasInternetConnection(context)) {
                 genreViewModel.onEvent(
-                    GenreEvent.GetGenre(
+                    GenreEvent.RefreshGenres(
                         splashViewModel.splashState.value?.userEntity?.token ?: ""
                     )
                 )
@@ -136,9 +136,13 @@ class HomeFragment : Fragment() {
                 shimmerView.visibility = View.VISIBLE
             }
             if (response.status == GenreState.GenreStatus.SUCCESS) {
-                response.genres?.let { genreAdapter.setData(response.genres.genres as List<GenreResponseModel.Data.Genre>) }
+                response.genres?.let { genreAdapter.setData(response.genres as List<Genre>) }
                 recyclerView.visibility = View.VISIBLE
                 shimmerView.visibility = View.GONE
+                if (response.fromApi == true) {
+                    //resave into roomdb if fetched from API
+                    genreViewModel.onEvent(GenreEvent.SaveGenres(response.genres))
+                }
             }
             if (response.status == GenreState.GenreStatus.FAILED) {
                 recyclerView.visibility = View.GONE

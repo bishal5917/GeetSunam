@@ -5,15 +5,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geetsunam.databinding.GenreCardBinding
-import com.example.geetsunam.features.data.models.genres.GenreResponseModel
+import com.example.geetsunam.utils.models.Genre
 
 class GenreAdapter : RecyclerView.Adapter<GenreAdapter.MyViewHolder>() {
 
-    private var genre = emptyList<GenreResponseModel.Data.Genre>()
+    private var genre = emptyList<Genre>()
 
     class MyViewHolder(private val binding: GenreCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(result: GenreResponseModel.Data.Genre) {
+        fun bind(result: Genre) {
             binding.result = result
             binding.executePendingBindings()
         }
@@ -40,7 +40,7 @@ class GenreAdapter : RecyclerView.Adapter<GenreAdapter.MyViewHolder>() {
         return genre.size
     }
 
-    fun setData(newData: List<GenreResponseModel.Data.Genre>) {
+    fun setData(newData: List<Genre>) {
         val genreDiffUtil = GenreDiffUtil(genre, newData)
         val diffUtilResult = DiffUtil.calculateDiff(genreDiffUtil)
         genre = newData

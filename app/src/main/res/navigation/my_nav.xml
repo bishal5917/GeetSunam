@@ -72,7 +72,7 @@
         android:label="GenreActivity" >
         <argument
             android:name="genre"
-            app:argType="com.example.geetsunam.features.data.models.genres.GenreResponseModel$Data$Genre" />
+            app:argType="com.example.geetsunam.utils.models.Genre" />
     </activity>
     <activity
         android:id="@+id/artistActivity"

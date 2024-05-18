@@ -3,6 +3,7 @@ package com.example.geetsunam.database
 import androidx.room.*
 import com.example.geetsunam.database.entities.Favourite
 import com.example.geetsunam.database.entities.Featured
+import com.example.geetsunam.database.entities.FeaturedGenre
 import com.example.geetsunam.database.entities.New
 import com.example.geetsunam.database.entities.Recommended
 import com.example.geetsunam.database.entities.Trending
@@ -45,4 +46,10 @@ interface AppDao {
 
     @Query("DELETE FROM Recommended")
     suspend fun deleteRecommended()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveGenres(genres: List<FeaturedGenre>)
+
+    @Query("SELECT * FROM FeaturedGenre")
+    fun getGenres(): Flow<List<FeaturedGenre>>
 }

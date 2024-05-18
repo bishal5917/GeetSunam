@@ -3,6 +3,7 @@ package com.example.geetsunam.features.data.datasource
 import com.example.geetsunam.database.AppDao
 import com.example.geetsunam.database.entities.Favourite
 import com.example.geetsunam.database.entities.Featured
+import com.example.geetsunam.database.entities.FeaturedGenre
 import com.example.geetsunam.database.entities.New
 import com.example.geetsunam.database.entities.Recommended
 import com.example.geetsunam.database.entities.Trending
@@ -24,6 +25,9 @@ interface UserLocalDatasource {
     //Deleting tables
     suspend fun deleteFavourites()
     suspend fun deleteRecommended()
+
+    suspend fun saveFeaturedGenres(genres: List<FeaturedGenre>)
+    fun getFeaturedGenres(): Flow<List<FeaturedGenre>>
 }
 
 class UserLocalDatasourceImpl @Inject constructor(private val appDao: AppDao) :
@@ -74,5 +78,13 @@ class UserLocalDatasourceImpl @Inject constructor(private val appDao: AppDao) :
 
     override suspend fun deleteRecommended() {
         appDao.deleteRecommended()
+    }
+
+    override suspend fun saveFeaturedGenres(genres: List<FeaturedGenre>) {
+        appDao.saveGenres(genres)
+    }
+
+    override fun getFeaturedGenres(): Flow<List<FeaturedGenre>> {
+        return appDao.getGenres()
     }
 }
