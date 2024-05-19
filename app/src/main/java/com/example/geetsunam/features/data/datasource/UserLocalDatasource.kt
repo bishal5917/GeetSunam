@@ -3,6 +3,7 @@ package com.example.geetsunam.features.data.datasource
 import com.example.geetsunam.database.AppDao
 import com.example.geetsunam.database.entities.Favourite
 import com.example.geetsunam.database.entities.Featured
+import com.example.geetsunam.database.entities.FeaturedArtist
 import com.example.geetsunam.database.entities.FeaturedGenre
 import com.example.geetsunam.database.entities.New
 import com.example.geetsunam.database.entities.Recommended
@@ -28,6 +29,8 @@ interface UserLocalDatasource {
 
     suspend fun saveFeaturedGenres(genres: List<FeaturedGenre>)
     fun getFeaturedGenres(): Flow<List<FeaturedGenre>>
+    suspend fun saveFeaturedArtists(artists: List<FeaturedArtist>)
+    fun getFeaturedArtists(): Flow<List<FeaturedArtist>>
 }
 
 class UserLocalDatasourceImpl @Inject constructor(private val appDao: AppDao) :
@@ -86,5 +89,13 @@ class UserLocalDatasourceImpl @Inject constructor(private val appDao: AppDao) :
 
     override fun getFeaturedGenres(): Flow<List<FeaturedGenre>> {
         return appDao.getGenres()
+    }
+
+    override suspend fun saveFeaturedArtists(artists: List<FeaturedArtist>) {
+        appDao.saveArtists(artists)
+    }
+
+    override fun getFeaturedArtists(): Flow<List<FeaturedArtist>> {
+        return appDao.getArtists()
     }
 }

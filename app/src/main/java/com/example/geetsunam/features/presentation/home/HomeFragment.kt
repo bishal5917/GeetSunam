@@ -82,7 +82,7 @@ class HomeFragment : Fragment() {
                     )
                 )
                 featuredArtistsViewModel.onEvent(
-                    FeaturedArtistsEvent.GetFeaturedArtists(
+                    FeaturedArtistsEvent.RefershArtists(
                         splashViewModel.splashState.value?.userEntity?.token ?: ""
                     )
                 )
@@ -171,11 +171,15 @@ class HomeFragment : Fragment() {
             if (response.status == FeaturedArtistsState.FeaturedArtistsStatus.SUCCESS) {
                 response.artists?.let {
                     featuredArtistsAdapter.setData(
-                        response.artists.artists as List<Artist>
+                        response.artists as List<Artist>
                     )
                 }
                 recyclerView.visibility = View.VISIBLE
                 shimmerView.visibility = View.GONE
+                if (response.fromApi == true) {
+                    //resave into roomdb if fetched from API
+                    featuredArtistsViewModel.onEvent(FeaturedArtistsEvent.SaveArtists(response.artists))
+                }
             }
             if (response.status == FeaturedArtistsState.FeaturedArtistsStatus.FAILED) {
                 recyclerView.visibility = View.GONE

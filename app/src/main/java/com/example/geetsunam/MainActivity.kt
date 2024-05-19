@@ -27,6 +27,7 @@ import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewMode
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.utils.CustomDialog
 import com.example.geetsunam.utils.CustomToast
+import com.example.geetsunam.utils.DateUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,11 +58,9 @@ class MainActivity : AppCompatActivity() {
 
         //Getting user and binding to the drawer header
         drawerHeaderBinding = DataBindingUtil.inflate(
-            layoutInflater,
-            R.layout.drawer_header,
-            binding.drawerNavView,
-            false
+            layoutInflater, R.layout.drawer_header, binding.drawerNavView, false
         )
+        drawerHeaderBinding.tvGreeting.text = DateUtil().getGreetingMessage()
         drawerHeaderBinding.user = splashViewModel.splashState.value?.userEntity
         drawerHeaderBinding.executePendingBindings()
         binding.drawerNavView.addHeaderView(drawerHeaderBinding.root)

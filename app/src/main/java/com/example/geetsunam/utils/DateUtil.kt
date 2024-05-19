@@ -11,10 +11,20 @@ class DateUtil {
         // Calculate the difference in milliseconds
         val difference = System.currentTimeMillis() - loggedInTime
         // Calculate the number of milliseconds in 5 days
-        val fiveDaysInMillis = 1 * 60 * 60 * 1000L
-//        val fiveDaysInMillis = 5 * 24 * 60 * 60 * 1000L
+        val fiveDaysInMillis = 5 * 24 * 60 * 60 * 1000L
         // Check if the difference is greater than or equal to 5 days in milliseconds
         return difference >= fiveDaysInMillis
+    }
+
+    fun getGreetingMessage(): String {
+        val c = Calendar.getInstance()
+        return when (c.get(Calendar.HOUR_OF_DAY)) {
+            in 0..11 -> "Good Morning !"
+            in 12..15 -> "Good Afternoon !"
+            in 16..19 -> "Good Evening !"
+            in 20..23 -> "Good Night !"
+            else -> "Welcome !"
+        }
     }
 
     fun getCurrentDateTimeWithAMPM(): String {

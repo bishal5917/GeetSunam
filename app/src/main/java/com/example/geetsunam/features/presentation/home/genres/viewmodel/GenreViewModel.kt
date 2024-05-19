@@ -25,8 +25,8 @@ class GenreViewModel @Inject constructor(
     private val saveFeaturedGenreUsecase: SaveFeaturedGenreUsecase,
     private val getLocalFeaturedGenresUsecase: GetLocalFeaturedGenresUsecase
 ) : ViewModel() {
-    private val _genreState = MutableLiveData(GenreState.idle)
-    val genreState: LiveData<GenreState> = _genreState
+    private val _state = MutableLiveData(GenreState.idle)
+    val genreState: LiveData<GenreState> = _state
 
     fun onEvent(event: GenreEvent) {
         when (event) {
@@ -47,8 +47,8 @@ class GenreViewModel @Inject constructor(
     }
 
     private fun getGenres(token: String) {
-        _genreState.postValue(
-            _genreState.value?.copy(
+        _state.postValue(
+            _state.value?.copy(
                 status = GenreState.GenreStatus.LOADING, message = "Getting genres"
             )
         )
@@ -62,8 +62,8 @@ class GenreViewModel @Inject constructor(
                         )
                         genres.add(genre)
                     }
-                    _genreState.postValue(
-                        _genreState.value?.copy(
+                    _state.postValue(
+                        _state.value?.copy(
                             status = GenreState.GenreStatus.SUCCESS,
                             message = "success",
                             fromApi = false,
@@ -81,16 +81,16 @@ class GenreViewModel @Inject constructor(
         getGenresUsecase.call(CommonRequestModel(token)).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
-                    _genreState.postValue(
-                        _genreState.value?.copy(
+                    _state.postValue(
+                        _state.value?.copy(
                             status = GenreState.GenreStatus.LOADING, message = "Getting genres"
                         )
                     )
                 }
 
                 is Resource.Success -> {
-                    _genreState.postValue(
-                        _genreState.value?.copy(
+                    _state.postValue(
+                        _state.value?.copy(
                             status = GenreState.GenreStatus.SUCCESS,
                             message = "success",
                             fromApi = true,
@@ -100,8 +100,8 @@ class GenreViewModel @Inject constructor(
                 }
 
                 is Resource.Error -> {
-                    _genreState.postValue(
-                        _genreState.value?.copy(
+                    _state.postValue(
+                        _state.value?.copy(
                             status = GenreState.GenreStatus.FAILED, message = result.message
                         )
                     )

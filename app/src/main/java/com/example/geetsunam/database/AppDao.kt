@@ -3,6 +3,7 @@ package com.example.geetsunam.database
 import androidx.room.*
 import com.example.geetsunam.database.entities.Favourite
 import com.example.geetsunam.database.entities.Featured
+import com.example.geetsunam.database.entities.FeaturedArtist
 import com.example.geetsunam.database.entities.FeaturedGenre
 import com.example.geetsunam.database.entities.New
 import com.example.geetsunam.database.entities.Recommended
@@ -52,4 +53,10 @@ interface AppDao {
 
     @Query("SELECT * FROM FeaturedGenre")
     fun getGenres(): Flow<List<FeaturedGenre>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveArtists(artists: List<FeaturedArtist>)
+
+    @Query("SELECT * FROM FeaturedArtist")
+    fun getArtists(): Flow<List<FeaturedArtist>>
 }
