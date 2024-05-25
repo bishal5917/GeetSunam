@@ -13,6 +13,9 @@
     <string name="password">Password</string>
     <string name="log_in">Log in</string>
     <string name="requesting_please_wait">Requesting , Please wait ...</string>
+    <string name="downloading_title">Downloading...</string>
+    <string name="downloading_desc">Warning : Please donot close the application while
+        the song is getting downloaded.</string>
     <string name="featured_artists">Featured Artists</string>
     <string name="featured_songs">Featured Songs</string>
     <string name="for_you">For You</string>

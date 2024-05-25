@@ -11,6 +11,7 @@ import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.To
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavState
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavViewModel
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
+import com.example.geetsunam.features.presentation.music.viewmodel.MusicState
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.utils.Constants
@@ -48,6 +49,7 @@ class MusicPlayerActivity : AppCompatActivity() {
         addToFavourite()
         setShuffleAndLoopMode()
         downloadSong()
+        observeDownloader()
         //set current song and play it
         musicViewModel.onEvent(
             MusicEvent.SetAndPlayCurrent(
@@ -64,6 +66,32 @@ class MusicPlayerActivity : AppCompatActivity() {
                 }
             } else {
                 CustomToast.showToast(this, Constants.noInternet)
+            }
+        }
+    }
+
+    private fun observeDownloader() {
+        val dialog = Dialog(this)
+        musicViewModel.musicState.observe(this) { response ->
+            if (response.status == MusicState.MusicStatus.Downloading) {
+                //show loading dialog
+                CustomDialog().showDownloadingDialog(dialog)
+            }
+            if (response.status == MusicState.MusicStatus.Downloaded) {
+                CustomDialog().hideDownloadingDialog(dialog)
+                CustomToast.showToast(
+                    context = this, "${
+                        response.message
+                    }"
+                )
+            }
+            if (response.status == MusicState.MusicStatus.Failed) {
+                CustomDialog().hideDownloadingDialog(dialog)
+                CustomToast.showToast(
+                    context = this, "${
+                        response.message
+                    }"
+                )
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.example.geetsunam.di
 
+import android.app.Application
 import androidx.media3.exoplayer.ExoPlayer
 import com.example.geetsunam.features.domain.usecases.ChangePasswordUsecase
 import com.example.geetsunam.features.domain.usecases.DeleteFavouriteUsecase
@@ -152,8 +153,8 @@ object ViewModelModule {
 
     @Provides
     @Singleton
-    fun providesMusicViewModel(exoPlayer: ExoPlayer): MusicViewModel {
-        return MusicViewModel(exoPlayer)
+    fun providesMusicViewModel(exoPlayer: ExoPlayer, application: Application): MusicViewModel {
+        return MusicViewModel(exoPlayer, application)
     }
 
     @Provides

@@ -16,6 +16,16 @@ class CustomDialog {
         dialog.dismiss()
     }
 
+    fun showDownloadingDialog(dialog: Dialog) {
+        dialog.setContentView(R.layout.downloading_dialog)
+        dialog.show()
+        dialog.setCancelable(false)
+    }
+
+    fun hideDownloadingDialog(dialog: Dialog) {
+        dialog.dismiss()
+    }
+
     fun showSureLogoutDialog(context: Activity, onClickedYes: () -> Unit) {
         val sureLogoutDialog =
             AlertDialog.Builder(context).setTitle(R.string.logout).setMessage(R.string.sure_logout)

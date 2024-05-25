@@ -7,6 +7,7 @@ import android.content.Intent
 import androidx.core.content.getSystemService
 import com.example.geetsunam.utils.LogUtil
 
+// Just for testing,this isnot used here
 class DownloadCompletedReceiver : BroadcastReceiver() {
 
     private lateinit var downloadManager: DownloadManager

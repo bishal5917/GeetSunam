@@ -1,11 +1,16 @@
 package com.example.geetsunam.features.presentation.music.viewmodel
 
+import android.app.Application
+import android.app.DownloadManager
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.media.MediaPlayer
 import androidx.annotation.OptIn
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
@@ -15,15 +20,25 @@ import com.example.geetsunam.databinding.ActivityMusicBinding
 import com.example.geetsunam.databinding.ActivityMusicPlayerBinding
 import com.example.geetsunam.downloader.MusicDownloader
 import com.example.geetsunam.features.domain.entities.SongEntity
+import com.example.geetsunam.utils.LogUtil
 import com.example.geetsunam.utils.models.Song
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.lang.Exception
 import javax.inject.Inject
 import kotlin.random.Random
 
 @HiltViewModel
-class MusicViewModel @Inject constructor(private val player: ExoPlayer) : ViewModel() {
+class MusicViewModel @Inject constructor(
+    private val player: ExoPlayer, private val application: Application
+) : AndroidViewModel(application) {
     private val _musicState = MutableLiveData(MusicState.idle)
     val musicState: LiveData<MusicState> = _musicState
+
+    //DownloadManager and BroadcastReceiver
+    private val downloadManager =
+        application.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+    private var downloadId: Long = -1L
+    private var receiver: BroadcastReceiver? = null
 
     fun onEvent(event: MusicEvent) {
         when (event) {
@@ -77,6 +92,9 @@ class MusicViewModel @Inject constructor(private val player: ExoPlayer) : ViewMo
             }
 
             is MusicEvent.DownloadSong -> {
+                if (player.isPlaying) {
+                    player.pause()
+                }
                 downloadSong(event.context)
             }
 
@@ -91,16 +109,6 @@ class MusicViewModel @Inject constructor(private val player: ExoPlayer) : ViewMo
 
             else -> {}
         }
-    }
-
-    private fun downloadSong(context: Context) {
-        val downloader = MusicDownloader(context)
-        val song = _musicState.value?.currentSong?.songName
-        val artist = _musicState.value?.currentSong?.artistName
-        val fileName = "$artist - $song"
-        downloader.downloadFile(
-            _musicState.value?.currentSong?.source ?: "", fileName
-        )
     }
 
     private fun setMediaItems(playlist: List<Song?>?, playlistName: String) {
@@ -272,6 +280,74 @@ class MusicViewModel @Inject constructor(private val player: ExoPlayer) : ViewMo
 //        }
     }
 
+    // ********** DOWNLOADING SONG **********
+    private fun downloadSong(context: Context) {
+        val downloader = MusicDownloader(context)
+        val song = _musicState.value?.currentSong?.songName
+        val artist = _musicState.value?.currentSong?.artistName
+        val fileName = "$artist - $song"
+        downloadId = downloader.downloadFile(
+            _musicState.value?.currentSong?.source ?: "", fileName
+        )
+        _musicState.value = _musicState.value?.copy(
+            status = MusicState.MusicStatus.Downloading
+        )
+        registerReceiver()
+    }
+
+    private fun registerReceiver() {
+        receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                try {
+                    val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1L)
+                    if (id == downloadId) {
+                        val query = DownloadManager.Query().setFilterById(downloadId)
+                        val cursor = downloadManager.query(query)
+                        if (cursor.moveToFirst()) {
+                            val columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
+                            if (columnIndex != -1) {
+                                when (cursor.getInt(columnIndex)) {
+                                    DownloadManager.STATUS_SUCCESSFUL -> {
+                                        _musicState.value = _musicState.value?.copy(
+                                            status = MusicState.MusicStatus.Downloaded,
+                                            message = "Song downloaded."
+                                        )
+                                    }
+
+                                    DownloadManager.STATUS_FAILED -> {
+                                        _musicState.value = _musicState.value?.copy(
+                                            status = MusicState.MusicStatus.Failed,
+                                            message = "Download failed."
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        cursor.close()
+                    }
+//                    if (intent?.action == "android.intent.action.DOWNLOAD_COMPLETE") {
+//                        val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1L)
+//                        if (id != -1L) {
+//                            _musicState.value = _musicState.value?.copy(
+//                                status = MusicState.MusicStatus.Downloaded,
+//                                message = "Song downloaded."
+//                            )
+//                            LogUtil.log("$id DOWNLOADED !!!")
+//                        }
+//                    }
+                } catch (ex: Exception) {
+                    _musicState.value = _musicState.value?.copy(
+                        status = MusicState.MusicStatus.Failed, message = "Download failed"
+                    )
+                }
+            }
+        }
+        val filter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE).apply {
+            addCategory(Intent.CATEGORY_DEFAULT)
+        }
+        getApplication<Application>().registerReceiver(receiver, filter)
+    }
+
     private fun playNextSong(
         isNext: Boolean, binding: ActivityMusicBinding, mediaPlayer: MediaPlayer
     ) {
@@ -374,6 +450,9 @@ class MusicViewModel @Inject constructor(private val player: ExoPlayer) : ViewMo
 
     override fun onCleared() {
         player.release()
+        receiver?.let {
+            getApplication<Application>().unregisterReceiver(it)
+        }
         super.onCleared()
     }
 }
