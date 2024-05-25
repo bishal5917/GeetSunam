@@ -72,4 +72,6 @@
     <string name="shuffle">Shuffle</string>
     <string name="set_mode">Set Mode</string>
     <string name="google_auth_error">Authentication error,Please try again later!</string>
+    <string name="my_downloads">my_downloads</string>
+    <string name="downloads">Downloads</string>
 </resources>

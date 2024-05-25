@@ -6,6 +6,7 @@ import com.example.geetsunam.database.entities.Featured
 import com.example.geetsunam.database.entities.FeaturedArtist
 import com.example.geetsunam.database.entities.FeaturedGenre
 import com.example.geetsunam.database.entities.New
+import com.example.geetsunam.database.entities.OfflineSong
 import com.example.geetsunam.database.entities.Recommended
 import com.example.geetsunam.database.entities.Trending
 import kotlinx.coroutines.flow.Flow
@@ -59,4 +60,12 @@ interface AppDao {
 
     @Query("SELECT * FROM FeaturedArtist")
     fun getArtists(): Flow<List<FeaturedArtist>>
+
+    //Inserting offline song
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveOfflineSong(song: OfflineSong)
+
+    //getting offline songs
+    @Query("SELECT * FROM OfflineSong")
+    fun getOfflineSongs(): Flow<List<OfflineSong>>
 }

@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.MediaPlayer
+import android.net.Uri
 import androidx.annotation.OptIn
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -16,20 +17,30 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import com.example.geetsunam.R
+import com.example.geetsunam.database.entities.OfflineSong
+import com.example.geetsunam.database.entities.Trending
 import com.example.geetsunam.databinding.ActivityMusicBinding
 import com.example.geetsunam.databinding.ActivityMusicPlayerBinding
 import com.example.geetsunam.downloader.MusicDownloader
 import com.example.geetsunam.features.domain.entities.SongEntity
+import com.example.geetsunam.features.domain.usecases.SaveSongOfflineUsecase
 import com.example.geetsunam.utils.LogUtil
+import com.example.geetsunam.utils.PlayerUtil
 import com.example.geetsunam.utils.models.Song
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.internal.notify
 import java.lang.Exception
 import javax.inject.Inject
 import kotlin.random.Random
 
 @HiltViewModel
 class MusicViewModel @Inject constructor(
-    private val player: ExoPlayer, private val application: Application
+    private val player: ExoPlayer,
+    private val application: Application,
+    private val saveSongOfflineUsecase: SaveSongOfflineUsecase
 ) : AndroidViewModel(application) {
     private val _musicState = MutableLiveData(MusicState.idle)
     val musicState: LiveData<MusicState> = _musicState
@@ -308,16 +319,29 @@ class MusicViewModel @Inject constructor(
                             if (columnIndex != -1) {
                                 when (cursor.getInt(columnIndex)) {
                                     DownloadManager.STATUS_SUCCESSFUL -> {
+                                        //Saving song to db
+                                        val fileUriIndex =
+                                            cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
+                                        val fileUri = cursor.getString(fileUriIndex)
+                                        val filePath = Uri.parse(fileUri).path
+//                                        val fileData =
+//                                            PlayerUtil().getFileAsByteArray(filePath ?: "")
+                                        if (filePath != null) {
+                                            saveSongOffline(filePath)
+                                        } else {
+                                            LogUtil.log("Filepath is null!!!")
+                                        }
+                                        //updating the livedata
                                         _musicState.value = _musicState.value?.copy(
                                             status = MusicState.MusicStatus.Downloaded,
-                                            message = "Song downloaded."
+                                            message = "Song downloaded successfully"
                                         )
                                     }
 
                                     DownloadManager.STATUS_FAILED -> {
                                         _musicState.value = _musicState.value?.copy(
                                             status = MusicState.MusicStatus.Failed,
-                                            message = "Download failed."
+                                            message = "Download failed"
                                         )
                                     }
                                 }
@@ -446,6 +470,29 @@ class MusicViewModel @Inject constructor(
 
     private fun releasePlayer() {
         player.stop()
+    }
+
+    private fun saveSongOffline(filePath: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val song = _musicState.value?.currentSong
+                val offlineSong = OfflineSong(
+                    id = song?.id!!,
+                    coverArt = song.coverArt,
+                    artistName = song.artistName,
+                    songName = song.songName,
+                    duration = song.duration,
+                    source = song.source,
+                    stream = song.stream,
+                    isFavourite = song.isFavourite,
+                    filePath = filePath,
+                    fileData = null
+                )
+                saveSongOfflineUsecase.call(offlineSong)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     override fun onCleared() {

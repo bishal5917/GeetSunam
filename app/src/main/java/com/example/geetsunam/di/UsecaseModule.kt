@@ -20,6 +20,7 @@ import com.example.geetsunam.features.domain.usecases.GetLocalNewUsecase
 import com.example.geetsunam.features.domain.usecases.GetLocalRecommendedUsecase
 import com.example.geetsunam.features.domain.usecases.GetLocalTrendingUsecase
 import com.example.geetsunam.features.domain.usecases.GetNewSongsUsecase
+import com.example.geetsunam.features.domain.usecases.GetOfflineSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetRecommendedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetSingleSongUsecase
 import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
@@ -31,6 +32,7 @@ import com.example.geetsunam.features.domain.usecases.SaveFeaturedGenreUsecase
 import com.example.geetsunam.features.domain.usecases.SaveFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.SaveNewUsecase
 import com.example.geetsunam.features.domain.usecases.SaveRecommendedUsecase
+import com.example.geetsunam.features.domain.usecases.SaveSongOfflineUsecase
 import com.example.geetsunam.features.domain.usecases.SaveTrendingUsecase
 import com.example.geetsunam.features.domain.usecases.SearchUsecase
 import com.example.geetsunam.features.domain.usecases.SignupUsecase
@@ -221,5 +223,15 @@ object UsecaseModule {
     @Provides
     fun providesGetLocalArtistsUsecase(localDatasource: UserLocalDatasource): GetLocalFeaturedArtistsUsecase {
         return GetLocalFeaturedArtistsUsecase(localDatasource)
+    }
+
+    @Provides
+    fun providesSaveSongOfflineUsecase(localDatasource: UserLocalDatasource): SaveSongOfflineUsecase {
+        return SaveSongOfflineUsecase(localDatasource)
+    }
+
+    @Provides
+    fun providesGetOfflineSongsUsecase(localDatasource: UserLocalDatasource): GetOfflineSongsUsecase {
+        return GetOfflineSongsUsecase(localDatasource)
     }
 }

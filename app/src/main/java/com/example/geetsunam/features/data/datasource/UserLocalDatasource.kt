@@ -6,6 +6,7 @@ import com.example.geetsunam.database.entities.Featured
 import com.example.geetsunam.database.entities.FeaturedArtist
 import com.example.geetsunam.database.entities.FeaturedGenre
 import com.example.geetsunam.database.entities.New
+import com.example.geetsunam.database.entities.OfflineSong
 import com.example.geetsunam.database.entities.Recommended
 import com.example.geetsunam.database.entities.Trending
 import kotlinx.coroutines.flow.Flow
@@ -31,6 +32,12 @@ interface UserLocalDatasource {
     fun getFeaturedGenres(): Flow<List<FeaturedGenre>>
     suspend fun saveFeaturedArtists(artists: List<FeaturedArtist>)
     fun getFeaturedArtists(): Flow<List<FeaturedArtist>>
+
+    //save offline song
+    suspend fun saveOfflineSong(song: OfflineSong)
+
+    //getting offline song
+    fun getOfflineSongs(): Flow<List<OfflineSong>>
 }
 
 class UserLocalDatasourceImpl @Inject constructor(private val appDao: AppDao) :
@@ -97,5 +104,13 @@ class UserLocalDatasourceImpl @Inject constructor(private val appDao: AppDao) :
 
     override fun getFeaturedArtists(): Flow<List<FeaturedArtist>> {
         return appDao.getArtists()
+    }
+
+    override suspend fun saveOfflineSong(song: OfflineSong) {
+        appDao.saveOfflineSong(song)
+    }
+
+    override fun getOfflineSongs(): Flow<List<OfflineSong>> {
+        return appDao.getOfflineSongs()
     }
 }

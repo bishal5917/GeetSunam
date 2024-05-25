@@ -12,4 +12,5 @@ data class Song(
     @SerializedName("source") val source: String? = null,
     @SerializedName("stream") val stream: String? = null,
     @SerializedName("title") val title: String? = null,
+    val filePath: String? = null
 )

@@ -57,6 +57,15 @@
             android:id="@+id/action_likedSongFragment_to_musicActivity"
             app:destination="@id/musicPlayerActivity" />
     </fragment>
+    <fragment
+        android:id="@+id/offlineSongFragment"
+        android:name="com.example.geetsunam.features.presentation.offline_song.OfflineSongFragment"
+        android:label="fragment_offline_song"
+        tools:layout="@layout/fragment_offline_song" >
+        <action
+            android:id="@+id/action_offlineSongFragment_to_musicActivity"
+            app:destination="@id/musicPlayerActivity" />
+    </fragment>
     <activity
         android:id="@+id/musicPlayerActivity"
         android:name="com.example.geetsunam.features.presentation.music.MusicPlayerActivity"

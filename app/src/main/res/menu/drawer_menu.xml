@@ -11,6 +11,12 @@
             android:title="@string/home" />
 
         <item
+            android:id="@+id/offlineSongFragment"
+            android:fontFamily="@font/urbanist_regular"
+            android:icon="@drawable/ic_downloads"
+            android:title="@string/downloads" />
+
+        <item
             android:id="@+id/changePasswordFragment"
             android:fontFamily="@font/urbanist_regular"
             android:icon="@drawable/ic_lock"

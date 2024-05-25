@@ -20,6 +20,7 @@ import com.example.geetsunam.features.domain.usecases.GetLocalNewUsecase
 import com.example.geetsunam.features.domain.usecases.GetLocalRecommendedUsecase
 import com.example.geetsunam.features.domain.usecases.GetLocalTrendingUsecase
 import com.example.geetsunam.features.domain.usecases.GetNewSongsUsecase
+import com.example.geetsunam.features.domain.usecases.GetOfflineSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetRecommendedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GetTrendingSongsUsecase
 import com.example.geetsunam.features.domain.usecases.GoogleLoginUsecase
@@ -30,6 +31,7 @@ import com.example.geetsunam.features.domain.usecases.SaveFeaturedGenreUsecase
 import com.example.geetsunam.features.domain.usecases.SaveFeaturedSongsUsecase
 import com.example.geetsunam.features.domain.usecases.SaveNewUsecase
 import com.example.geetsunam.features.domain.usecases.SaveRecommendedUsecase
+import com.example.geetsunam.features.domain.usecases.SaveSongOfflineUsecase
 import com.example.geetsunam.features.domain.usecases.SaveTrendingUsecase
 import com.example.geetsunam.features.domain.usecases.SearchUsecase
 import com.example.geetsunam.features.domain.usecases.SignupUsecase
@@ -49,6 +51,7 @@ import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.To
 import com.example.geetsunam.features.presentation.music.track.viewmodel.TrackSongViewModel
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.new_song.viewmodel.NewSongViewModel
+import com.example.geetsunam.features.presentation.offline_song.viewmodel.OfflineSongViewModel
 import com.example.geetsunam.features.presentation.signup.viewmodel.SignupViewModel
 import com.example.geetsunam.features.presentation.single_artist.viewmodel.ArtistSongViewModel
 import com.example.geetsunam.features.presentation.single_genre.viewmodel.GenreSongViewModel
@@ -153,8 +156,12 @@ object ViewModelModule {
 
     @Provides
     @Singleton
-    fun providesMusicViewModel(exoPlayer: ExoPlayer, application: Application): MusicViewModel {
-        return MusicViewModel(exoPlayer, application)
+    fun providesMusicViewModel(
+        exoPlayer: ExoPlayer,
+        application: Application,
+        saveSongOfflineUsecase: SaveSongOfflineUsecase
+    ): MusicViewModel {
+        return MusicViewModel(exoPlayer, application, saveSongOfflineUsecase)
     }
 
     @Provides
@@ -231,5 +238,13 @@ object ViewModelModule {
         changePasswordUsecase: ChangePasswordUsecase
     ): ChangePasswordViewModel {
         return ChangePasswordViewModel(changePasswordUsecase)
+    }
+
+    @Provides
+    @Singleton
+    fun providesOfflineSongViewModel(
+        getOfflineSongsUsecase: GetOfflineSongsUsecase
+    ): OfflineSongViewModel {
+        return OfflineSongViewModel(getOfflineSongsUsecase)
     }
 }
