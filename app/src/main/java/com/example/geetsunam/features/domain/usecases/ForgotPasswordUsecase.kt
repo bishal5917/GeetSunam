@@ -1,9 +1,7 @@
 package com.example.geetsunam.features.domain.usecases
 
-import android.util.Log
 import com.example.geetsunam.features.domain.repositories.UserRepository
 import com.example.geetsunam.utils.Constants
-import com.example.geetsunam.utils.LogTag
 import com.example.geetsunam.utils.Resource
 import com.example.geetsunam.utils.models.CommonRequestModel
 import com.example.geetsunam.utils.models.CommonResponseModel

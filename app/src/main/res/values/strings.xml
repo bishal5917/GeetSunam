@@ -54,6 +54,9 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
+    <string name="download">Download</string>
+    <string name="sure_download">Are you sure to download this song for offline playback?</string>
+
     //Error message during api calls
     <string name="some_error">Some error occured.</string>
     <string name="parse_error">Error parsing response.</string>

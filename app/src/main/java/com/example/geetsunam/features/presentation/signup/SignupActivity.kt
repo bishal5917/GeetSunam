@@ -22,9 +22,7 @@ import com.example.geetsunam.features.presentation.signup.viewmodel.SignupViewMo
 import com.example.geetsunam.utils.CustomDialog
 import com.example.geetsunam.utils.CustomToast
 import com.example.geetsunam.utils.LocalController
-import com.example.geetsunam.utils.LogTag
 import com.example.geetsunam.utils.Validation
-import com.example.geetsunam.utils.models.QueryRequestModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

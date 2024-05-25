@@ -24,4 +24,12 @@ class CustomDialog {
                 }.setNegativeButton(R.string.no) { _, _ -> }
         sureLogoutDialog.show()
     }
+
+    fun showSureDownloadDialog(context: Activity, onClickedYes: () -> Unit) {
+        val sureLogoutDialog = AlertDialog.Builder(context).setTitle(R.string.download)
+            .setMessage(R.string.sure_download).setPositiveButton(R.string.yes) { _, _ ->
+                onClickedYes()
+            }.setNegativeButton(R.string.no) { _, _ -> }
+        sureLogoutDialog.show()
+    }
 }

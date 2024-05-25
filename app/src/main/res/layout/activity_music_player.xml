@@ -32,13 +32,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/ibAddToPlaylist"
+            android:id="@+id/ibDownload"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="16dp"
             android:background="@drawable/custom_button_bg"
             android:contentDescription="@string/add_to_favourites"
-            android:src="@drawable/ic_playlistadd"
+            android:src="@drawable/ic_download"
             app:layout_constraintBottom_toTopOf="@+id/ivMusic"
             app:layout_constraintStart_toStartOf="parent" />
 

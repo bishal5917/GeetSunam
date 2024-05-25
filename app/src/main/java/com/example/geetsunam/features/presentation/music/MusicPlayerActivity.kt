@@ -13,8 +13,10 @@ import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.To
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
+import com.example.geetsunam.utils.Constants
 import com.example.geetsunam.utils.CustomDialog
 import com.example.geetsunam.utils.CustomToast
+import com.example.geetsunam.utils.Network
 import com.example.geetsunam.utils.models.CommonRequestModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -45,12 +47,25 @@ class MusicPlayerActivity : AppCompatActivity() {
         binding.result = args.song
         addToFavourite()
         setShuffleAndLoopMode()
+        downloadSong()
         //set current song and play it
         musicViewModel.onEvent(
             MusicEvent.SetAndPlayCurrent(
                 args.song.id!!, binding
             )
         )
+    }
+
+    private fun downloadSong() {
+        binding.ibDownload.setOnClickListener {
+            if (Network.hasInternetConnection(this)) {
+                CustomDialog().showSureDownloadDialog(this) {
+                    musicViewModel.onEvent(MusicEvent.DownloadSong(this))
+                }
+            } else {
+                CustomToast.showToast(this, Constants.noInternet)
+            }
+        }
     }
 
     private fun setShuffleAndLoopMode() {

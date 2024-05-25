@@ -5,10 +5,7 @@ import android.content.Intent
 import android.content.IntentSender
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -24,13 +21,11 @@ import com.example.geetsunam.features.presentation.login.viewmodel.LoginEvent
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginState
 import com.example.geetsunam.features.presentation.login.viewmodel.LoginViewModel
 import com.example.geetsunam.features.presentation.signup.SignupActivity
-import com.example.geetsunam.features.presentation.signup.viewmodel.SignupEvent
-import com.example.geetsunam.features.presentation.signup.viewmodel.SignupState
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.utils.CustomDialog
 import com.example.geetsunam.utils.CustomToast
 import com.example.geetsunam.utils.LocalController
-import com.example.geetsunam.utils.LogTag
+import com.example.geetsunam.utils.LogUtil
 import com.example.geetsunam.utils.Validation
 import com.example.geetsunam.utils.models.CommonRequestModel
 import com.example.heartconnect.features.presentation.screens.splash.viewmodel.SplashEvent
@@ -195,7 +190,7 @@ class LoginActivity : AppCompatActivity() {
                 val idToken = credential?.googleIdToken
                 when {
                     idToken != null -> {
-                        Log.d(LogTag.GOOGLE, "$idToken")
+                        Log.d(LogUtil.GOOGLE, "$idToken")
                         //authenticate through sever
                         googleLoginViewModel.onEvent(
                             GoogleLoginEvent.LoginWithGoogle(
@@ -205,7 +200,7 @@ class LoginActivity : AppCompatActivity() {
                     }
 
                     else -> {
-                        Log.d(LogTag.GOOGLE, "No ID token!")
+                        Log.d(LogUtil.GOOGLE, "No ID token!")
                         googleLoginViewModel.onEvent(
                             GoogleLoginEvent.HandleError(
                                 getString(R.string.google_auth_error)
@@ -216,14 +211,14 @@ class LoginActivity : AppCompatActivity() {
             } catch (e: ApiException) {
                 when (e.statusCode) {
                     CommonStatusCodes.CANCELED -> {
-                        Log.d(LogTag.GOOGLE, "One-tap dialog was closed.")
+                        Log.d(LogUtil.GOOGLE, "One-tap dialog was closed.")
                         googleLoginViewModel.onEvent(
                             GoogleLoginEvent.HandleError("Login cancelled")
                         )
                     }
 
                     CommonStatusCodes.NETWORK_ERROR -> {
-                        Log.d(LogTag.GOOGLE, "One-tap encountered a network error.")
+                        Log.d(LogUtil.GOOGLE, "One-tap encountered a network error.")
                         googleLoginViewModel.onEvent(
                             GoogleLoginEvent.HandleError(
                                 "Please check your internet connection"
@@ -233,7 +228,7 @@ class LoginActivity : AppCompatActivity() {
 
                     else -> {
                         Log.d(
-                            LogTag.GOOGLE,
+                            LogUtil.GOOGLE,
                             "Couldn't get credential from result." + " (${e.localizedMessage})"
                         )
                         googleLoginViewModel.onEvent(
@@ -252,7 +247,7 @@ class LoginActivity : AppCompatActivity() {
                 val ib = IntentSenderRequest.Builder(result.pendingIntent.intentSender).build()
                 oneTapResult.launch(ib)
             } catch (e: IntentSender.SendIntentException) {
-                Log.e(LogTag.GOOGLE, "Couldn't start One Tap UI: ${e.localizedMessage}")
+                Log.e(LogUtil.GOOGLE, "Couldn't start One Tap UI: ${e.localizedMessage}")
                 googleLoginViewModel.onEvent(
                     GoogleLoginEvent.HandleError(
                         getString(R.string.google_auth_error)
@@ -261,7 +256,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }?.addOnFailureListener(this) { e ->
             // No Google Accounts found. Just continue presenting the signed-out UI.
-            Log.d(LogTag.GOOGLE, e.localizedMessage!!)
+            Log.d(LogUtil.GOOGLE, e.localizedMessage!!)
             googleLoginViewModel.onEvent(
                 GoogleLoginEvent.HandleError(
                     getString(R.string.google_auth_error)

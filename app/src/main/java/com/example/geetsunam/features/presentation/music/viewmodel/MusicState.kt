@@ -19,7 +19,7 @@ data class MusicState(
     }
 
     enum class MusicStatus {
-        IDLE, PREPARING, PLAYING, PAUSED, StartTracking
+        IDLE, PREPARING, PLAYING, PAUSED, StartTracking, Downloading, Downloaded, Failed
     }
 
     enum class PlayMode {

@@ -1,7 +1,7 @@
 package com.example.geetsunam.features.presentation.music.viewmodel
 
+import android.content.Context
 import android.media.MediaPlayer
-import android.util.Log
 import androidx.annotation.OptIn
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,8 +13,8 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.example.geetsunam.R
 import com.example.geetsunam.databinding.ActivityMusicBinding
 import com.example.geetsunam.databinding.ActivityMusicPlayerBinding
+import com.example.geetsunam.downloader.MusicDownloader
 import com.example.geetsunam.features.domain.entities.SongEntity
-import com.example.geetsunam.utils.LogTag
 import com.example.geetsunam.utils.models.Song
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -76,6 +76,10 @@ class MusicViewModel @Inject constructor(private val player: ExoPlayer) : ViewMo
                 }
             }
 
+            is MusicEvent.DownloadSong -> {
+                downloadSong(event.context)
+            }
+
             is MusicEvent.Reset -> {
                 releasePlayer()
                 _musicState.postValue(
@@ -87,6 +91,16 @@ class MusicViewModel @Inject constructor(private val player: ExoPlayer) : ViewMo
 
             else -> {}
         }
+    }
+
+    private fun downloadSong(context: Context) {
+        val downloader = MusicDownloader(context)
+        val song = _musicState.value?.currentSong?.songName
+        val artist = _musicState.value?.currentSong?.artistName
+        val fileName = "$artist - $song"
+        downloader.downloadFile(
+            _musicState.value?.currentSong?.source ?: "", fileName
+        )
     }
 
     private fun setMediaItems(playlist: List<Song?>?, playlistName: String) {

@@ -7,7 +7,7 @@ import android.util.Log
 import android.widget.ImageButton
 import com.example.geetsunam.R
 import com.example.geetsunam.utils.CustomToast
-import com.example.geetsunam.utils.LogTag
+import com.example.geetsunam.utils.LogUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -52,14 +52,14 @@ class GoogleSignTestActivity : AppCompatActivity() {
         try {
             val account: GoogleSignInAccount = completedTask.getResult(ApiException::class.java)
             // Signed in successfully, show authenticated UI.
-            Log.d(LogTag.GOOGLE, "${account.idToken}")
+            Log.d(LogUtil.GOOGLE, "${account.idToken}")
             CustomToast.showToast(
                 context = this, "Authentication failed"
             )
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.d(LogTag.GOOGLE, "signInResult:failed code=" + e.statusCode)
+            Log.d(LogUtil.GOOGLE, "signInResult:failed code=" + e.statusCode)
         }
     }
 }

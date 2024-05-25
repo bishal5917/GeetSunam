@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.geetsunam.services.local.LocalDatastore
 import com.example.geetsunam.utils.DateUtil
-import com.example.geetsunam.utils.LogTag
+import com.example.geetsunam.utils.LogUtil
 import com.example.heartconnect.features.presentation.screens.splash.viewmodel.SplashEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -85,7 +85,7 @@ class SplashViewModel @Inject constructor(private val localDatastore: LocalDatas
                     message = "Some error occured",
                 )
             )
-            Log.d(LogTag.SPLASH, "Exception : ${ex.message}")
+            Log.d(LogUtil.SPLASH, "Exception : ${ex.message}")
         }
     }
 }

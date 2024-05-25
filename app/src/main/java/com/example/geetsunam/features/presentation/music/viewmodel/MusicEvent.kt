@@ -1,5 +1,6 @@
 package com.example.geetsunam.features.presentation.music.viewmodel
 
+import android.content.Context
 import android.media.MediaPlayer
 import androidx.media3.exoplayer.ExoPlayer
 import com.example.geetsunam.databinding.ActivityMusicBinding
@@ -30,6 +31,8 @@ sealed class MusicEvent {
     data class ChangeRepeatMode(val binding: ActivityMusicPlayerBinding) : MusicEvent()
 
     data class ChangeShuffleMode(val binding: ActivityMusicPlayerBinding) : MusicEvent()
+
+    data class DownloadSong(val context: Context) : MusicEvent()
 
     object Reset : MusicEvent()
 }
