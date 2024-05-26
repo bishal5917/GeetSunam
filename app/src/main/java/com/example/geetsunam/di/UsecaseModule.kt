@@ -4,6 +4,7 @@ import com.example.geetsunam.features.data.datasource.UserLocalDatasource
 import com.example.geetsunam.features.domain.repositories.UserRepository
 import com.example.geetsunam.features.domain.usecases.ChangePasswordUsecase
 import com.example.geetsunam.features.domain.usecases.DeleteFavouriteUsecase
+import com.example.geetsunam.features.domain.usecases.DeleteOfflineSongUsecase
 import com.example.geetsunam.features.domain.usecases.DeleteRecommendedUsecase
 import com.example.geetsunam.features.domain.usecases.ForgotPasswordUsecase
 import com.example.geetsunam.features.domain.usecases.GetArtistSongsUsecase
@@ -233,5 +234,10 @@ object UsecaseModule {
     @Provides
     fun providesGetOfflineSongsUsecase(localDatasource: UserLocalDatasource): GetOfflineSongsUsecase {
         return GetOfflineSongsUsecase(localDatasource)
+    }
+
+    @Provides
+    fun providesDeleteSongUsecaseModule(localDatasource: UserLocalDatasource): DeleteOfflineSongUsecase {
+        return DeleteOfflineSongUsecase(localDatasource)
     }
 }

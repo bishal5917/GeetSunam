@@ -4,6 +4,7 @@
     package="com.example.geetsunam">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
@@ -35,9 +36,9 @@
         <activity
             android:name=".features.presentation.signup.SignupActivity"
             android:exported="false" />
-        <activity
-            android:name=".features.presentation.music.MusicActivity"
-            android:exported="false" />
+        <!--        <activity-->
+        <!--            android:name=".features.presentation.music.MusicActivity"-->
+        <!--            android:exported="false" />-->
         <activity
             android:name=".features.presentation.music.MusicPlayerActivity"
             android:exported="false" />
@@ -56,7 +57,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
-
         <!--        <receiver-->
         <!--            android:name=".downloader.DownloadCompletedReceiver"-->
         <!--            android:exported="true">-->

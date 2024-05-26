@@ -33,8 +33,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class OfflineSongFragment : Fragment() {
-    private val offlineSongsAdapter by lazy { OfflineSongAdapter() }
-
     private lateinit var gview: View
 
     @Inject
@@ -42,6 +40,12 @@ class OfflineSongFragment : Fragment() {
 
     @Inject
     lateinit var offlineSongViewModel: OfflineSongViewModel
+
+    private val offlineSongsAdapter by lazy {
+        OfflineSongAdapter(
+            requireContext(), offlineSongViewModel
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -103,6 +107,9 @@ class OfflineSongFragment : Fragment() {
                 noSongsTv.visibility = View.VISIBLE
                 pb.visibility = View.GONE
                 CustomToast.showToast(context = requireContext(), "${response.message}")
+            }
+            if (response.status == OfflineSongState.OfflineSongStatus.DELETED) {
+                offlineSongViewModel.onEvent(OfflineSongEvent.GetOfflineSongs)
             }
         }
     }

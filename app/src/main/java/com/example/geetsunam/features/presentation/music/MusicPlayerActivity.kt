@@ -13,6 +13,8 @@ import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.To
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicEvent
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicState
 import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewModel
+import com.example.geetsunam.features.presentation.offline_song.viewmodel.OfflineSongEvent
+import com.example.geetsunam.features.presentation.offline_song.viewmodel.OfflineSongViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.utils.Constants
 import com.example.geetsunam.utils.CustomDialog
@@ -39,6 +41,9 @@ class MusicPlayerActivity : AppCompatActivity() {
 
     @Inject
     lateinit var toggleFavViewModel: ToggleFavViewModel
+
+    @Inject
+    lateinit var offlineSongViewModel: OfflineSongViewModel
 
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,6 +89,7 @@ class MusicPlayerActivity : AppCompatActivity() {
                         response.message
                     }"
                 )
+                offlineSongViewModel.onEvent(OfflineSongEvent.GetOfflineSongs)
             }
             if (response.status == MusicState.MusicStatus.Failed) {
                 CustomDialog().hideDownloadingDialog(dialog)

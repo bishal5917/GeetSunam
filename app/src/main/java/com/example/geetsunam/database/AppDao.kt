@@ -68,4 +68,8 @@ interface AppDao {
     //getting offline songs
     @Query("SELECT * FROM OfflineSong")
     fun getOfflineSongs(): Flow<List<OfflineSong>>
+
+    //Delete a particular song
+    @Query("DELETE FROM OfflineSong WHERE id=:songId")
+    suspend fun deleteOfflineSong(songId: String)
 }

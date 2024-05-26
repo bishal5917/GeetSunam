@@ -5,16 +5,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.geetsunam.database.entities.OfflineSong
+import com.example.geetsunam.features.domain.usecases.DeleteOfflineSongUsecase
 import com.example.geetsunam.features.domain.usecases.GetOfflineSongsUsecase
+import com.example.geetsunam.utils.FileUtil
 import com.example.geetsunam.utils.models.Artist
 import com.example.geetsunam.utils.models.Song
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class OfflineSongViewModel @Inject constructor(
-    private val getOfflineSongsUsecase: GetOfflineSongsUsecase
+    private val getOfflineSongsUsecase: GetOfflineSongsUsecase,
+    private val deleteOfflineSongUsecase: DeleteOfflineSongUsecase
 ) : ViewModel() {
     private val _state = MutableLiveData(OfflineSongState.idle)
     val state: LiveData<OfflineSongState> = _state
@@ -23,6 +28,10 @@ class OfflineSongViewModel @Inject constructor(
         when (event) {
             is OfflineSongEvent.GetOfflineSongs -> {
                 getSongs()
+            }
+
+            is OfflineSongEvent.DeleteOfflineSong -> {
+                deleteMusic(event.id, event.filePath)
             }
 
             else -> {}
@@ -71,5 +80,25 @@ class OfflineSongViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun deleteMusic(id: String, path: String) {
+        _state.value?.copy(
+            status = OfflineSongState.OfflineSongStatus.DELETING,
+            message = "Deleting a file...",
+        )
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // Execute the suspend function within the coroutine scope
+                deleteOfflineSongUsecase.call(id)
+                FileUtil().deleteFile(path)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        _state.value?.copy(
+            status = OfflineSongState.OfflineSongStatus.DELETED,
+            message = "file deleted.",
+        )
     }
 }

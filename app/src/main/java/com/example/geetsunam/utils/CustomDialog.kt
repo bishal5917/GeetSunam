@@ -3,6 +3,7 @@ package com.example.geetsunam.utils
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import com.example.geetsunam.R
 
 class CustomDialog {
@@ -36,10 +37,18 @@ class CustomDialog {
     }
 
     fun showSureDownloadDialog(context: Activity, onClickedYes: () -> Unit) {
-        val sureLogoutDialog = AlertDialog.Builder(context).setTitle(R.string.download)
+        val sureDownloadDialog = AlertDialog.Builder(context).setTitle(R.string.download)
             .setMessage(R.string.sure_download).setPositiveButton(R.string.yes) { _, _ ->
                 onClickedYes()
             }.setNegativeButton(R.string.no) { _, _ -> }
-        sureLogoutDialog.show()
+        sureDownloadDialog.show()
+    }
+
+    fun showSureDeleteDialog(context: Context, onClickedYes: () -> Unit) {
+        val sureDeleteDialog = AlertDialog.Builder(context).setTitle(R.string.delete)
+            .setMessage(R.string.sure_delete).setPositiveButton(R.string.yes) { _, _ ->
+                onClickedYes()
+            }.setNegativeButton(R.string.no) { _, _ -> }
+        sureDeleteDialog.show()
     }
 }

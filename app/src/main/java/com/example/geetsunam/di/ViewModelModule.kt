@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.media3.exoplayer.ExoPlayer
 import com.example.geetsunam.features.domain.usecases.ChangePasswordUsecase
 import com.example.geetsunam.features.domain.usecases.DeleteFavouriteUsecase
+import com.example.geetsunam.features.domain.usecases.DeleteOfflineSongUsecase
 import com.example.geetsunam.features.domain.usecases.DeleteRecommendedUsecase
 import com.example.geetsunam.features.domain.usecases.ForgotPasswordUsecase
 import com.example.geetsunam.features.domain.usecases.GetArtistSongsUsecase
@@ -243,8 +244,9 @@ object ViewModelModule {
     @Provides
     @Singleton
     fun providesOfflineSongViewModel(
-        getOfflineSongsUsecase: GetOfflineSongsUsecase
+        getOfflineSongsUsecase: GetOfflineSongsUsecase,
+        deleteOfflineSongUsecase: DeleteOfflineSongUsecase
     ): OfflineSongViewModel {
-        return OfflineSongViewModel(getOfflineSongsUsecase)
+        return OfflineSongViewModel(getOfflineSongsUsecase, deleteOfflineSongUsecase)
     }
 }

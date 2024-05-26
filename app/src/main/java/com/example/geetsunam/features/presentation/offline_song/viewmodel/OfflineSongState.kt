@@ -10,6 +10,6 @@ data class OfflineSongState(
     }
 
     enum class OfflineSongStatus {
-        IDLE, LOADING, SUCCESS, EMPTY, FAILED
+        IDLE, LOADING, SUCCESS, EMPTY, FAILED, DELETING, DELETED
     }
 }

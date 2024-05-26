@@ -38,6 +38,9 @@ interface UserLocalDatasource {
 
     //getting offline song
     fun getOfflineSongs(): Flow<List<OfflineSong>>
+
+    //getting single offline song
+    suspend fun deleteOfflineSong(id: String)
 }
 
 class UserLocalDatasourceImpl @Inject constructor(private val appDao: AppDao) :
@@ -112,5 +115,9 @@ class UserLocalDatasourceImpl @Inject constructor(private val appDao: AppDao) :
 
     override fun getOfflineSongs(): Flow<List<OfflineSong>> {
         return appDao.getOfflineSongs()
+    }
+
+    override suspend fun deleteOfflineSong(id: String) {
+        appDao.deleteOfflineSong(id)
     }
 }
