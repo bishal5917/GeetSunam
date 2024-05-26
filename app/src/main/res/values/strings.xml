@@ -74,4 +74,5 @@
     <string name="google_auth_error">Authentication error,Please try again later!</string>
     <string name="my_downloads">my_downloads</string>
     <string name="downloads">Downloads</string>
+    <string name="no_songs_downloaded">No songs downloaded !</string>
 </resources>

@@ -13,6 +13,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
@@ -32,6 +33,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.internal.notify
+import java.io.IOException
 import java.lang.Exception
 import javax.inject.Inject
 import kotlin.random.Random
@@ -127,7 +129,11 @@ class MusicViewModel @Inject constructor(
         //Now loop through songs and add all
         if (playlist != null) {
             for (song: Song? in playlist) {
-                items.add(MediaItem.fromUri(song?.source!!))
+                if (playlistName == "offline") {
+                    items.add(MediaItem.fromUri(song?.filePath!!))
+                } else {
+                    items.add(MediaItem.fromUri(song?.source!!))
+                }
             }
         }
         //Now setting the mediaItems
@@ -229,6 +235,20 @@ class MusicViewModel @Inject constructor(
                     binding.result = _musicState.value?.currentSong
                 }
                 super.onMediaItemTransition(mediaItem, reason)
+            }
+
+            override fun onPlayerError(error: PlaybackException) {
+                if (error.cause is IOException) {
+                    // Handle the case where the file was not found
+                    _musicState.value = _musicState.value?.copy(
+                        status = MusicState.MusicStatus.Failed, message = "File not found"
+                    )
+                } else {
+                    // Handle other types of exceptions
+                    _musicState.value = _musicState.value?.copy(
+                        status = MusicState.MusicStatus.Failed, message = error.message ?: ""
+                    )
+                }
             }
         })
 //        binding.result = songEntity

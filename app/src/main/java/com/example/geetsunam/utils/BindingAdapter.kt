@@ -16,6 +16,7 @@ import com.example.geetsunam.features.presentation.home.HomeFragmentDirections
 import com.example.geetsunam.features.presentation.liked_song.LikedSongFragmentDirections
 import com.example.geetsunam.features.presentation.music.MusicPlayerActivity
 import com.example.geetsunam.features.presentation.new_song.NewSongFragmentDirections
+import com.example.geetsunam.features.presentation.offline_song.OfflineSongFragmentDirections
 import com.example.geetsunam.features.presentation.single_artist.ArtistActivity
 import com.example.geetsunam.features.presentation.trending.TrendingFragmentDirections
 import com.example.geetsunam.utils.models.Artist
@@ -68,6 +69,12 @@ class BindingAdapter {
                         val action = ForYouFragmentDirections.actionForYouFragmentToMusicActivity(
                             songEntity
                         )
+                        songCard.findNavController().navigate(action)
+                    } else if (from == "offline") {
+                        val action =
+                            OfflineSongFragmentDirections.actionOfflineSongFragmentToMusicActivity(
+                                songEntity
+                            )
                         songCard.findNavController().navigate(action)
                     } else if (from == "genre_songs" || from == "artist_songs" || from == "search") {
                         val intent = Intent(songCard.context, MusicPlayerActivity::class.java)
