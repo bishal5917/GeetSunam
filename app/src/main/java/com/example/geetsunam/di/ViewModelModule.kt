@@ -58,7 +58,7 @@ import com.example.geetsunam.features.presentation.single_artist.viewmodel.Artis
 import com.example.geetsunam.features.presentation.single_genre.viewmodel.GenreSongViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingViewModel
-import com.example.geetsunam.services.local.LocalDatastore
+import com.example.geetsunam.datastore.LocalDatastore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

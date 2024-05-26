@@ -1,6 +1,8 @@
 package com.example.geetsunam.features.presentation.music
 
 import android.app.Dialog
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +18,8 @@ import com.example.geetsunam.features.presentation.music.viewmodel.MusicViewMode
 import com.example.geetsunam.features.presentation.offline_song.viewmodel.OfflineSongEvent
 import com.example.geetsunam.features.presentation.offline_song.viewmodel.OfflineSongViewModel
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
+import com.example.geetsunam.service.Actions
+import com.example.geetsunam.service.SongTrackService
 import com.example.geetsunam.utils.Constants
 import com.example.geetsunam.utils.CustomDialog
 import com.example.geetsunam.utils.CustomToast
@@ -61,6 +65,19 @@ class MusicPlayerActivity : AppCompatActivity() {
                 args.song.id!!, binding
             )
         )
+        //Start song tracking service
+        configureService(Actions.START)
+    }
+
+    private fun configureService(action: Actions) {
+        Intent(this, SongTrackService::class.java).also {
+            it.action = action.name
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(it)
+                return
+            }
+            startService(it)
+        }
     }
 
     private fun downloadSong() {
@@ -150,6 +167,7 @@ class MusicPlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         musicViewModel.onEvent(MusicEvent.Reset)
+        configureService(Actions.STOP)
         super.onDestroy()
     }
 }

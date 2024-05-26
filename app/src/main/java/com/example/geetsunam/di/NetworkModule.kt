@@ -1,11 +1,10 @@
 package com.example.geetsunam.di
 
 import com.example.geetsunam.core.configs.ApiConfig
-import com.example.geetsunam.services.network.ApiService
+import com.example.geetsunam.network.ApiInterface
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
-//import okhttp3.logging.HttpLoggingInterceptor
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
@@ -38,8 +37,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
+    fun providesApiInterface(retrofit: Retrofit): ApiInterface {
+        return retrofit.create(ApiInterface::class.java)
     }
 
     @Provides

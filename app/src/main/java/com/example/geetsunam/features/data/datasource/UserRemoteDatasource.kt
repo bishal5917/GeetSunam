@@ -9,7 +9,7 @@ import com.example.geetsunam.features.data.models.signup.SignupRequestModel
 import com.example.geetsunam.features.data.models.songs.RecommendedSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SingleSongResponseModel
 import com.example.geetsunam.features.data.models.songs.SongResponseModel
-import com.example.geetsunam.services.network.ApiService
+import com.example.geetsunam.network.ApiInterface
 import com.example.geetsunam.utils.GetQuery
 import com.example.geetsunam.utils.models.CommonRequestModel
 import com.example.geetsunam.utils.models.CommonResponseModel
@@ -52,10 +52,10 @@ interface UserRemoteDatasource {
     suspend fun changePassword(commonRequestModel: CommonRequestModel): Response<CommonResponseModel>
 }
 
-class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiService) :
+class UserRemoteDatasourceImpl @Inject constructor(private val apiInterface: ApiInterface) :
     UserRemoteDatasource {
     override suspend fun login(loginRequestModel: LoginRequestModel): Response<LoginResponseModel> {
-        return apiService.login(
+        return apiInterface.login(
             body = mapOf<String, String>(
                 "email" to loginRequestModel.email,
                 "password" to loginRequestModel.password,
@@ -64,7 +64,7 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
     }
 
     override suspend fun forgotPassword(commonRequestModel: CommonRequestModel): Response<CommonResponseModel> {
-        return apiService.forgotPassword(
+        return apiInterface.forgotPassword(
             body = mapOf<String, String>(
                 "email" to commonRequestModel.email!!,
             )
@@ -72,7 +72,7 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
     }
 
     override suspend fun signUp(signupRequestModel: SignupRequestModel): Response<CommonResponseModel> {
-        return apiService.signUp(
+        return apiInterface.signUp(
             body = mapOf<String, String>(
                 "email" to signupRequestModel.email,
                 "password" to signupRequestModel.password,
@@ -84,7 +84,7 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
     }
 
     override suspend fun loginWithGoogle(commonRequestModel: CommonRequestModel): Response<LoginResponseModel> {
-        return apiService.loginWithGoogle(
+        return apiInterface.loginWithGoogle(
             body = mapOf<String, String>(
                 "googleAccessToken" to commonRequestModel.googleAccessToken!!,
                 "type" to "manual",
@@ -93,34 +93,34 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
     }
 
     override suspend fun getGenres(commonRequestModel: CommonRequestModel): Response<GenreResponseModel> {
-        return apiService.getGenres(authToken = "Bearer ${commonRequestModel.token}")
+        return apiInterface.getGenres(authToken = "Bearer ${commonRequestModel.token}")
     }
 
     override suspend fun getFeaturedArtists(commonRequestModel: CommonRequestModel): Response<ArtistResponseModel> {
-        return apiService.getFeaturedArtists(authToken = "Bearer ${commonRequestModel.token}")
+        return apiInterface.getFeaturedArtists(authToken = "Bearer ${commonRequestModel.token}")
     }
 
     override suspend fun getFeaturedSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel> {
-        return apiService.getFeaturedSongs(authToken = "Bearer ${commonRequestModel.token}")
+        return apiInterface.getFeaturedSongs(authToken = "Bearer ${commonRequestModel.token}")
     }
 
     override suspend fun getTrendingSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel> {
-        return apiService.getTrendingSongs(authToken = "Bearer ${commonRequestModel.token}")
+        return apiInterface.getTrendingSongs(authToken = "Bearer ${commonRequestModel.token}")
     }
 
     override suspend fun getSingleSong(commonRequestModel: CommonRequestModel): Response<SingleSongResponseModel> {
-        return apiService.getSingleSong(
+        return apiInterface.getSingleSong(
             authToken = "Bearer ${commonRequestModel.token}",
             songId = commonRequestModel.songId ?: "abc"
         )
     }
 
     override suspend fun getNewSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel> {
-        return apiService.getNewSongs(authToken = "Bearer ${commonRequestModel.token}")
+        return apiInterface.getNewSongs(authToken = "Bearer ${commonRequestModel.token}")
     }
 
     override suspend fun toggleFavourite(commonRequestModel: CommonRequestModel): Response<SingleSongResponseModel> {
-        return apiService.toggleFavourites(
+        return apiInterface.toggleFavourites(
             authToken = "Bearer ${commonRequestModel.token}", body = mapOf<String, String>(
                 "songs" to commonRequestModel.songId!!,
             )
@@ -128,38 +128,38 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
     }
 
     override suspend fun getFavouriteSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel> {
-        return apiService.getFavouriteSongs(authToken = "Bearer ${commonRequestModel.token}")
+        return apiInterface.getFavouriteSongs(authToken = "Bearer ${commonRequestModel.token}")
     }
 
     override suspend fun getGenreSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel> {
-        return apiService.getGenreSongs(
+        return apiInterface.getGenreSongs(
             authToken = "Bearer ${commonRequestModel.token}",
             genreId = commonRequestModel.genreId ?: "abc"
         )
     }
 
     override suspend fun getArtistSongs(commonRequestModel: CommonRequestModel): Response<SongResponseModel> {
-        return apiService.getArtistSongs(
+        return apiInterface.getArtistSongs(
             authToken = "Bearer ${commonRequestModel.token}",
             genreId = commonRequestModel.artistId ?: "abc"
         )
     }
 
     override suspend fun search(queryRequestModel: QueryRequestModel): Response<SearchResponseModel> {
-        return apiService.search(
+        return apiInterface.search(
             authToken = "Bearer ${queryRequestModel.token}",
             queryMap = GetQuery.getQueryMap(queryRequestModel)
         )
     }
 
     override suspend fun getRecommendedSongs(commonRequestModel: CommonRequestModel): Response<RecommendedSongResponseModel> {
-        return apiService.getRecommendedSongs(
+        return apiInterface.getRecommendedSongs(
             authToken = "Bearer ${commonRequestModel.token}",
         )
     }
 
     override suspend fun trackPlayedSong(commonRequestModel: CommonRequestModel): Response<CommonResponseModel> {
-        return apiService.trackPlayedSong(
+        return apiInterface.trackPlayedSong(
             authToken = "Bearer ${commonRequestModel.token}", body = mapOf<String, String>(
                 "id" to commonRequestModel.songId!!,
             )
@@ -167,7 +167,7 @@ class UserRemoteDatasourceImpl @Inject constructor(private val apiService: ApiSe
     }
 
     override suspend fun changePassword(commonRequestModel: CommonRequestModel): Response<CommonResponseModel> {
-        return apiService.changePassword(
+        return apiInterface.changePassword(
             authToken = "Bearer ${commonRequestModel.token}", body = mapOf<String, String>(
                 "currentPassword" to commonRequestModel.currentPassword!!,
                 "newPassword" to commonRequestModel.newPassword!!,

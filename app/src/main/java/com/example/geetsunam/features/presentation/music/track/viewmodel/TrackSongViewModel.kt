@@ -16,8 +16,8 @@ import javax.inject.Inject
 class TrackSongViewModel @Inject constructor(
     private val trackPlayedSongUsecase: TrackPlayedSongUsecase
 ) : ViewModel() {
-    private val _liveState = MutableLiveData(TrackSongState.idle)
-    val trackSongState: LiveData<TrackSongState> = _liveState
+    private val _state = MutableLiveData(TrackSongState.idle)
+    val state: LiveData<TrackSongState> = _state
 
     fun onEvent(event: TrackSongEvent) {
         when (event) {
@@ -33,8 +33,8 @@ class TrackSongViewModel @Inject constructor(
         trackPlayedSongUsecase.call(commonRequestModel).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
-                    _liveState.postValue(
-                        _liveState.value?.copy(
+                    _state.postValue(
+                        _state.value?.copy(
                             status = TrackSongState.TrackSongStatus.TRACKING,
                             message = "Tracking current song..."
                         )
@@ -42,8 +42,8 @@ class TrackSongViewModel @Inject constructor(
                 }
 
                 is Resource.Success -> {
-                    _liveState.postValue(
-                        _liveState.value?.copy(
+                    _state.postValue(
+                        _state.value?.copy(
                             status = TrackSongState.TrackSongStatus.TRACKED,
                             message = "Success",
                         )
@@ -51,8 +51,8 @@ class TrackSongViewModel @Inject constructor(
                 }
 
                 is Resource.Error -> {
-                    _liveState.postValue(
-                        _liveState.value?.copy(
+                    _state.postValue(
+                        _state.value?.copy(
                             status = TrackSongState.TrackSongStatus.FAILED, message = result.message
                         )
                     )

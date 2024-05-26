@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
@@ -56,6 +57,11 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:exported="false" />
+
+        <service
+            android:name=".service.SongTrackService"
+            android:enabled="true"
             android:exported="false" />
         <!--        <receiver-->
         <!--            android:name=".downloader.DownloadCompletedReceiver"-->

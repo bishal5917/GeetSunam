@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.geetsunam.services.local.LocalDatastore
+import com.example.geetsunam.datastore.LocalDatastore
 import com.example.geetsunam.utils.DateUtil
 import com.example.geetsunam.utils.LogUtil
 import com.example.heartconnect.features.presentation.screens.splash.viewmodel.SplashEvent

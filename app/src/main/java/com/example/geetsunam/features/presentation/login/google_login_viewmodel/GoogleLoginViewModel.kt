@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.geetsunam.features.domain.entities.UserEntity
 import com.example.geetsunam.features.domain.usecases.GoogleLoginUsecase
-import com.example.geetsunam.services.local.LocalDatastore
+import com.example.geetsunam.datastore.LocalDatastore
 import com.example.geetsunam.utils.Resource
 import com.example.geetsunam.utils.models.CommonRequestModel
 import dagger.hilt.android.lifecycle.HiltViewModel

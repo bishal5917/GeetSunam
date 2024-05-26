@@ -16,9 +16,9 @@ import com.example.geetsunam.features.data.datasource.UserRemoteDatasource
 import com.example.geetsunam.features.data.datasource.UserRemoteDatasourceImpl
 import com.example.geetsunam.features.data.repositories.UserRepositoryImpl
 import com.example.geetsunam.features.domain.repositories.UserRepository
-import com.example.geetsunam.services.local.LocalDatastore
-import com.example.geetsunam.services.local.LocalDatastoreImpl
-import com.example.geetsunam.services.network.ApiService
+import com.example.geetsunam.datastore.LocalDatastore
+import com.example.geetsunam.datastore.LocalDatastoreImpl
+import com.example.geetsunam.network.ApiInterface
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -53,8 +53,8 @@ object AppModule {
         LocalDatastoreImpl(datastore)
 
     @Provides
-    fun providesRemoteDataSource(apiService: ApiService): UserRemoteDatasource {
-        return UserRemoteDatasourceImpl(apiService)
+    fun providesRemoteDataSource(apiInterface: ApiInterface): UserRemoteDatasource {
+        return UserRemoteDatasourceImpl(apiInterface)
     }
 
     @Provides

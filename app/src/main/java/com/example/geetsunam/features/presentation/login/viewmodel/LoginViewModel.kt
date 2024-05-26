@@ -9,7 +9,7 @@ import com.example.geetsunam.features.domain.entities.UserEntity
 import com.example.geetsunam.features.domain.usecases.DeleteFavouriteUsecase
 import com.example.geetsunam.features.domain.usecases.DeleteRecommendedUsecase
 import com.example.geetsunam.features.domain.usecases.LoginUsecase
-import com.example.geetsunam.services.local.LocalDatastore
+import com.example.geetsunam.datastore.LocalDatastore
 import com.example.geetsunam.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
