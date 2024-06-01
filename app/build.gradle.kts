@@ -34,8 +34,8 @@ android {
         applicationId = "com.example.geetsunam"
         minSdk = 26
         targetSdk = 33
-        versionCode = 1
-        versionName = "Geetsunam"
+        versionCode = 2
+        versionName = "2.${getBuildNumber()}"
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

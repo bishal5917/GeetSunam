@@ -135,18 +135,17 @@ class SongTrackService : Service() {
     }
 
     private fun createNotification(): Notification {
-        val notificationChannelId = "TRACKING SERVICE CHANNEL"
+        val notificationChannelId = "Tracking Song"
+        val notificationChannelName = "Tracking Song Channel"
         // depending on the Android API that we're dealing with we will have
         // to use a specific method to create the notification
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager;
             val channel = NotificationChannel(
-                notificationChannelId,
-                "TRACKING SERVICE CHANNEL ID",
-                NotificationManager.IMPORTANCE_HIGH
+                notificationChannelId, notificationChannelName, NotificationManager.IMPORTANCE_HIGH
             ).let {
-                it.description = "TRACKING SERVICE CHANNEL"
+                it.description = "Tracking Song"
                 it.enableLights(true)
                 it.lightColor = Color.RED
                 it.enableVibration(true)
@@ -165,8 +164,10 @@ class SongTrackService : Service() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) Notification.Builder(
                 this, notificationChannelId
             ) else Notification.Builder(this)
-
-        return builder.setContentTitle("Song Tracking Service").setContentText("Service Running")
+        //get current song name and singer
+        val song = musicViewModel.musicState.value?.currentSong?.songName
+        val artist = musicViewModel.musicState.value?.currentSong?.artistName
+        return builder.setContentTitle("Music Playing").setContentText("$artist - $song")
             .setContentIntent(pendingIntent).setSmallIcon(R.mipmap.ic_launcher).setTicker("...")
             .setPriority(Notification.PRIORITY_HIGH) // for under android 26 compatibility
             .build()

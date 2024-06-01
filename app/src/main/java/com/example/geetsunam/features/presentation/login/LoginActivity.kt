@@ -53,10 +53,14 @@ class LoginActivity : AppCompatActivity() {
     @Inject
     lateinit var splashViewModel: SplashViewModel
 
+    //common dialog
+    private lateinit var dialog: Dialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        dialog = Dialog(this)
 
         //one tap builders
         oneTapClient = Identity.getSignInClient(this)
@@ -81,6 +85,7 @@ class LoginActivity : AppCompatActivity() {
             startActivity(signupIntent)
         }
         binding.ibGoogle.setOnClickListener {
+            CustomDialog().showLoadingDialog(dialog)
             oneTapClient!!.signOut()
             displaySignUp()
         }
@@ -117,7 +122,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun observeNormalLogin() {
-        val dialog = Dialog(this)
         loginViewModel.loginState.observe(this) { response ->
             if (response.status == LoginState.LoginStatus.FormValid) {
                 loginViewModel.onEvent(LoginEvent.LoginUser)
@@ -153,12 +157,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun observeGoogleLogin() {
-        val dialog = Dialog(this)
         googleLoginViewModel.googleLoginState.observe(this) { response ->
-            if (response.status == GoogleLoginState.GoogleLoginStatus.LOADING) {
-                //show loading dialog
-                CustomDialog().showLoadingDialog(dialog)
-            }
             if (response.status == GoogleLoginState.GoogleLoginStatus.SUCCESS) {
                 splashViewModel.onEvent(SplashEvent.SetUser(response.user!!))
                 CustomDialog().hideLoadingDialog(dialog)

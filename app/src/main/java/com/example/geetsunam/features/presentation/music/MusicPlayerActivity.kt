@@ -58,7 +58,7 @@ class MusicPlayerActivity : AppCompatActivity() {
         addToFavourite()
         setShuffleAndLoopMode()
         downloadSong()
-        observeDownloader()
+        observeSongStatus()
         //set current song and play it
         musicViewModel.onEvent(
             MusicEvent.SetAndPlayCurrent(
@@ -92,7 +92,7 @@ class MusicPlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeDownloader() {
+    private fun observeSongStatus() {
         val dialog = Dialog(this)
         musicViewModel.musicState.observe(this) { response ->
             if (response.status == MusicState.MusicStatus.Downloading) {
@@ -115,6 +115,10 @@ class MusicPlayerActivity : AppCompatActivity() {
                         response.message
                     }"
                 )
+            }
+            if (response.status == MusicState.MusicStatus.Changed) {
+                //Start song tracking service for next song also
+                configureService(Actions.START)
             }
         }
     }

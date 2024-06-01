@@ -78,8 +78,8 @@
 
                 <ImageButton
                     android:id="@+id/ibDelete"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:layout_marginEnd="16dp"
                     android:background="@drawable/custom_button_bg"
                     android:contentDescription="@string/add_to_favourites"

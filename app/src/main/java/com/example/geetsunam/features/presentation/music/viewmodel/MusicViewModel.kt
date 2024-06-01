@@ -233,6 +233,9 @@ class MusicViewModel @Inject constructor(
                     val currentPosition = player.currentMediaItemIndex
                     setSongByIdx(currentPosition)
                     binding.result = _musicState.value?.currentSong
+                    _musicState.value = _musicState.value?.copy(
+                        status = MusicState.MusicStatus.Changed, message = "Changed"
+                    )
                 }
                 super.onMediaItemTransition(mediaItem, reason)
             }
