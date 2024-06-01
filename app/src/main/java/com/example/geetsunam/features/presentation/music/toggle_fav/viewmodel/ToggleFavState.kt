@@ -1,7 +1,9 @@
 package com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel
 
 data class ToggleFavState(
-    val status: ToggleFavStatus, val message: String? = null, val isFavourite: Boolean? = null,
+    val status: ToggleFavStatus,
+    val message: String? = null,
+    val isFavourite: Boolean? = null,
     val drawableId: Int? = null
 ) {
     companion object {

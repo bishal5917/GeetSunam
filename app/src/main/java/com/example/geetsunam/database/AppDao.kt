@@ -72,4 +72,12 @@ interface AppDao {
     //Delete a particular song
     @Query("DELETE FROM OfflineSong WHERE id=:songId")
     suspend fun deleteOfflineSong(songId: String)
+
+    //Add a song to the favourite
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addFavourite(song: Favourite)
+
+    //delete a song from favourite
+    @Query("DELETE FROM Favourite WHERE id=:songId")
+    suspend fun deleteFavourite(songId: String)
 }

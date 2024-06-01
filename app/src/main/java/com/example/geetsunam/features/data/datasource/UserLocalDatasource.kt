@@ -41,6 +41,10 @@ interface UserLocalDatasource {
 
     //getting single offline song
     suspend fun deleteOfflineSong(id: String)
+
+    //adding and removing favourite
+    suspend fun addFavourite(song: Favourite)
+    suspend fun deleteFavourite(id: String)
 }
 
 class UserLocalDatasourceImpl @Inject constructor(private val appDao: AppDao) :
@@ -119,5 +123,13 @@ class UserLocalDatasourceImpl @Inject constructor(private val appDao: AppDao) :
 
     override suspend fun deleteOfflineSong(id: String) {
         appDao.deleteOfflineSong(id)
+    }
+
+    override suspend fun addFavourite(song: Favourite) {
+        appDao.addFavourite(song)
+    }
+
+    override suspend fun deleteFavourite(id: String) {
+        appDao.deleteFavourite(id)
     }
 }

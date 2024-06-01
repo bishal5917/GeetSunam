@@ -59,6 +59,8 @@ import com.example.geetsunam.features.presentation.single_genre.viewmodel.GenreS
 import com.example.geetsunam.features.presentation.splash.viewmodel.SplashViewModel
 import com.example.geetsunam.features.presentation.trending.viewmodel.TrendingViewModel
 import com.example.geetsunam.datastore.LocalDatastore
+import com.example.geetsunam.features.domain.usecases.AddFavouriteLocalUsecase
+import com.example.geetsunam.features.domain.usecases.DeleteFavouriteLocalUsecase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -177,9 +179,13 @@ object ViewModelModule {
 
     @Provides
     fun provideToggleFavViewModel(
-        toggleFavouriteUsecase: ToggleFavouriteUsecase
+        toggleFavouriteUsecase: ToggleFavouriteUsecase,
+        addFavouriteLocalUsecase: AddFavouriteLocalUsecase,
+        deleteFavouriteLocalUsecase: DeleteFavouriteLocalUsecase
     ): ToggleFavViewModel {
-        return ToggleFavViewModel(toggleFavouriteUsecase)
+        return ToggleFavViewModel(
+            toggleFavouriteUsecase, addFavouriteLocalUsecase, deleteFavouriteLocalUsecase
+        )
     }
 
     @Provides

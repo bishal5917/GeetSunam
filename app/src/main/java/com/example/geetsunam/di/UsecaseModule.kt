@@ -2,7 +2,9 @@ package com.example.geetsunam.di
 
 import com.example.geetsunam.features.data.datasource.UserLocalDatasource
 import com.example.geetsunam.features.domain.repositories.UserRepository
+import com.example.geetsunam.features.domain.usecases.AddFavouriteLocalUsecase
 import com.example.geetsunam.features.domain.usecases.ChangePasswordUsecase
+import com.example.geetsunam.features.domain.usecases.DeleteFavouriteLocalUsecase
 import com.example.geetsunam.features.domain.usecases.DeleteFavouriteUsecase
 import com.example.geetsunam.features.domain.usecases.DeleteOfflineSongUsecase
 import com.example.geetsunam.features.domain.usecases.DeleteRecommendedUsecase
@@ -239,5 +241,15 @@ object UsecaseModule {
     @Provides
     fun providesDeleteSongUsecaseModule(localDatasource: UserLocalDatasource): DeleteOfflineSongUsecase {
         return DeleteOfflineSongUsecase(localDatasource)
+    }
+
+    @Provides
+    fun providesDeleteFavUsecase(localDatasource: UserLocalDatasource): DeleteFavouriteLocalUsecase {
+        return DeleteFavouriteLocalUsecase(localDatasource)
+    }
+
+    @Provides
+    fun providesAddFavUsecase(localDatasource: UserLocalDatasource): AddFavouriteLocalUsecase {
+        return AddFavouriteLocalUsecase(localDatasource)
     }
 }

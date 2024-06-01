@@ -105,9 +105,7 @@ class MusicViewModel @Inject constructor(
             }
 
             is MusicEvent.DownloadSong -> {
-                if (player.isPlaying) {
-                    player.pause()
-                }
+                player.pause()
                 downloadSong(event.context)
             }
 

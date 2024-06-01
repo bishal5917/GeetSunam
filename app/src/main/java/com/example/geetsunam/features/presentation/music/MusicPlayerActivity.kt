@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.navArgs
 import com.example.geetsunam.databinding.ActivityMusicPlayerBinding
+import com.example.geetsunam.features.presentation.liked_song.viewmodel.FavSongEvent
+import com.example.geetsunam.features.presentation.liked_song.viewmodel.FavSongViewModel
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavEvent
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavState
 import com.example.geetsunam.features.presentation.music.toggle_fav.viewmodel.ToggleFavViewModel
@@ -49,11 +51,17 @@ class MusicPlayerActivity : AppCompatActivity() {
     @Inject
     lateinit var offlineSongViewModel: OfflineSongViewModel
 
+    @Inject
+    lateinit var favSongViewModel: FavSongViewModel
+
+    private lateinit var token: String
+
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMusicPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        token = splashViewModel.splashState.value?.userEntity?.token ?: ""
         binding.result = args.song
         addToFavourite()
         setShuffleAndLoopMode()
@@ -136,9 +144,7 @@ class MusicPlayerActivity : AppCompatActivity() {
         binding.ibLike.setOnClickListener {
             toggleFavViewModel.onEvent(
                 ToggleFavEvent.AddFavourite(
-                    CommonRequestModel(
-                        splashViewModel.splashState.value?.userEntity?.token ?: "", args.song.id
-                    )
+                    CommonRequestModel(token, args.song.id)
                 )
             )
         }
@@ -152,6 +158,7 @@ class MusicPlayerActivity : AppCompatActivity() {
             if (response.status == ToggleFavState.ToggleFavStatus.SUCCESS) {
                 CustomDialog().hideLoadingDialog(dialog)
                 binding.ibLike.setImageResource(response.drawableId!!)
+                favSongViewModel.onEvent(FavSongEvent.GetFavouriteSongs(token))
                 CustomToast.showToast(
                     context = this, "${
                         response.message
